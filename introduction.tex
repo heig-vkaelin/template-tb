@@ -1,16 +1,125 @@
-L'introduction est une section requise dans un rapport technique. Introduisez votre travail, l'idée de départ et les objectifs attendus. Un lecteur qui découvrirait votre projet au travers de cette introduction devrait ainsi être capable d'en comprendre le cadre, l'idée générale et les aboutissants du projet.
-
 \section{Contexte}
-Cette section \underline{n'est pas obligatoire}, mais elle est souvent présente dans un rapport technique pour compléter l'introduction et définir le contexte du travail \cad le cadre formel dans lequel le travail est mené.
+L'association Baleinev organise, depuis plus de 25 ans, le festival de musique “Baleinev Festival” sur le campus de la HEIG-VD et aime se démarquer par son originalité.
 
-%%if
-\section{Citations et bibliographie}
-Citer vos sources est essentiel. Avec \texttt{biblatex} vous pouvez facilement citer des articles, des livres ou des sites internet. Toutes les citations dans le texte seront automatiquement regroupées en fin de document dans la section \guillemotleft Bibliographie\guillemotright. Par exemple, citons un article d'Einstein \cite{einstein} ou le livre de Dirac \cite{dirac}.
+En 2014, le festival proposait pour la première fois “Pimp My Wall”, un concept consistant en l'utilisation des fenêtres orientées sur la cour comme écrans géants, affichant du contenu interactif, des animations visuelles et la possibilité de dessiner à distance.
 
-Parfois il peut être utile d'utiliser un gestionnaire de bibliographie. La communauté académique recommande l'outil \href{https://www.zotero.org/}{Zotero} qui permet de gérer une bibliothèque numérique d'ouvrages et de références numériques. Il permet également de générer une bibliographie compatible avec \LaTeX.
+En 2018, le concept a été repris à partir de zéro et a donné naissance à “BeeScreens”, la nouvelle version open source aux technologies modernes. L'ambition du projet est de concevoir un système permettant le développement d'applications interactives diffusées en continu sur Internet (applications, jeux, multi-joueurs, multi-écrans, tout est imaginable). Sa première utilisation a remporté un certain succès lors du Baleinev Festival 2019 !
 
-Notez qu'il est très facile d'obtenir l'extrait \texttt{bibtex} depuis des journaux. Sélectionnez \emph{export/citation}. Si vous le pouvez choisissez \texttt{bibtex}. Dans le cas d'un format \texttt{.ris}, utilisez un convertisseur en ligne comme \href{http://www.bruot.org/ris2bib/}{ris2bib}.
+Baleinev a proposé un premier travail de bachelor en 2019 autour de BeeScreens. Celui-ci a été effectué avec succès et a remporté un prix. Suite à cette bonne expérience, l'association souhaite proposer à nouveau des travaux de bachelor autour de cette thématique.
 
-\section{Adapter votre modèle}
-Ce document n'est qu'un modèle ayant pour but de revoir les quelques avantages de \LaTeX~ et les fonctionnalités qui pourraient vous être utiles pour rédiger un rapport académique. N'hésitez pas à supprimer les parties inutiles et à adapter ce modèle à vos besoins.
-%%fi
+C'est dans ce contexte-ci qu'est né le projet de ce travail de Bachelor. L'idée est de créer une nouvelle application interactive à projeter sur un sous-ensemble des écrans du festival.
+
+\section{Présentation r/place}
+% TODO: add more here
+
+\href{https://www.reddit.com/r/place/}{r/place} offre une toile géante virtuelle permettant à tout le monde de placer un pixel de couleur. Chaque utilisateur doit attendre un certain délai avant de reposer un nouveau pixel, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'oeuvre. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité.
+
+\section{Cahier des charges}
+
+\subsection{Présentation}
+
+Le projet principal de ce travail de bachelor consiste en premier lieu à recréer une version Open Source du fameux r/place de Reddit. Cette variante nommée b/place comme référence au festival Baleinev ainsi qu'à BeeScreens.
+
+En plus de reproduire une plateforme dans le genre d'r/place, l'ambition est d'associer si le temps le permet le physique au virtuel. L'idée est de pouvoir proposer aux festivaliers une nouvelle façon de socialiser lors de la soirée. Voici un exemple d'implémentation possible: chaque festivalier aura initialement la possibilité de placer un nombre limité de pixels sur la toile virtuelle géante. Afin d'en avoir davantage, le festivalier devra se rendre à un endroit spécifique appelé la “borne à pixels”. Pour rendre l'expérience plus sociale, l'utilisateur aura l'obligation de scanner le QR Code d'un autre festivalier sur la borne pour recevoir ses précieux pixels.
+
+Pour résumer le travail à effectuer, voici les points importants à retenir:
+
+\begin{itemize}
+  \item Développer une application web dans l'idée de r/place.;
+  \item Assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens.;
+  \item Assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival.;
+  \item Imaginer et créer un système permettant de lier le virtuel au physique si le temps le permet.;
+        % \item des documents techniques \pex \emph{datasheet};
+        % \item des développements mathématiques.
+\end{itemize}
+
+\subsection{Objectifs}
+
+Les livrables à réaliser pour ce travail de bachelor sont les suivants:
+
+\begin{itemize}
+  \item Un rapport intermédiaire,
+  \item Un rapport final,
+  \item Un résumé publiable,
+  \item Un poster,
+  \item L'application web du r/place en elle-même.
+\end{itemize}
+
+L'application répond à plusieurs objectifs, catégorisées selon leur importance. Les objectifs \textbf{required} sont nécessaires au bon fonctionnement de l'application. Les \textbf{essential} aident beaucoup à la qualité du projet final et pour finir les \textbf{nice-to-have} améliorent surtout l'expérience utilisateur des usagers ainsi que des administrateurs qui ont la tâche de supprimer les éventuels débordements.
+
+\subsubsection{Objectifs \guillemotleft required\guillemotright}
+
+\begin{itemize}
+  \item L'utilisateur arrive sur une page affichant la toile virtuelle au complet.
+  \item La toile s'actualise avec les modifications réalisées par les autres utilisateurs.
+  \item L'utilisateur peut zoomer ou dé-zoomer sur la toile afin de voir les moindres détails.
+  \item L'utilisateur voit facilement le nombre de pixels qu'il a actuellement la possibilité de placer sur la toile.
+  \item L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et le colorier.
+  \item Les dimensions de la toile doivent être configurables par un administrateur.
+  \item Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
+  \item Créer des tests de montée en charge de l'application afin d'assurer un bon fonctionnement lors des festivals notamment.
+\end{itemize}
+
+\subsubsection{Objectifs \guillemotleft essential\guillemotright}
+
+\begin{itemize}
+  \item Un administrateur peut choisir une zone à censurer (recouvrir/suppression de pixels d'une couleur) à partir de la ligne de commandes en cas de comportement non désiré.
+  \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
+  \item Les coordonnées du pixel sélectionné par l'utilisateur lui sont affichées ainsi que son niveau de zoom.
+  \item Créer des tests unitaires ainsi que des tests d'intégration pour s'assurer de la qualité de l'application.
+\end{itemize}
+
+\subsubsection{Objectifs \guillemotleft nice-to-have\guillemotright}
+
+\begin{itemize}
+  \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
+  \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
+  \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
+  \item Les administrateurs peuvent changer la taille de la toile dynamiquement dans le dashboard.
+  \item Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
+  \item Un mode “affichage”, permettant d'afficher régulièrement un QRCode pour rejoindre la toile virtuelle. En plus de ce QRCode, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'élèverait automatiquement dès qu'un utilisateur est actif sur l'application.
+  \item Ajouter la possibilité de sauvegarder le dessin.
+  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
+\end{itemize}
+
+\subsection{Calendrier}
+
+Le projet est séparé en différentes milestones, les dates celles-ci sont adaptées en fonction des événements clés du semestre, comme les délais de rendu ainsi que le festival Baleinev en lui-même.
+
+\subsubsection{Milestone 1 - semaine du 20 au 26 mars}
+
+\begin{enumerate}
+  \item Rédaction du cahier des charges
+  \item Rédaction de la partie du rapport concernant l'intégration dans l'environnement BeeScreens
+\end{enumerate}
+
+\subsubsection{Milestone 2 - semaine du 17 au 23 avril}
+
+\begin{enumerate}
+  \item Intégration à l'environnement BeeScreens de l'application b/place
+  \item Réalisation d'une première version de l'application afin d'être potentiellement utilisée lors du festival Baleinev de cette année
+\end{enumerate}
+
+\subsubsection{Milestone 3 - semaine du 22 au 28 mai}
+
+\begin{enumerate}
+  \item Rédaction du rapport intermédiaire
+  \item Utilisation d'outils de tests de montées en charges afin d'identifier les problèmes du code actuel
+\end{enumerate}
+
+\subsubsection{Milestone 4 - semaine du 12 au 18 juin}
+
+\begin{enumerate}
+  \item Optimisation de l'application afin d'améliorer sa scalabilité
+  \item Potentiels tests avec les CRDTs (Conflict-free Replicated Data Type)
+\end{enumerate}
+
+\subsubsection{Milestone 5 - semaine du 24 au 30 juillet}
+
+\begin{enumerate}
+  \item Réalisation des derniers livrables: le résumé publiable ainsi que le poster
+  \item Finalisation du rapport
+  \item Implémentation de fonctionnalités “nice-to-have”
+\end{enumerate}
+
+Le travail se termine le jeudi 27 juillet avec la remise du rapport et des autres livrables indiqués plus haut. La défense du travail aura lieu dans les semaines qui suivent.
