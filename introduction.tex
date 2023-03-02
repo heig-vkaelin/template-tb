@@ -11,6 +11,7 @@ C'est dans ce contexte-ci qu'est né le projet de ce travail de Bachelor. L'idé
 
 \section{Présentation r/place}
 % TODO: add more here
+TODO
 
 \href{https://www.reddit.com/r/place/}{r/place} offre une toile géante virtuelle permettant à tout le monde de placer un pixel de couleur. Chaque utilisateur doit attendre un certain délai avant de reposer un nouveau pixel, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'oeuvre. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité.
 
@@ -25,12 +26,10 @@ En plus de reproduire une plateforme dans le genre d'r/place, l'ambition est d'a
 Pour résumer le travail à effectuer, voici les points importants à retenir:
 
 \begin{itemize}
-  \item Développer une application web dans l'idée de r/place.;
-  \item Assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens.;
-  \item Assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival.;
-  \item Imaginer et créer un système permettant de lier le virtuel au physique si le temps le permet.;
-        % \item des documents techniques \pex \emph{datasheet};
-        % \item des développements mathématiques.
+  \item Développer une application web dans l'idée de r/place.
+  \item Assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens.
+  \item Assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival.
+  \item Imaginer et créer un système permettant de lier le virtuel au physique si le temps le permet.
 \end{itemize}
 
 \subsection{Objectifs}
@@ -56,22 +55,24 @@ L'application répond à plusieurs objectifs, catégorisées selon leur importan
   \item L'utilisateur voit facilement le nombre de pixels qu'il a actuellement la possibilité de placer sur la toile.
   \item L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et le colorier.
   \item Les dimensions de la toile doivent être configurables par un administrateur.
-  \item Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
-  \item Créer des tests de montée en charge de l'application afin d'assurer un bon fonctionnement lors des festivals notamment.
+  \item L'utilisateur dispose d'un moyen de recharger ses pixels à placer une fois ceux-ci écoulés. Il peut par exemple recevoir un nombre de pixels définis après un temps d'attente également choisi.
 \end{itemize}
 
 \subsubsection{Objectifs \guillemotleft essential\guillemotright}
 
 \begin{itemize}
-  \item Un administrateur peut choisir une zone à censurer (recouvrir/suppression de pixels d'une couleur) à partir de la ligne de commandes en cas de comportement non désiré.
-  \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
+  \item Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
+  \item Créer des tests de montée en charge de l'application afin d'assurer un bon fonctionnement lors des festivals notamment.
+  \item Afin d'éviter que les utilisateurs puissent recharger la page pour recevoir à nouveau des pixels, trouver un moyen de les identifier.
   \item Les coordonnées du pixel sélectionné par l'utilisateur lui sont affichées ainsi que son niveau de zoom.
   \item Créer des tests unitaires ainsi que des tests d'intégration pour s'assurer de la qualité de l'application.
+  \item Un administrateur peut choisir une zone à censurer (recouvrir/suppression de pixels d'une couleur) à partir d'un call API en cas de comportement non désiré.
 \end{itemize}
 
 \subsubsection{Objectifs \guillemotleft nice-to-have\guillemotright}
 
 \begin{itemize}
+  \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
   \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
   \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
