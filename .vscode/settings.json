@@ -1,6 +1,12 @@
 {
-    "latex-workshop.latex.external.build.command": "make",
-    "latex-workshop.latex.outDir": "./build",
-    "files.eol": "\n",
-    "latex-workshop.view.pdf.viewer": "browser",
+  "latex-workshop.latex.external.build.command": "make",
+  "latex-workshop.latex.outDir": "./build",
+  "files.eol": "\n",
+  "latex-workshop.view.pdf.viewer": "browser",
+  "cSpell.language": "en,fr",
+  "cSpell.words": [
+    "Baleinev",
+    "CRDTs",
+    "HEIG"
+  ],
 }

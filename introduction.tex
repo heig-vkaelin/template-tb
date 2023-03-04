@@ -10,10 +10,18 @@ Baleinev a proposé un premier travail de bachelor en 2019 autour de BeeScreens.
 C'est dans ce contexte-ci qu'est né le projet de ce travail de Bachelor. L'idée est de créer une nouvelle application interactive à projeter sur un sous-ensemble des écrans du festival.
 
 \section{Présentation r/place}
-% TODO: add more here
-TODO
+\href{https://www.reddit.com}{Reddit}, sûrement le forum en ligne le plus connu au monde a l'habitude de faire des expériences pour le 1er avril. En 2017, Reddit présente pour la première fois leur concept de r/place.
 
-\href{https://www.reddit.com/r/place/}{r/place} offre une toile géante virtuelle permettant à tout le monde de placer un pixel de couleur. Chaque utilisateur doit attendre un certain délai avant de reposer un nouveau pixel, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'oeuvre. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité.
+\href{https://www.reddit.com/r/place/}{r/place} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque utilisateur doit attendre un certain délai (5 minutes) avant de reposer un nouveau pixel, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'oeuvre. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité.
+
+En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions de joueurs participent à cette édition. La toile de 2000x2000 pixels est remplie de créations en tout genre réalisées par diverses communautés (voir figure \ref{fig:rplace2022}).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{./assets/figures/rplace.png}
+  \caption{Résultat du r/place de 2022}
+  \label{fig:rplace2022}
+\end{figure}
 
 \section{Cahier des charges}
 
@@ -74,7 +82,7 @@ L'application répond à plusieurs objectifs, catégorisées selon leur importan
 \begin{itemize}
   \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
   \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
-  \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
+  \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customizables par l'administrateur (ex: via le dashboard).
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
   \item Les administrateurs peuvent changer la taille de la toile dynamiquement dans le dashboard.
   \item Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
