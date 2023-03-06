@@ -28,7 +28,8 @@
         "hediet.vscode-drawio",
         "yzhang.markdown-all-in-one",
         "GitHub.copilot",
-        "streetsidesoftware.code-spell-checker-french"
+        "streetsidesoftware.code-spell-checker-french",
+        "WakaTime.vscode-wakatime"
       ]
     }
   }

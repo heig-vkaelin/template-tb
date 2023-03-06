@@ -245,6 +245,7 @@
 ]{dirtytalk}
 \RequirePackage{pgfgantt}
 \RequirePackage{pdflscape}
+\RequirePackage{dirtree}
 
 \RequirePackage[
   backref=true,

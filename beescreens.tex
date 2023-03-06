@@ -1,6 +1,38 @@
 \section{Environnement existant}
 
-Le code de tous les projets existants réalisés par l'équipe BeeScreen se trouve dans un unique répertoire GitLab \cite{beescreens}. Le répertoire est organisé sous la forme d'un monorepo.
+Le code de tous les projets existants réalisés par l'équipe BeeScreen se trouvent dans un unique répertoire GitLab \cite{beescreens}. En effet, le répertoire est organisé sous la forme d'un monorepo. Ce qui signifie, qu'au lieu d'avoir une répertoire par projet comme il était surtout courant auparavant, tous les projets sont regroupés. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite notamment la collaboration entre les développeurs en ayant directement accès au code complet.
+
+Le répertoire est organisé grâce à une workspace pnpm \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
+
+\subsection{Structure du répertoire}
+
+\dirtree{%
+  .1 /.
+  .2 apps.
+  .3 media-player.
+  .3 pimp-my-wall.
+  .2 deployement.
+  .3 apps.
+  .4 ....
+  .3 cicd.
+  .3 infra.
+  .2 docs.
+  .2 packages.
+  .3 pimp-my-wall.
+}
+
+Le dossier \mintinline[breaklines]{bash}{apps} contient les applications déjà développées qui sont pour l'instant:
+
+\begin{enumerate}
+  \item Media Player : une application permettant de lire des images ainsi que des vidéos afin d'afficher entre autre les sponsors et diverses informations lors du festival sous forme de diaporama.
+  \item Pimp My Wall : l'application majeure du projet permettant aux utilisateurs de collaborer en temps réel en dessinant sur la même toile virtuelle. Cette application pourra servir de point de repère lors du développement de l'application b/place comme ces deux applications ont des fonctionnalités similaires (ex: temps réel, canvas partagé entre les utilisateurs, etc.).
+\end{enumerate}
+
+Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de Docker ainsi que de Docker Compose. Chaque application possède son propre dossier à l'intérieur du dossier \mintinline[breaklines]{bash}{deployment/apps}. Les dossiers \mintinline[breaklines]{bash}{cicd} et \mintinline[breaklines]{bash}{infra} contiennent surtout des instructions sur la configuration des Raspberry Pis, utilisés afin de projeter les créations des utilisateurs de Pimp My Wall sur les murs du festival.
+
+Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet \cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe BeeScreens. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
+
+Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \Gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
 
 \section{Intégration}
 
