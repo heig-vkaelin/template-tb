@@ -4,6 +4,8 @@ Le code de tous les projets existants réalisés par l'équipe BeeScreen se trou
 
 Le répertoire est organisé grâce à une workspace pnpm \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
 
+pnpm est une version améliorée du gestionnaire de paquets par défaut présent avec Node.js npm. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, pnpm peremt une gestion des monorepos plus efficace grâce à la notion de workspace.
+
 \subsection{Structure du répertoire}
 
 \dirtree{%
@@ -33,6 +35,14 @@ Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers néc
 Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet \cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe BeeScreens. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
 
 Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \Gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
+
+\subsection{CI/CD}
+
+TODO: CI/CD Gitlab, deploiement
+
+\subsection{Tests}
+
+TODO: tests, husky
 
 \section{Intégration}
 
