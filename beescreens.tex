@@ -4,7 +4,7 @@ Le code de tous les projets existants réalisés par l'équipe BeeScreen se trou
 
 Le répertoire est organisé grâce à une workspace pnpm \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
 
-pnpm est une version améliorée du gestionnaire de paquets par défaut présent avec Node.js npm. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, pnpm peremt une gestion des monorepos plus efficace grâce à la notion de workspace.
+pnpm est une version améliorée du gestionnaire de paquets par défaut présent avec Node.js npm. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, pnpm permet une gestion des monorepos plus efficace grâce à la notion de workspace.
 
 \subsection{Structure du répertoire}
 
@@ -27,7 +27,7 @@ Le dossier \mintinline[breaklines]{bash}{apps} contient les applications déjà 
 
 \begin{enumerate}
   \item Media Player : une application permettant de lire des images ainsi que des vidéos afin d'afficher entre autre les sponsors et diverses informations lors du festival sous forme de diaporama.
-  \item Pimp My Wall : l'application majeure du projet permettant aux utilisateurs de collaborer en temps réel en dessinant sur la même toile virtuelle. Cette application pourra servir de point de repère lors du développement de l'application b/place comme ces deux applications ont des fonctionnalités similaires (ex: temps réel, canvas partagé entre les utilisateurs, etc.).
+  \item Pimp My Wall : l'application majeure du projet permettant aux utilisateurs de collaborer en temps réel en dessinant sur la même toile virtuelle. Cette application pourra servir de point de repère lors du développement de l'application BeePlace comme ces deux applications ont des fonctionnalités similaires (ex: temps réel, canvas partagé entre les utilisateurs, etc.).
 \end{enumerate}
 
 Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de Docker ainsi que de Docker Compose. Chaque application possède son propre dossier à l'intérieur du dossier \mintinline[breaklines]{bash}{deployment/apps}. Les dossiers \mintinline[breaklines]{bash}{cicd} et \mintinline[breaklines]{bash}{infra} contiennent surtout des instructions sur la configuration des Raspberry Pis, utilisés afin de projeter les créations des utilisateurs de Pimp My Wall sur les murs du festival.
@@ -38,7 +38,7 @@ Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différ
 
 \subsection{CI/CD}
 
-TODO: CI/CD Gitlab, deploiement
+TODO: CI/CD GitLab, déploiement
 
 \subsection{Tests}
 
@@ -46,4 +46,21 @@ TODO: tests, husky
 
 \section{Intégration}
 
-TODO
+Pour réaliser l'intégration de façon optimale, un guide \cite[text]{addapptobeescreens} a été créé par les mainteneurs du projet BeeScreens expliquant les étapes à suivre afin d'ajouter une nouvelle application au répertoire.
+
+\subsection{Création d'une nouvelle application}
+
+La première étape consiste à créer le dossier de l'application dans le dossier \mintinline[breaklines]{bash}{apps} décrit précédemment. Dans celui-ci, deux dossiers sont également créés: \mintinline[breaklines]{bash}{frontend} et \mintinline[breaklines]{bash}{backend}. Le premier contient le code source de l'application côté client tandis que le second contient le code source de l'application côté serveur. D'éventuels autres dossiers seront peut être nécessaires en fonction des besoins de l'application. Ceux-ci seront créés après l'analyse préliminaire permettant de choisir les technologies utilisées.
+
+L'arborescence est donc actuellement la suivante:
+
+\dirtree{%
+  .1 /.
+  .2 apps.
+  .3 beeplace.
+  .4 backend.
+  .4 frontend.
+}
+
+% Par la suite, un 
+% TODO

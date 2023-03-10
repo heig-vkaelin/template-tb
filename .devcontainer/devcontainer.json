@@ -20,17 +20,18 @@
         }
       },
       "extensions": [
-        "james-yu.latex-workshop",
-        "eamodio.gitlens",
-        "shardulm94.trailing-spaces",
-        "stkb.rewrap",
-        "vscode-icons-team.vscode-icons",
-        "hediet.vscode-drawio",
-        "yzhang.markdown-all-in-one",
-        "GitHub.copilot",
-        "streetsidesoftware.code-spell-checker-french",
-        "WakaTime.vscode-wakatime"
-      ]
+		"james-yu.latex-workshop",
+		"eamodio.gitlens",
+		"shardulm94.trailing-spaces",
+		"stkb.rewrap",
+		"vscode-icons-team.vscode-icons",
+		"hediet.vscode-drawio",
+		"yzhang.markdown-all-in-one",
+		"GitHub.copilot",
+		"streetsidesoftware.code-spell-checker-french",
+		"WakaTime.vscode-wakatime",
+		"jebbs.plantuml"
+	]
     }
   }
 }
