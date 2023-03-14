@@ -30,7 +30,8 @@
 		"GitHub.copilot",
 		"streetsidesoftware.code-spell-checker-french",
 		"WakaTime.vscode-wakatime",
-		"jebbs.plantuml"
+		"jebbs.plantuml",
+		"Gruntfuggly.todo-tree"
 	]
     }
   }

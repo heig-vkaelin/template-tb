@@ -1,0 +1,32 @@
+\section{Choix des technologies}
+
+\subsection{Frontend}
+
+- TypeScript
+- React (vs Next.js) vs Vue.js
+- Tailwind (PAS BOOTSTRAP)
+- Voir autre libs potentiellement ?
+
+\subsection{Backend}
+
+- Node.js
+- TypeScript
+- Nest.js vs AdonisJS vs Fastify (PAS EXPRESS)
+
+\subsection{Communication temps réel}
+
+- WebSockets
+- Server-Sent Events (SSE) -> bof trop limité
+- WebRTC -> peer to peer, pas le but, on veut un jeu global commun à tous les utilisateurs
+
+\subsection{Stockage}
+
+- Redis
+
+Bitfield redis: https://redis.io/commands/bitfield/
+
+Pour stocker tout le board d'un coup, on accède à une pos (x, y) en calculant l'offset
+
+Autre option, hash redis avec comme clé (x, y): https://redis.io/docs/data-types/hashes/
+
+\section{Architecture}

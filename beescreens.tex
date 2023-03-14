@@ -60,7 +60,97 @@ L'arborescence est donc actuellement la suivante:
   .3 beeplace.
   .4 backend.
   .4 frontend.
+  .3 ....
+  .2 ....
 }
 
-% Par la suite, un 
-% TODO
+Par la suite, un fichier \mintinline[breaklines]{bash}{package.json} est nécessaire par dossier. Ces fichiers sont normalement utilisés dans les projets JavaScript et Node.js afin de préciser notamment les scripts, les dépendances et diverses métadonnées du projet. Dans ce cas-ci, ils sont utilisés peu importe les technologies qui seront choisies pour ce projet. En effet, cela permet d'unifier beaucoup d'aspects sur l'entièreté du code BeeScreens. Par exemple, il est possible de lancer les tests unitaires de toutes les applications grâce au fichier \mintinline[breaklines]{bash}{package.json} créé à la racine du répertoire. Si la future application n'est pas développée en JavaScript, les scripts du \mintinline[breaklines]{bash}{package.json} lancerons les commandes nécessaires dans le langage souhaité afin d'abstraire le plus possible les technologies utilisées.
+
+La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée sur celle suggérée par les mainteneurs BeeScreens \cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est la suivante:
+
+\begin{listing}[h]
+  \inputminted{json}{assets/figures/package.json}
+  \caption{package.json initial du Backend l'application BeePlace}
+\end{listing}
+
+Celui du frontend suit la même structure. Un script de test a été ajouté afin de vérifier que l'intégration est réussie par la suite.
+
+Un dossier ainsi qu'un fichier \mintinline[breaklines]{bash}{package.json} peuvent être créés dans le dossier \mintinline[breaklines]{bash}{packages} si du code doit être partagé entre les diverses parties de l'application. Ce besoin n'a pas encore été identifié donc aucun package n'a pour le moment été créé.
+
+\subsection{Ajouter l'application au monorepo}
+
+Afin de prévenir pnpm qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \mintinline[breaklines]{bash}{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
+
+
+Grâce à cela, il est possible de lancer les tests précédemment créés en filtrant sur les applications souhaitées afin d'observer les résultats affichés dans le terminal.
+
+\begin{minted}{bash}
+  pnpm \
+  --filter @beescreens/beeplace-backend \
+  --filter @beescreens/beeplace-frontend \
+  test
+
+  # Résultat
+  Scope: 2 of 11 workspace projects
+  apps/beeplace/frontend test$ echo "This is a test from BeePlace Frontend!"
+  │ This is a test from BeePlace Frontend!
+  └─ Done in 9ms
+  apps/beeplace/backend test$ echo "This is a test from BeePlace Backend!"
+  │ This is a test from BeePlace Backend!
+  └─ Done in 9ms
+\end{minted}
+
+Afin d'être sûr que l'IDE VSCode ait connaissance de la nouvelle application, il est également nécessaire d'ajouter les chemins dans le fichier de configuration \mintinline[breaklines]{bash}{.vscode/settings.json} présent à la racine du répertoire.
+
+\subsection{CI/CD}
+
+L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline GitLab. Pour la première, il faut ajouter au fichier \mintinline[breaklines]{bash}{.husky/pre-push} le code suivant afin de lancer les tests avant chaque push:
+
+\begin{minted}{bash}
+## BeePlace
+if
+  did_files_change_in_directory "apps/beeplace/**/*"
+then
+  ## test
+  pnpm --parallel \
+  --filter @beescreens/beeplace-backend \
+  --filter @beescreens/beeplace-frontend \
+  test
+fi
+\end{minted}
+
+Grâce à la fonction \mintinline[breaklines]{bash}{did_files_change_in_directory}, les tests ne seront lancés que si des fichiers ont été modifiés dans le dossier de l'application.
+
+Pour la pipeline GitLab, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
+
+\begin{minted}{yaml}
+## Backend
+
+# test
+beeplace::app::backend::test:
+  needs:
+  - setup env
+  extends: .test
+  variables:
+  PROJECT_PATH: "apps/beeplace/backend"
+  PROJECT_NAME: "@beescreens/beeplace-backend"
+  script:
+  - echo "Testing $PROJECT_NAME..."
+
+## Frontend
+
+# test
+beeplace::app::frontend::test:
+  needs:
+  - setup env
+  extends: .test
+  variables:
+  PROJECT_PATH: "apps/beeplace/frontend"
+  PROJECT_NAME: "@beescreens/beeplace-frontend"
+  script:
+  - echo "Testing $PROJECT_NAME..."
+\end{minted}
+
+Ce fichier doit être inclus dans le fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/main.yml} afin d'être ajouté à la pipeline globale.
+
+L'application est maintenant prête à être développée. Le code peut être push afin de lancer les tests en local avec Husky et sur la pipeline GitLab.
