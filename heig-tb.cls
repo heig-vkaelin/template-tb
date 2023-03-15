@@ -287,8 +287,8 @@
 \newcommand{\clearemptydoublepage}{%
   \newpage{\thispagestyle{empty}\cleardoublepage}}
 
-\def\cleardoublepage{\clearpage\ifodd\c@page\else
-    \null\thispagestyle{empty}\newpage\fi}
+% \def\cleardoublepage{\clearpage\ifodd\c@page\else
+%     \null\thispagestyle{empty}\newpage\fi}
 
 \setlength{\parindent}{0pt}
 \setlength\parskip{\medskipamount}

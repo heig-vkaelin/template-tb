@@ -1,16 +1,46 @@
 \section{Choix des technologies}
 
+Tout d'abord, le choix de découper le projet en deux applications bien distinctes s'est fait rapidement. En effet, il aurait été possible de faire une application monolithique, comme il était plus commun de le faire à l'époque avec des frameworks comme Ruby on Rails ou Laravel. De nos jours, il est plus courant de bien séparer les différentes couches d'une application et d'en faire des applications indépendantes. Cela octroie plusieurs avantages:
+
+\begin{itemize}
+  \item Meilleure scalabilité, en pouvant notamment multiplier les instances de chaque application séparément.
+  \item Développement plus facile entre plusieurs équipes de développeurs, sans devoir tous modifier le même code.
+  \item Possibilité d'utiliser le serveur pour plusieurs clients différents, par exemple pour un site web ainsi qu'une application mobile.
+\end{itemize}
+
+Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectuer des deux côtés.
+
+Avant d'énumérer les technologies choisies, il faut noter que le temps pour réaliser le travail de Bachelor étant assez restreint, il est préférable de choisir une majorité de technologies déjà connues avec lesquelles le temps de prise en main est donc réduit.
+
+\subsection{TypeScript}
+
+TypeScript \cite{typescript} est un langage de programmation créé par Microsoft qui est un sur-ensemble de JavaScript. Il est donc possible de compiler du code TypeScript en JavaScript, ce qui permet de l'utiliser dans n'importe quel environnement. TypeScript peut donc être utilisé dans l'application entière, que ce soit du côté de l'application frontend dans le navigateur ou du côté backend sur le serveur grâce à Node.js \cite{nodejs}, qui permet de faire tourner du JavaScript en dehors du navigateur.
+
+TypeScript ajoute de nombreuses fonctionnalités à JavaScript, comme la possibilité de créer des types, des interfaces, des énumérations et bien d'autres. Les avantages à utiliser TypeScript sont donc nombreux:
+
+\begin{itemize}
+  \item Meilleure complétion dans les IDE, comme Visual Studio Code.
+  \item Gestion automatique des imports dans les IDE.
+  \item Evite de découvrir de nombreuses erreurs au runtime, car elles sont détectées au moment de la compilation.
+  \item Refactoriser le code de façon plus sure en voyant directement les erreurs de types dans l'IDE.
+  \item Lecture et compréhension du code plus facile, car les types sont explicitement définis.
+\end{itemize}
+
+De plus, les deux applications existantes, Pimp My Wall et le Media Player, sont déjà écrites en TypeScript. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
+
 \subsection{Frontend}
 
-- TypeScript
 - React (vs Next.js) vs Vue.js
 - Tailwind (PAS BOOTSTRAP)
 - Voir autre libs potentiellement ?
 
 \subsection{Backend}
 
+Comme expliqué précédemment, le choix s'est tourné vers Node.js \cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: TypeScript. Node.js permet d'utiliser les connaissances acquises en JavaScript côté client également pour le côté serveur. De plus, Node.js est un environnement très populaire, ce qui permet, en combinaison avec \Gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. De plus, les performances de Node.js sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
+
+TODO
+
 - Node.js
-- TypeScript
 - Nest.js vs AdonisJS vs Fastify (PAS EXPRESS)
 
 \subsection{Communication temps réel}
