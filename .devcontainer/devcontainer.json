@@ -17,22 +17,26 @@
         "editor.formatOnSave": true,
         "files.associations": {
           "*.tex": "latex"
-        }
+        },
+        "plantuml.exportFormat": "svg",
+        "plantuml.exportOutDir": "assets/figures",
+        "plantuml.exportSubFolder": false,
+        "plantuml.exportIncludeFolderHeirarchy": false
       },
       "extensions": [
-		"james-yu.latex-workshop",
-		"eamodio.gitlens",
-		"shardulm94.trailing-spaces",
-		"stkb.rewrap",
-		"vscode-icons-team.vscode-icons",
-		"hediet.vscode-drawio",
-		"yzhang.markdown-all-in-one",
-		"GitHub.copilot",
-		"streetsidesoftware.code-spell-checker-french",
-		"WakaTime.vscode-wakatime",
-		"jebbs.plantuml",
-		"Gruntfuggly.todo-tree"
-	]
+        "james-yu.latex-workshop",
+        "eamodio.gitlens",
+        "shardulm94.trailing-spaces",
+        "stkb.rewrap",
+        "vscode-icons-team.vscode-icons",
+        "hediet.vscode-drawio",
+        "yzhang.markdown-all-in-one",
+        "GitHub.copilot",
+        "streetsidesoftware.code-spell-checker-french",
+        "WakaTime.vscode-wakatime",
+        "jebbs.plantuml",
+        "Gruntfuggly.todo-tree"
+      ]
     }
   }
 }

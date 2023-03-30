@@ -1,4 +1,6 @@
-\section{Choix des technologies}
+\section{Architecture}
+
+\fig[H, width=0.8\textwidth]{Architecture globale}{overview-architecture.svg}
 
 Tout d'abord, le choix de découper le projet en deux applications bien distinctes s'est fait rapidement. En effet, il aurait été possible de faire une application monolithique, comme il était plus commun de le faire à l'époque avec des frameworks comme Ruby on Rails ou Laravel. De nos jours, il est plus courant de bien séparer les différentes couches d'une application et d'en faire des applications indépendantes. Cela octroie plusieurs avantages:
 
@@ -8,7 +10,11 @@ Tout d'abord, le choix de découper le projet en deux applications bien distinct
   \item Possibilité d'utiliser le serveur pour plusieurs clients différents, par exemple pour un site web ainsi qu'une application mobile.
 \end{itemize}
 
-Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectuer des deux côtés.
+Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectués des deux côtés.
+
+% TODO
+
+\section{Choix des technologies}
 
 Avant d'énumérer les technologies choisies, il faut noter que le temps pour réaliser le travail de Bachelor étant assez restreint, il est préférable de choisir une majorité de technologies déjà connues avec lesquelles le temps de prise en main est donc réduit.
 
@@ -58,5 +64,3 @@ Bitfield redis: https://redis.io/commands/bitfield/
 Pour stocker tout le board d'un coup, on accède à une pos (x, y) en calculant l'offset
 
 Autre option, hash redis avec comme clé (x, y): https://redis.io/docs/data-types/hashes/
-
-\section{Architecture}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="257px" preserveAspectRatio="none" style="width:685px;height:257px;background:#FFFFFF;" version="1.1" viewBox="0 0 685 257" width="685px" zoomAndPan="magnify"><defs/><g><!--MD5=[8699c0c8e953ee53654a072cc875bfb4]
+cluster Browser--><g id="cluster_Browser"><rect fill="none" height="154" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="285" x="7" y="97.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67" x="116" y="112.4951">Browser</text></g><!--MD5=[fca8240bc233c06068545f9c8883ae88]
+cluster Frontend--><g id="cluster_Frontend"><rect fill="none" height="87" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="237" x="31" y="140.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="72" x="113.5" y="155.4951">Frontend</text></g><!--MD5=[b4e09d266be9964199f2622adcc056fa]
+cluster Backend--><g id="cluster_Backend"><rect fill="none" height="87" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="247" x="316" y="140.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67" x="406" y="155.4951">Backend</text></g><!--MD5=[815249f79c2c08157ac02b3106e03757]
+cluster Database--><g id="cluster_Database"><rect fill="none" height="87" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="92" x="587" y="140.5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="73" x="596.5" y="155.4951">Database</text></g><!--MD5=[2abee8f471501a100e5867885753521f]
+entity Canvas--><g id="elem_Canvas"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="70" x="47" y="175.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="57" y="198.4951">Canvas</text></g><!--MD5=[7ee7540ff8af09f61502bafc53318fd1]
+entity WebSocket--><g id="elem_WebSocket"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99" x="152.5" y="175.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="162.5" y="198.4951">WebSocket</text></g><!--MD5=[49cbbb1648246ecd0e2d56eda0c19f08]
+entity Gateway--><g id="elem_Gateway"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="79" x="331.5" y="175.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="341.5" y="198.4951">Gateway</text></g><!--MD5=[f39bee242f0e9e918e91a725f807fef6]
+entity RediService--><g id="elem_RediService"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="101" x="445.5" y="175.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="455.5" y="198.4951">RediService</text></g><!--MD5=[f96d690baea4a0823d36c98ba0c3a2b4]
+entity Redis--><g id="elem_Redis"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="59" x="603.5" y="175.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="613.5" y="198.4951">Redis</text></g><!--MD5=[431b31f8ca5af8fb1bac91d077302fb4]
+entity User_A--><g id="elem_User_A"><ellipse cx="40" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M40,22 L40,49 M27,30 L53,30 M40,49 L27,64 M40,49 L53,64 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="16" y="78.4951">User_A</text></g><!--MD5=[69137c3cb78e503f920c6fa1bed11368]
+entity User_B--><g id="elem_User_B"><ellipse cx="124" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M124,22 L124,49 M111,30 L137,30 M124,49 L111,64 M124,49 L137,64 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49" x="99.5" y="78.4951">User_B</text></g><!--MD5=[f84264e8a15f0cfeaccb502820fa1ac1]
+link User_A to Canvas--><g id="link_User_A_Canvas"><path d="M50.6,81.85 C58.51,109.71 69.05,146.85 75.68,170.22 " fill="none" id="User_A-to-Canvas" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="77.11,175.28,78.4913,165.5285,75.7402,170.4713,70.7973,167.7202,77.11,175.28" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d8601f38a845c7e54e4dcc92addfaf7b]
+link User_B to Canvas--><g id="link_User_B_Canvas"><path d="M113.4,81.85 C105.49,109.71 94.95,146.85 88.32,170.22 " fill="none" id="User_B-to-Canvas" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="86.89,175.28,93.2027,167.7202,88.2598,170.4713,85.5087,165.5285,86.89,175.28" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[3b1d2d4723b3e9ea58fe52ba95bee96d]
+reverse link Canvas to WebSocket--><g id="link_Canvas_WebSocket"><path d="M122.37,193.5 C132.34,193.5 142.31,193.5 152.29,193.5 " fill="none" id="Canvas-backto-WebSocket" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="117.16,193.5,126.16,197.5,122.16,193.5,126.16,189.5,117.16,193.5" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[1ef40d2ec868be726a4c633fff210579]
+link WebSocket to Gateway--><g id="link_WebSocket_Gateway"><path d="M256.5,205.3 C279.79,207.94 303.07,207.51 326.36,204 " fill="none" id="WebSocket-Gateway" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="331.33,203.2,321.8065,200.6893,326.3942,203.9989,323.0847,208.5866,331.33,203.2" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="251.51,204.69,259.9498,209.7664,256.472,205.3049,260.9336,201.8272,251.51,204.69" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[3bbce86bf1ef76ec43297853184f0a12]
+link Gateway to RediService--><g id="link_Gateway_RediService"><path d="M410.55,193.5 C420.4,193.5 430.26,193.5 440.11,193.5 " fill="none" id="Gateway-to-RediService" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="445.26,193.5,436.26,189.5,440.26,193.5,436.26,197.5,445.26,193.5" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[270cdc4d22cf6541384f669364289d10]
+link RediService to Redis--><g id="link_RediService_Redis"><path d="M546.57,206.08 C563.71,207.84 580.84,207.08 597.97,203.78 " fill="none" id="RediService-to-Redis" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="603.29,202.67,593.6648,200.5829,598.3944,203.6863,595.291,208.4159,603.29,202.67" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[22d3f1c235efef6baa2077a50408e1ef]
+@startuml overview-architecture
+
+actor User_A
+actor User_B
+
+rectangle Browser {
+  rectangle "Frontend" {
+    rectangle Canvas
+    rectangle WebSocket
+  }
+}
+
+rectangle "Backend" {
+  rectangle Gateway
+  rectangle RediService
+}
+
+rectangle "Database" {
+  rectangle Redis
+}
+
+User_A - -> Canvas
+User_B - -> Canvas
+
+Canvas <- WebSocket
+WebSocket <-> Gateway
+Gateway -> RediService
+RediService -> Redis
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
