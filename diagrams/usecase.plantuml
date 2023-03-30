@@ -1,0 +1,24 @@
+@startuml overview-architecture
+left to right direction
+skinparam PackageStyle rectangle
+
+actor User_A
+actor User_B
+
+rectangle Client {
+  User_A -- (browser_1)
+  (browser_2) -- User_B
+}
+
+package "Backend" {
+}
+
+package "Database" {
+}
+
+browser_1 --> Backend
+browser_2 --> Backend
+Backend --> Database
+
+@enduml
+

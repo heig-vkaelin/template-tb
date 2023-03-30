@@ -41,6 +41,12 @@ RUN pip install control Pygments
 
 # RUN dpkg -i drawio-arm*
 
+# PlantUML
+RUN mkdir -p /usr/share/man/man1
+RUN apt-get update
+RUN apt-get install -y openjdk-8-jre
+RUN apt-get install -y graphviz
+
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
 ENV LANG en_US.UTF-8

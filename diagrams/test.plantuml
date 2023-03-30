@@ -1,0 +1,30 @@
+@startuml overview-architecture
+
+actor User_A
+actor User_B
+
+rectangle Browser {
+  rectangle "Frontend" {
+    rectangle Canvas
+    rectangle WebSocket
+  }
+}
+
+rectangle "Backend" {
+  rectangle Gateway
+  rectangle RediService
+}
+
+rectangle "Database" {
+  rectangle Redis
+}
+
+User_A --> Canvas
+User_B --> Canvas
+
+Canvas <- WebSocket
+WebSocket <-> Gateway
+Gateway -> RediService
+RediService -> Redis
+
+@enduml
