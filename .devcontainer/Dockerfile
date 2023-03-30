@@ -34,13 +34,6 @@ RUN apt-get install -y wget xvfb locales sudo
 # Pygments for LaTeX minted
 RUN pip install control Pygments
 
-# Draw.io for building figures
-# TODO: j'ai enlevé drawio pour le moment vu que pas dispo Linux ARM
-# RUN apt-get install -y libnotify4 libxss1 xdg-utils libsecret-1-0 libappindicator3-1 libgbm1 libasound2
-# RUN wget https://github.com/jgraph/drawio-desktop/releases/download/v20.2.3/draw.io-arm64-20.2.3.dmg
-
-# RUN dpkg -i drawio-arm*
-
 # PlantUML
 RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
