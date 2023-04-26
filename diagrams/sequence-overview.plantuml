@@ -1,0 +1,67 @@
+@startuml sequence-overview
+
+' quand le pixel est dessiné
+
+actor User_1
+actor User_2
+note left of User_2
+  User_2 is already connected
+end note
+participant Client_1
+participant Client_2
+participant Server
+database Cache
+database Database
+
+== User joining ==
+
+group User_1 joins BeePlace
+  User_1 --> Client_1: Joins the BeePlace webapp
+  Client_1 --> Server: Initialize the connection
+
+  Server --> Cache: Ask for state
+  ' Cache --> Database: Get state
+  ' Database --> Cache: Return State
+  Cache --> Server: Return State
+  Server --> Client_1: Sends the current state of the place
+end
+
+' group User_2 joins BeePlace
+'   User_2 --> Client_2: Joins the BeePlace webapp
+'   Client_2 --> Server: Initialize the connection
+
+'   Server --> Client_2: Sends the current state of the place
+
+'   User_2 --> Client_2: Place a pixel
+'   Client_2 --> Server: Place a pixel
+'   Server --> Client_1: Place a pixel
+' end
+
+== Playing ==
+
+User_1 --> Client_1: Confirm a new pixel
+note right
+  Pixel drawn for User_1
+end note
+Client_1 --> Server: New pixel
+Server --> Cache: New pixel to store
+Cache --> Database: Store new pixel for history
+Server --> Client_2: New pixel
+note left
+  Pixel drawn for User_2
+end note
+
+
+User_2 --> Client_2: Confirm a new pixel
+note right
+  Pixel drawn for User_2
+end note
+Client_2 --> Server: New pixel
+Server --> Cache: New pixel to store
+Cache --> Database: Store new pixel for history
+Server --> Client_1: New pixel
+note left
+  Pixel drawn for User_1
+end note
+
+@enduml

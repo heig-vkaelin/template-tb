@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="795px" preserveAspectRatio="none" style="width:972px;height:795px;background:#FFFFFF;" version="1.1" viewBox="0 0 972 795" width="972px" zoomAndPan="magnify"><defs/><g><rect fill="none" height="162.7969" style="stroke:#000000;stroke-width:1.5;" width="659" x="111" y="176.5625"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="148" x2="148" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="212" x2="212" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="341.5" x2="341.5" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="420.5" x2="420.5" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="597" x2="597" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="735" x2="735" y1="81.2969" y2="714.8203"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="924" x2="924" y1="81.2969" y2="714.8203"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="121" y="77.9951">User_1</text><ellipse cx="148" cy="13.5" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M148,21.5 L148,48.5 M135,29.5 L161,29.5 M148,48.5 L135,63.5 M148,48.5 L161,63.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="121" y="726.8154">User_1</text><ellipse cx="148" cy="738.6172" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M148,746.6172 L148,773.6172 M135,754.6172 L161,754.6172 M148,773.6172 L135,788.6172 M148,773.6172 L161,788.6172 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="185" y="77.9951">User_2</text><ellipse cx="212" cy="13.5" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M212,21.5 L212,48.5 M199,29.5 L225,29.5 M212,48.5 L199,63.5 M212,48.5 L225,63.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="185" y="726.8154">User_2</text><ellipse cx="212" cy="738.6172" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M212,746.6172 L212,773.6172 M199,754.6172 L225,754.6172 M212,773.6172 L199,788.6172 M212,773.6172 L225,788.6172 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="69" x="307.5" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="314.5" y="69.9951">Client_1</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="69" x="307.5" y="713.8203"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="314.5" y="733.8154">Client_1</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="69" x="386.5" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="393.5" y="69.9951">Client_2</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="69" x="386.5" y="713.8203"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55" x="393.5" y="733.8154">Client_2</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="58" x="568" y="50"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="575" y="69.9951">Server</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="58" x="568" y="713.8203"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="575" y="733.8154">Server</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="710" y="77.9951">Cache</text><path d="M717,29 C717,19 735,19 735,19 C735,19 753,19 753,29 L753,55 C753,65 735,65 735,65 C735,65 717,65 717,55 L717,29 " fill="#E2E2F0" style="stroke:#181818;stroke-width:1.5;"/><path d="M717,29 C717,39 735,39 735,39 C735,39 753,39 753,29 " fill="none" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="710" y="726.8154">Cache</text><path d="M717,740.1172 C717,730.1172 735,730.1172 735,730.1172 C735,730.1172 753,730.1172 753,740.1172 L753,766.1172 C753,776.1172 735,776.1172 735,776.1172 C735,776.1172 717,776.1172 717,766.1172 L717,740.1172 " fill="#E2E2F0" style="stroke:#181818;stroke-width:1.5;"/><path d="M717,740.1172 C717,750.1172 735,750.1172 735,750.1172 C735,750.1172 753,750.1172 753,740.1172 " fill="none" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66" x="888" y="77.9951">Database</text><path d="M906,29 C906,19 924,19 924,19 C924,19 942,19 942,29 L942,55 C942,65 924,65 924,65 C924,65 906,65 906,55 L906,29 " fill="#E2E2F0" style="stroke:#181818;stroke-width:1.5;"/><path d="M906,29 C906,39 924,39 924,39 C924,39 942,39 942,29 " fill="none" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66" x="888" y="726.8154">Database</text><path d="M906,740.1172 C906,730.1172 924,730.1172 924,730.1172 C924,730.1172 942,730.1172 942,740.1172 L942,766.1172 C942,776.1172 924,776.1172 924,776.1172 C924,776.1172 906,776.1172 906,766.1172 L906,740.1172 " fill="#E2E2F0" style="stroke:#181818;stroke-width:1.5;"/><path d="M906,740.1172 C906,750.1172 924,750.1172 924,750.1172 C924,750.1172 942,750.1172 942,740.1172 " fill="none" style="stroke:#181818;stroke-width:1.5;"/><path d="M5,96.2969 L5,121.2969 L207,121.2969 L207,106.2969 L197,96.2969 L5,96.2969 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M197,96.2969 L197,106.2969 L207,106.2969 L197,96.2969 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="181" x="11" y="113.3638">User_2 is already connected</text><rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1.0;" width="965" x="0" y="146.9961"/><line style="stroke:#000000;stroke-width:1.0;" x1="0" x2="965" y1="146.9961" y2="146.9961"/><line style="stroke:#000000;stroke-width:1.0;" x1="0" x2="965" y1="149.9961" y2="149.9961"/><rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2.0;" width="106" x="429.5" y="136.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="87" x="435.5" y="152.4966">User joining</text><path d="M111,176.5625 L317,176.5625 L317,183.6953 L307,193.6953 L111,193.6953 L111,176.5625 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.5;"/><rect fill="none" height="162.7969" style="stroke:#000000;stroke-width:1.5;" width="659" x="111" y="176.5625"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="161" x="126" y="189.6294">User_1 joins BeePlace</text><polygon fill="#181818" points="330,210.8281,340,214.8281,330,218.8281,334,214.8281" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="148" x2="336" y1="214.8281" y2="214.8281"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="170" x="155" y="209.7622">Joins the BeePlace webapp</text><polygon fill="#181818" points="585,239.9609,595,243.9609,585,247.9609,589,243.9609" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="342" x2="591" y1="243.9609" y2="243.9609"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="150" x="349" y="238.895">Initialize the connection</text><polygon fill="#181818" points="723,269.0938,733,273.0938,723,277.0938,727,273.0938" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="597" x2="729" y1="273.0938" y2="273.0938"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="81" x="604" y="268.0278">Ask for state</text><polygon fill="#181818" points="608,298.2266,598,302.2266,608,306.2266,604,302.2266" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="602" x2="734" y1="302.2266" y2="302.2266"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="81" x="614" y="297.1606">Return State</text><polygon fill="#181818" points="353,327.3594,343,331.3594,353,335.3594,349,331.3594" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="347" x2="596" y1="331.3594" y2="331.3594"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="231" x="359" y="326.2935">Sends the current state of the place</text><rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1.0;" width="965" x="0" y="366.9258"/><line style="stroke:#000000;stroke-width:1.0;" x1="0" x2="965" y1="366.9258" y2="366.9258"/><line style="stroke:#000000;stroke-width:1.0;" x1="0" x2="965" y1="369.9258" y2="369.9258"/><rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2.0;" width="73" x="446" y="356.3594"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="54" x="452" y="372.4263">Playing</text><polygon fill="#181818" points="330,409.625,340,413.625,330,417.625,334,413.625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="148" x2="336" y1="413.625" y2="413.625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124" x="155" y="408.5591">Confirm a new pixel</text><path d="M347,394.4922 L347,419.4922 L509,419.4922 L509,404.4922 L499,394.4922 L347,394.4922 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M499,394.4922 L499,404.4922 L509,404.4922 L499,394.4922 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141" x="353" y="411.5591">Pixel drawn for User_1</text><polygon fill="#181818" points="585,441.7578,595,445.7578,585,449.7578,589,445.7578" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="342" x2="591" y1="445.7578" y2="445.7578"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="349" y="440.6919">New pixel</text><polygon fill="#181818" points="723,470.8906,733,474.8906,723,478.8906,727,474.8906" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="597" x2="729" y1="474.8906" y2="474.8906"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="114" x="604" y="469.8247">New pixel to store</text><polygon fill="#181818" points="912,500.0234,922,504.0234,912,508.0234,916,504.0234" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="735" x2="918" y1="504.0234" y2="504.0234"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="165" x="742" y="498.9575">Store new pixel for history</text><polygon fill="#181818" points="432,532.1563,422,536.1563,432,540.1563,428,536.1563" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="426" x2="596" y1="536.1563" y2="536.1563"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="438" y="531.0903">New pixel</text><path d="M254,517.0234 L254,542.0234 L416,542.0234 L416,527.0234 L406,517.0234 L254,517.0234 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M406,517.0234 L406,527.0234 L416,527.0234 L406,517.0234 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141" x="260" y="534.0903">Pixel drawn for User_2</text><polygon fill="#181818" points="409,567.2891,419,571.2891,409,575.2891,413,571.2891" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="212" x2="415" y1="571.2891" y2="571.2891"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124" x="219" y="566.2231">Confirm a new pixel</text><path d="M426,552.1563 L426,577.1563 L588,577.1563 L588,562.1563 L578,552.1563 L426,552.1563 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M578,552.1563 L578,562.1563 L588,562.1563 L578,552.1563 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141" x="432" y="569.2231">Pixel drawn for User_2</text><polygon fill="#181818" points="585,599.4219,595,603.4219,585,607.4219,589,603.4219" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="421" x2="591" y1="603.4219" y2="603.4219"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="428" y="598.356">New pixel</text><polygon fill="#181818" points="723,628.5547,733,632.5547,723,636.5547,727,632.5547" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="597" x2="729" y1="632.5547" y2="632.5547"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="114" x="604" y="627.4888">New pixel to store</text><polygon fill="#181818" points="912,657.6875,922,661.6875,912,665.6875,916,661.6875" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="735" x2="918" y1="661.6875" y2="661.6875"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="165" x="742" y="656.6216">Store new pixel for history</text><polygon fill="#181818" points="353,689.8203,343,693.8203,353,697.8203,349,693.8203" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="347" x2="596" y1="693.8203" y2="693.8203"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60" x="359" y="688.7544">New pixel</text><path d="M175,674.6875 L175,699.6875 L337,699.6875 L337,684.6875 L327,674.6875 L175,674.6875 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M327,674.6875 L327,684.6875 L337,684.6875 L327,674.6875 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141" x="181" y="691.7544">Pixel drawn for User_1</text><!--MD5=[a84384b562eda6468de06c14ff6936f4]
+@startuml sequence-overview
+
+' quand le pixel est dessiné
+
+actor User_1
+actor User_2
+note left of User_2
+  User_2 is already connected
+end note
+participant Client_1
+participant Client_2
+participant Server
+database Cache
+database Database
+
+== User joining ==
+
+group User_1 joins BeePlace
+  User_1 - -> Client_1: Joins the BeePlace webapp
+  Client_1 - -> Server: Initialize the connection
+
+  Server - -> Cache: Ask for state
+  ' Cache - -> Database: Get state
+  ' Database - -> Cache: Return State
+  Cache - -> Server: Return State
+  Server - -> Client_1: Sends the current state of the place
+end
+
+' group User_2 joins BeePlace
+'   User_2 - -> Client_2: Joins the BeePlace webapp
+'   Client_2 - -> Server: Initialize the connection
+
+'   Server - -> Client_2: Sends the current state of the place
+
+'   User_2 - -> Client_2: Place a pixel
+'   Client_2 - -> Server: Place a pixel
+'   Server - -> Client_1: Place a pixel
+' end
+
+== Playing ==
+
+User_1 - -> Client_1: Confirm a new pixel
+note right
+  Pixel drawn for User_1
+end note
+Client_1 - -> Server: New pixel
+Server - -> Cache: New pixel to store
+Cache - -> Database: Store new pixel for history
+Server - -> Client_2: New pixel
+note left
+  Pixel drawn for User_2
+end note
+
+
+User_2 - -> Client_2: Confirm a new pixel
+note right
+  Pixel drawn for User_2
+end note
+Client_2 - -> Server: New pixel
+Server - -> Cache: New pixel to store
+Cache - -> Database: Store new pixel for history
+Server - -> Client_1: New pixel
+note left
+  Pixel drawn for User_1
+end note
+
+@enduml
+
+@startuml sequence-overview
+
+
+actor User_1
+actor User_2
+note left of User_2
+  User_2 is already connected
+end note
+participant Client_1
+participant Client_2
+participant Server
+database Cache
+database Database
+
+== User joining ==
+
+group User_1 joins BeePlace
+  User_1 - -> Client_1: Joins the BeePlace webapp
+  Client_1 - -> Server: Initialize the connection
+
+  Server - -> Cache: Ask for state
+  Cache - -> Server: Return State
+  Server - -> Client_1: Sends the current state of the place
+end
+
+
+
+
+== Playing ==
+
+User_1 - -> Client_1: Confirm a new pixel
+note right
+  Pixel drawn for User_1
+end note
+Client_1 - -> Server: New pixel
+Server - -> Cache: New pixel to store
+Cache - -> Database: Store new pixel for history
+Server - -> Client_2: New pixel
+note left
+  Pixel drawn for User_2
+end note
+
+
+User_2 - -> Client_2: Confirm a new pixel
+note right
+  Pixel drawn for User_2
+end note
+Client_2 - -> Server: New pixel
+Server - -> Cache: New pixel to store
+Cache - -> Database: Store new pixel for history
+Server - -> Client_1: New pixel
+note left
+  Pixel drawn for User_1
+end note
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

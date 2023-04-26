@@ -1,18 +1,18 @@
 \section{Architecture}
 
-\fig[H, width=0.8\textwidth]{Architecture globale}{overview-architecture.svg}
+\fig[H, width=1\textwidth]{Diagramme de séquence de la pose de pixels}{sequence-overview.svg}
+
+\subsection{Séparation Client / Serveur}
 
 Tout d'abord, le choix de découper le projet en deux applications bien distinctes s'est fait rapidement. En effet, il aurait été possible de faire une application monolithique, comme il était plus commun de le faire à l'époque avec des frameworks comme Ruby on Rails ou Laravel. De nos jours, il est plus courant de bien séparer les différentes couches d'une application et d'en faire des applications indépendantes. Cela octroie plusieurs avantages:
 
 \begin{itemize}
   \item Meilleure scalabilité, en pouvant notamment multiplier les instances de chaque application séparément.
   \item Développement plus facile entre plusieurs équipes de développeurs, sans devoir tous modifier le même code.
-  \item Possibilité d'utiliser le serveur pour plusieurs clients différents, par exemple pour un site web ainsi qu'une application mobile.
+  \item Possibilité d'utiliser le même serveur pour plusieurs clients différents, par exemple pour un site web ainsi qu'une application mobile.
 \end{itemize}
 
 Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectués des deux côtés.
-
-% TODO
 
 \section{Choix des technologies}
 
@@ -44,16 +44,43 @@ De plus, les deux applications existantes, Pimp My Wall et le Media Player, sont
 
 Comme expliqué précédemment, le choix s'est tourné vers Node.js \cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: TypeScript. Node.js permet d'utiliser les connaissances acquises en JavaScript côté client également pour le côté serveur. De plus, Node.js est un environnement très populaire, ce qui permet, en combinaison avec \Gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. De plus, les performances de Node.js sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
 
-TODO
+Pour finir, grâce à l'utilisation de TypeScript dans les deux applications, il est possible de partager du code, notamment les types entre les deux applications en créant un package. Cela permet d'éviter la duplication de code ainsi qu'être sûr de la cohérence des données.
 
-- Node.js
-- Nest.js vs AdonisJS vs Fastify (PAS EXPRESS)
+Il existe de nombreux frameworks dans l'écosystème Node.js, voici les principaux encore actuellement maintenus:
+
+\begin{table}[h]
+  \begin{center}
+    \caption{Frameworks Backend Node.js}
+    \begin{tabular}{c|l|r}
+      Framework  & Nombre de stars & Type      \\ \hline
+      Express.js & 60.7k           & Librairie \\
+      AdonisJS   & 13.8k           & Framework \\
+      Fastify    & 27.1k           & Librairie \\
+      NestJS     & 56.2k           & Framework \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet. Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Il reste donc AdonisJS et NestJS. Le premier promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. AdonisJS est souvent comparé au framework PHP Laravel sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques. La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS, ce qui est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel.
 
 \subsection{Communication temps réel}
 
-- WebSockets
-- Server-Sent Events (SSE) -> bof trop limité
-- WebRTC -> peer to peer, pas le but, on veut un jeu global commun à tous les utilisateurs
+Pour la communication en temps réel sur le web, nous avons principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
+
+\subsubsection{Server-Sent Events (SSE)}
+Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
+
+\subsubsection{WebRTC}
+WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de BeePlace, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
+
+\subsubsection{WebSockets}
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème JavaScript et TypeScript afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les deux fonctionnalités les plus intéressantes qu'elle nous offre sont les suivantes:
+
+\begin{itemize}
+  \item Auto reconnexion: Socket.io gère automatiquement les reconnexions en cas de perte de connexion.
+  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile si nous souhaitons par exemple créer plusieurs toiles simultanément sur l'application.
+  \item Intégration avec Redis: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
+\end{itemize}
 
 \subsection{Stockage}
 
