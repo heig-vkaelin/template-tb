@@ -61,7 +61,7 @@ Il existe de nombreux frameworks dans l'écosystème Node.js, voici les principa
   \end{center}
 \end{table}
 
-Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet. Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Il reste donc AdonisJS et NestJS. Le premier promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. AdonisJS est souvent comparé au framework PHP Laravel sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques. La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS, ce qui est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel.
+Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet. Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Il reste donc AdonisJS et NestJS. Le premier promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. AdonisJS est souvent comparé au framework PHP Laravel sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques. La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS, ce qui est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Le choix s'est donc porté sur NestJS.
 
 \subsection{Communication temps réel}
 
@@ -82,7 +82,30 @@ Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire po
   \item Intégration avec Redis: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
 \end{itemize}
 
+Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.io pour la communication temps réel.
+
 \subsection{Stockage}
+
+\subsubsection{Bases de données}
+
+L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes de stockage est venue assez naturellement. En effet, la toile actuelle doit être accessible très rapidement afin d'éviter un temps de chargement initial trop important à l'utilisateur lorsque celui-ci arrive sur la page. De plus, il peut être intéressant de stocker des métadonnées en plus des pixels actuelles de la toile. Ces métadonnées se composent de l'historique des pixels avec la date et l'utilisateur qui l'a placé afin de pouvoir retracer l'évolution de la toile ainsi qu'en faire diverses analyses. Pour conclure, il est nécessaire d'avoir deux types de stockage pour l'application: un très rapide pour l'état actuel de la toile et un second plus durable pour l'historique et diverses métadonnées.
+
+\subsubsection{Stockage de l'état actuel de la toile}
+
+Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis ou simplement une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est un service tiers.
+
+La prochaine interrogation est de savoir comment stocker l'état de la toile dans Redis. La première option est de stocker chaque pixel dans une clé Redis en utilisant les coordonnées comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement.
+
+Pour calculer l'offset du bit à modifier en fonction de la position du pixel, il est possible d'utiliser la simple formule suivante:
+\begin{equation}
+  offset = (y * width + x)
+\end{equation}
+
+L'avantage TODO
+
+% Il est donc possible de stocker l'état de la toile dans une seule clé Redis en utilisant un bit par pixel. Cependant, il est nécessaire de calculer l'offset du bit à modifier en fonction de la position du pixel. Cela peut être fait en utilisant la formule suivante:
 
 - Redis
 
@@ -91,3 +114,7 @@ Bitfield redis: https://redis.io/commands/bitfield/
 Pour stocker tout le board d'un coup, on accède à une pos (x, y) en calculant l'offset
 
 Autre option, hash redis avec comme clé (x, y): https://redis.io/docs/data-types/hashes/
+
+\subsubsection{Stockage de l'historique}
+
+% TODO
