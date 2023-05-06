@@ -45,9 +45,37 @@ De plus, les deux applications existantes, Pimp My Wall et le Media Player, sont
 
 \subsection{Frontend}
 
-- React (vs Next.js) vs Vue.js
-- Tailwind (PAS BOOTSTRAP)
-- Voir autre libs potentiellement ?
+L'environnement du développement web frontend est actuellement très morcelé. De nouveaux frameworks JavaScript voient le jour chaque année et il peut être compliqué de faire un choix pour la mise en place d'un projet vierge. L'argument de l'ancienneté du framework et sa stabilité sont donc d'autant plus importants.
+
+\subsubsection{Framework}
+
+Les trois frameworks JavaScript concurrents principaux actuellement sont React, Vue.js et Angular. Angular est le plus ancien des trois et est développé par Google. Cependant, il est également le plus lourd des trois et demande plus de temps pour être pris en main. Les différences entre Vue et React sont moindres. Les deux frameworks sont plus de légères librairies extensibles facilement afin d'ajouter les briques nécessaires au projet. Cependant, React reste plus populaire et a donc des librairies pour répondre à tous les besoins qu'on pourrait rencontrer. De plus, l'application Pimp My Wall existante est elle-même écrite en React, ce qui permet d'uniformiser les technologie. Le choix s'est donc tourné vers React.
+
+Il aurait également été possible de mentionner les nouveaux arrivants comme Svelte ou Solid qui sont des frameworks encore plus légers que React et Vue. Cependant, ces frameworks sont encore très jeunes et ne disposent pas d'un écosystème aussi développé que React ou Vue.
+
+Comme expliqué précédemment, React n'est pas vraiment un framework mais plus une librairie. Le développeur doit donc chercher quelles librairies utiliser pour répondre à ses besoins et les imbriquer ensemble. Cette solution est plus flexible mais demande également plus de temps pour la mise en place du projet. Heureusement, il existe des solutions qui permettent de créer un projet React rapidement avec des choix concernant les bonnes pratiques déjà effectués. Le plus connu d'entre eux est Next.js \cite{nextjs}, un framework basé sur React. Les avantages principaux sont les suivants:
+
+\begin{itemize}
+  \item Système de routage intégré en fonction de la structure du projet.
+  \item Rendre des pages côté serveur afin d'améliorer le référencement.
+  \item Créer des fonctions côté serveur afin de ne pas exposer les clés d'API.
+  \item Utilisation des variables d'environnement pour la configuration.
+\end{itemize}
+
+Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de ce projet, surtout la dernière est venue influencer le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique.
+
+\subsubsection{Design}
+
+Il existe principalement deux catégories de librairie afin de styliser des applications web:
+
+\begin{itemize}
+  \item Les librairies avec des opinions très arrêtées et des composants prêts à être assemblés comme Bootstrap ou Material UI.
+  \item Les librairies facilitant l'écriture de CSS, comme Tailwind ou UnoCSS.
+\end{itemize}
+
+La première catégorie est très adaptée pour créer une application rapidement mais la personnalisation devient plus compliquée par la suite. De plus, ces librairies sont souvent plus utiles dans le design d'applications classiques comme des panels d'administration qui nécessitent de nombreux composants. Dans le cas de BeePlace, l'interface utilisateur ne contient que très peu d'éléments et est donc plus adaptée à la deuxième catégorie de librairies, plus souple et personnalisable.
+
+Le choix s'est tourné vers Tailwind \cite{tailwindcss} qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
 
 \subsection{Backend}
 
