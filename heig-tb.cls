@@ -559,3 +559,6 @@
   ](key) {#1\strut}
   ;
 }
+
+% Custom - Valentin
+\newcommand\bigO[1]{$\mathcal{O}(#1)$}

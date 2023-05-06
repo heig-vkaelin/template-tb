@@ -2,6 +2,15 @@
 
 \fig[H, width=1\textwidth]{Diagramme de séquence de la pose de pixels}{sequence-overview.svg}
 
+Le diagramme précédent démontre les deux scénarios principaux de l'application:
+
+\begin{enumerate}
+  \item Lorsqu'un nouvel utilisateur rejoint le site, il doit récupérer l'état actuel de la toile.
+  \item Lorsqu'un utilisateur pose un pixel, tous les autres usagers doivent recevoir l'information.
+\end{enumerate}
+
+De plus, le diagramme montre également que l'application utilise plusieurs niveaux de stockage de données: un cache et une base de données. Les raisons derrières ce choix seront expliquées dans la section \ref{subsection:stockage}.
+
 \subsection{Séparation Client / Serveur}
 
 Tout d'abord, le choix de découper le projet en deux applications bien distinctes s'est fait rapidement. En effet, il aurait été possible de faire une application monolithique, comme il était plus commun de le faire à l'époque avec des frameworks comme Ruby on Rails ou Laravel. De nos jours, il est plus courant de bien séparer les différentes couches d'une application et d'en faire des applications indépendantes. Cela octroie plusieurs avantages:
@@ -16,7 +25,7 @@ Cependant, il faut également prendre en compte que cette approche demande souve
 
 \section{Choix des technologies}
 
-Avant d'énumérer les technologies choisies, il faut noter que le temps pour réaliser le travail de Bachelor étant assez restreint, il est préférable de choisir une majorité de technologies déjà connues avec lesquelles le temps de prise en main est donc réduit.
+Avant d'énumérer les technologies choisies, il faut noter que le temps pour réaliser le travail de Bachelor étant assez restreint, il est préférable de choisir une majorité de technologies déjà connues avec lesquelles le temps de prise en main est donc réduit. Cet argument a donc joué un rôle important dans le choix des technologies en combinaison avec les besoins du projet.
 
 \subsection{TypeScript}
 
@@ -85,6 +94,7 @@ Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire po
 Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.io pour la communication temps réel.
 
 \subsection{Stockage}
+\label{subsection:stockage}
 
 \subsubsection{Bases de données}
 
@@ -94,27 +104,26 @@ L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes
 
 Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis ou simplement une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est un service tiers.
 
-La prochaine interrogation est de savoir comment stocker l'état de la toile dans Redis. La première option est de stocker chaque pixel dans une clé Redis en utilisant les coordonnées comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+La prochaine interrogation est de savoir comment stocker l'état de la toile dans Redis. La première option est de stocker chaque pixel dans une clé Redis en utilisant les coordonnées comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement.
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
 Pour calculer l'offset du bit à modifier en fonction de la position du pixel, il est possible d'utiliser la simple formule suivante:
 \begin{equation}
   offset = (y * width + x)
 \end{equation}
 
-L'avantage TODO
-
-% Il est donc possible de stocker l'état de la toile dans une seule clé Redis en utilisant un bit par pixel. Cependant, il est nécessaire de calculer l'offset du bit à modifier en fonction de la position du pixel. Cela peut être fait en utilisant la formule suivante:
-
-- Redis
-
-Bitfield redis: https://redis.io/commands/bitfield/
-
-Pour stocker tout le board d'un coup, on accède à une pos (x, y) en calculant l'offset
-
-Autre option, hash redis avec comme clé (x, y): https://redis.io/docs/data-types/hashes/
+Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Nous avons ainsi accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
 
 \subsubsection{Stockage de l'historique}
 
-% TODO
+Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. Afin de stocker ce genre d'informations, une base de données plus conventionnelle est nécessaire. Le choix s'est tourné sur PostgreSQL \cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins d'étant pas très complexes, de nombreux autres possibilités auraient pu être utilisées comme SQLite ou MySQL. En effet, l'utilisation de la base de données relationnelle se contentera d'avoir une table principale comprenant les champs suivant:
+
+\begin{itemize}
+  \item id: Identifiant unique de l'historique
+  \item x: Position x du pixel
+  \item y: Position y du pixel
+  \item color: Identifiant de la couleur du pixel
+  \item created\_at: Date et heure à laquelle le pixel a été posé
+  \item user: Identifiant de l'utilisateur ayant posé le pixel
+\end{itemize}
