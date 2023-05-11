@@ -1,33 +1,6 @@
-\section{Architecture}
-
-\fig[H, width=1\textwidth]{Diagramme de séquence de la pose de pixels}{sequence-overview.svg}
-
-Le diagramme précédent démontre les deux scénarios principaux de l'application:
-
-\begin{enumerate}
-  \item Lorsqu'un nouvel utilisateur rejoint le site, il doit récupérer l'état actuel de la toile.
-  \item Lorsqu'un utilisateur pose un pixel, tous les autres usagers doivent recevoir l'information.
-\end{enumerate}
-
-De plus, le diagramme montre également que l'application utilise plusieurs niveaux de stockage de données: un cache et une base de données. Les raisons derrières ce choix seront expliquées dans la section \ref{subsection:stockage}.
-
-\subsection{Séparation Client / Serveur}
-
-Tout d'abord, le choix de découper le projet en deux applications bien distinctes s'est fait rapidement. En effet, il aurait été possible de faire une application monolithique, comme il était plus commun de le faire à l'époque avec des frameworks comme Ruby on Rails ou Laravel. De nos jours, il est plus courant de bien séparer les différentes couches d'une application et d'en faire des applications indépendantes. Cela octroie plusieurs avantages:
-
-\begin{itemize}
-  \item Meilleure scalabilité, en pouvant notamment multiplier les instances de chaque application séparément.
-  \item Développement plus facile entre plusieurs équipes de développeurs, sans devoir tous modifier le même code.
-  \item Possibilité d'utiliser le même serveur pour plusieurs clients différents, par exemple pour un site web ainsi qu'une application mobile.
-\end{itemize}
-
-Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectués des deux côtés.
-
-\section{Choix des technologies}
-
 Avant d'énumérer les technologies choisies, il faut noter que le temps pour réaliser le travail de Bachelor étant assez restreint, il est préférable de choisir une majorité de technologies déjà connues avec lesquelles le temps de prise en main est donc réduit. Cet argument a donc joué un rôle important dans le choix des technologies en combinaison avec les besoins du projet.
 
-\subsection{TypeScript}
+\section{TypeScript}
 
 TypeScript \cite{typescript} est un langage de programmation créé par Microsoft qui est un sur-ensemble de JavaScript. Il est donc possible de compiler du code TypeScript en JavaScript, ce qui permet de l'utiliser dans n'importe quel environnement. TypeScript peut donc être utilisé dans l'application entière, que ce soit du côté de l'application frontend dans le navigateur ou du côté backend sur le serveur grâce à Node.js \cite{nodejs}, qui permet de faire tourner du JavaScript en dehors du navigateur.
 
@@ -43,11 +16,11 @@ TypeScript ajoute de nombreuses fonctionnalités à JavaScript, comme la possibi
 
 De plus, les deux applications existantes, Pimp My Wall et le Media Player, sont déjà écrites en TypeScript. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
 
-\subsection{Frontend}
+\section{Frontend}
 
 L'environnement du développement web frontend est actuellement très morcelé. De nouveaux frameworks JavaScript voient le jour chaque année et il peut être compliqué de faire un choix pour la mise en place d'un projet vierge. L'argument de l'ancienneté du framework et sa stabilité sont donc d'autant plus importants.
 
-\subsubsection{Framework}
+\subsection{Framework}
 
 Les trois frameworks JavaScript concurrents principaux actuellement sont React, Vue.js et Angular. Angular est le plus ancien des trois et est développé par Google. Cependant, il est également le plus lourd des trois et demande plus de temps pour être pris en main. Les différences entre Vue et React sont moindres. Les deux frameworks sont plus de légères librairies extensibles facilement afin d'ajouter les briques nécessaires au projet. Cependant, React reste plus populaire et a donc des librairies pour répondre à tous les besoins qu'on pourrait rencontrer. De plus, l'application Pimp My Wall existante est elle-même écrite en React, ce qui permet d'uniformiser les technologie. Le choix s'est donc tourné vers React.
 
@@ -64,7 +37,7 @@ Comme expliqué précédemment, React n'est pas vraiment un framework mais plus 
 
 Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de ce projet, surtout la dernière est venue influencer le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique.
 
-\subsubsection{Design}
+\subsection{Design}
 
 Il existe principalement deux catégories de librairie afin de styliser des applications web:
 
@@ -77,7 +50,7 @@ La première catégorie est très adaptée pour créer une application rapidemen
 
 Le choix s'est tourné vers Tailwind \cite{tailwindcss} qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
 
-\subsection{Backend}
+\section{Backend}
 
 Comme expliqué précédemment, le choix s'est tourné vers Node.js \cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: TypeScript. Node.js permet d'utiliser les connaissances acquises en JavaScript côté client également pour le côté serveur. De plus, Node.js est un environnement très populaire, ce qui permet, en combinaison avec \Gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. De plus, les performances de Node.js sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
 
@@ -100,17 +73,17 @@ Il existe de nombreux frameworks dans l'écosystème Node.js, voici les principa
 
 Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet. Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Il reste donc AdonisJS et NestJS. Le premier promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. AdonisJS est souvent comparé au framework PHP Laravel sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques. La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS, ce qui est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Le choix s'est donc porté sur NestJS.
 
-\subsection{Communication temps réel}
+\section{Communication temps réel}
 
 Pour la communication en temps réel sur le web, nous avons principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
 
-\subsubsection{Server-Sent Events (SSE)}
+\subsection{Server-Sent Events (SSE)}
 Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
 
-\subsubsection{WebRTC}
+\subsection{WebRTC}
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de BeePlace, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
-\subsubsection{WebSockets}
+\subsection{WebSockets}
 Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème JavaScript et TypeScript afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les deux fonctionnalités les plus intéressantes qu'elle nous offre sont les suivantes:
 
 \begin{itemize}
@@ -121,37 +94,18 @@ Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire po
 
 Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.io pour la communication temps réel.
 
-\subsection{Stockage}
-\label{subsection:stockage}
+\section{Stockage}
 
-\subsubsection{Bases de données}
+\subsection{Bases de données}
 
-L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes de stockage est venue assez naturellement. En effet, la toile actuelle doit être accessible très rapidement afin d'éviter un temps de chargement initial trop important à l'utilisateur lorsque celui-ci arrive sur la page. De plus, il peut être intéressant de stocker des métadonnées en plus des pixels actuelles de la toile. Ces métadonnées se composent de l'historique des pixels avec la date et l'utilisateur qui l'a placé afin de pouvoir retracer l'évolution de la toile ainsi qu'en faire diverses analyses. Pour conclure, il est nécessaire d'avoir deux types de stockage pour l'application: un très rapide pour l'état actuel de la toile et un second plus durable pour l'historique et diverses métadonnées.
+L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes de stockage est venue assez naturellement. En effet, la toile actuelle doit être accessible très rapidement afin d'éviter un temps de chargement initial trop important à l'utilisateur lorsque celui-ci arrive sur la page. De plus, il peut être intéressant de stocker des métadonnées en plus des pixels actuels de la toile. Ces métadonnées représentent l'historique des pixels avec la date et l'utilisateur qui l'a placé afin de pouvoir retracer l'évolution de la toile ainsi qu'en faire diverses analyses. Pour conclure, il est nécessaire d'avoir deux types de stockage pour l'application: un très rapide pour l'état actuel de la toile et un second plus durable pour l'historique et diverses métadonnées.
 
-\subsubsection{Stockage de l'état actuel de la toile}
+\subsection{Stockage de l'état actuel de la toile}
 
 Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis ou simplement une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est un service tiers.
 
-La prochaine interrogation est de savoir comment stocker l'état de la toile dans Redis. La première option est de stocker chaque pixel dans une clé Redis en utilisant les coordonnées comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+D'autres options sont possibles comme utiliser un service de cache comme Memcached mais Redis reste le choix le plus populaire et le plus simple à mettre en place.
 
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
+\subsection{Stockage durable}
 
-Pour calculer l'offset du bit à modifier en fonction de la position du pixel, il est possible d'utiliser la simple formule suivante:
-\begin{equation}
-  offset = (y * width + x)
-\end{equation}
-
-Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Nous avons ainsi accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
-
-\subsubsection{Stockage de l'historique}
-
-Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. Afin de stocker ce genre d'informations, une base de données plus conventionnelle est nécessaire. Le choix s'est tourné sur PostgreSQL \cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins d'étant pas très complexes, de nombreux autres possibilités auraient pu être utilisées comme SQLite ou MySQL. En effet, l'utilisation de la base de données relationnelle se contentera d'avoir une table principale comprenant les champs suivant:
-
-\begin{itemize}
-  \item id: Identifiant unique de l'historique
-  \item x: Position x du pixel
-  \item y: Position y du pixel
-  \item color: Identifiant de la couleur du pixel
-  \item created\_at: Date et heure à laquelle le pixel a été posé
-  \item user: Identifiant de l'utilisateur ayant posé le pixel
-\end{itemize}
+Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL \cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins d'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite ou MySQL. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
