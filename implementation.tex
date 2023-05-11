@@ -1,0 +1,57 @@
+\section{Identification des utilisateurs}
+La bonne identification des utilisateurs est un point crucial de l'application. En effet, il est nécessaire de pouvoir vérifier que les utilisateurs attendent bien le temps nécessaire avant de pouvoir placer un nouveau pixel. Pouvoir contourner cette règle casserait complètement le but principal de l'application qui est de faire collaborer les utilisateurs.
+
+Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas envisageable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrière possible pour pouvoir l'utiliser.
+
+Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées fingerprint \cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur.
+
+\subsection{Fingerprint}
+
+Cette technique consiste à récupérer des informations sur le navigateur de l'utilisateur afin de créer un identifiant unique, notamment via les caractéristiques techniques de l'appareil comme sa résolution d'écran ou ses polices installées.
+
+Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS \cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
+
+La seule vraie alternative open source se nomme Broprint.js \cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon de quelques personnes, nous avons déjà eu des collisions d'identifiants car les ordinateurs potables étaient du même modèle. De même, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable.
+
+Le choix se tourne donc finalement vers FingerprintJS. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\% \cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
+
+L'avantage est que la version payante dispose d'un essai gratuit d'un mois et que la migration contient littéralement deux lignes \cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
+
+\section{Frontend}
+
+\subsection{Canvas}
+
+
+\subsection{Gestion du state}
+
+\section{Backend}
+
+
+\section{Stockage de l'état actuel de la toile}
+\label{section:stockage}
+
+Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
+
+Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
+\begin{equation}
+  offset = (y * width + x)
+\end{equation}
+
+Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Nous avons ainsi accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
+
+\section{Stockage de l'historique}
+
+Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. La conception de ces données a été réalisée dans une table unique nommée \texttt{pixel} contenant les champs suivants:
+
+\begin{itemize}
+  \item id: Identifiant unique de l'historique
+  \item x: Position x du pixel
+  \item y: Position y du pixel
+  \item color: Identifiant de la couleur du pixel
+  \item created\_at: Date et heure à laquelle le pixel a été posé
+  \item user: Identifiant de l'utilisateur ayant posé le pixel
+\end{itemize}
+
+

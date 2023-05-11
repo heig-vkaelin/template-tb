@@ -23,32 +23,3 @@ Tout d'abord, le choix de découper le projet en deux applications bien distinct
 \end{itemize}
 
 Cependant, il faut également prendre en compte que cette approche demande souvent plus de travail qu'une application unique. Par exemple, pour gérer l'état actuel de l'application, les deux partis doivent garder une synchronisation entre eux. Il faut donc bien faire attention à ce que les changements soient effectués des deux côtés.
-
-\section{Stockage de l'état actuel de la toile}
-\label{section:stockage}
-
-Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de Reddit dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
-
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela nous permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
-
-Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
-\begin{equation}
-  offset = (y * width + x)
-\end{equation}
-
-Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Nous avons ainsi accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
-
-\section{Stockage de l'historique}
-
-Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. La conception de ces données a été réalisée dans une table unique nommée \texttt{pixel} contenant les champs suivants:
-
-\begin{itemize}
-  \item id: Identifiant unique de l'historique
-  \item x: Position x du pixel
-  \item y: Position y du pixel
-  \item color: Identifiant de la couleur du pixel
-  \item created\_at: Date et heure à laquelle le pixel a été posé
-  \item user: Identifiant de l'utilisateur ayant posé le pixel
-\end{itemize}
-
-
