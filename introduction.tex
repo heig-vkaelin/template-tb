@@ -27,36 +27,18 @@ Les codes sources de ces deux événements ne sont malheureusement pas disponibl
 
 \section{Cahier des charges}
 
-\subsection{Présentation}
-
-Le projet principal de ce travail de bachelor consiste en premier lieu à recréer une version Open Source du fameux r/place de Reddit. Cette variante sera nommée BeePlace afin de s'aligner avec le nom de l'écosystème BeeScreens.
-
-En plus de reproduire une plateforme dans le genre d'r/place, l'ambition est d'associer si le temps le permet le physique au virtuel. L'idée est de pouvoir proposer aux festivaliers une nouvelle façon de socialiser lors de la soirée. Voici un exemple d'implémentation possible: chaque festivalier aura initialement la possibilité de placer un nombre limité de pixels sur la toile virtuelle géante. Afin d'en avoir davantage, le festivalier devra se rendre à un endroit spécifique appelé la “borne à pixels”. Pour rendre l'expérience plus sociale, l'utilisateur aura l'obligation de scanner le QR Code d'un autre festivalier sur la borne pour recevoir ses précieux pixels.
-
-Pour résumer le travail à effectuer, voici les points importants à retenir:
-
-\begin{itemize}
-  \item Développer une application web dans l'idée de r/place.
-  \item Assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens.
-  \item Assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival.
-  \item Imaginer et créer un système permettant de lier le virtuel au physique si le temps le permet.
-\end{itemize}
-
 \subsection{Objectifs}
 
-Les livrables à réaliser pour ce travail de bachelor sont les suivants:
+Le but principal de ce travail de bachelor consiste à recréer une version Open Source du fameux r/place de Reddit. Cette variante sera nommée BeePlace afin de s'aligner avec le nom de l'écosystème BeeScreens.
+Cette application, comme le r/place original, a comme but de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs, ceux-ci devront attendre un certain délai entre chaque pose de pixel. Ce délai a également pour but de minimiser les dégâts causés par des utilisateurs malveillants qui pourraient vouloir détruire les oeuvres des autres utilisateurs ou dessiner des images inappropriées.
 
-\begin{itemize}
-  \item Un rapport intermédiaire,
-  \item Un rapport final,
-  \item Un résumé publiable,
-  \item Un poster,
-  \item L'application web du r/place en elle-même.
-\end{itemize}
+En plus de l'application en elle-même, des critères non-fonctionnels sont à prendre en compte. Tout d'abord, il est nécessaire d'assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival. Ce critère sera vérifié grâce à des tests de montée en charge. De plus, il est important d'assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens. En effet, l'application BeePlace fera partie intégrante de l'écosystème existant et devra donc être correctement intégrée afin de pouvoir être facilement utilisée dans le futur. Pour finir, l'application doit être agréable d'utilisation sur téléphone car les utilisateurs du festival utiliseront principalement leur téléphone pour interagir avec l'application.
 
-L'application répond à plusieurs objectifs, catégorisées selon leur importance. Les objectifs \textbf{required} sont nécessaires au bon fonctionnement de l'application. Les \textbf{essential} aident beaucoup à la qualité du projet final et pour finir les \textbf{nice-to-have} améliorent surtout l'expérience utilisateur des usagers ainsi que des administrateurs qui ont la tâche de supprimer les éventuels débordements.
+\subsection{Fonctionnalités}
 
-\subsubsection{Objectifs \guillemotleft required\guillemotright}
+Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonctionnalités de l'application ont été listées. Celles-ci sont catégorisées selon leur importance. Les fonctionnalités \textbf{required} sont nécessaires au bon fonctionnement de l'application. Les \textbf{essential} aident beaucoup à la qualité du projet final et pour finir les \textbf{nice-to-have} améliorent surtout l'expérience utilisateur des usagers ainsi que des administrateurs qui ont la tâche de supprimer les éventuels débordements.
+
+\subsubsection{Fonctionnalités \guillemotleft required\guillemotright}
 
 \begin{itemize}
   \item L'utilisateur arrive sur une page affichant la toile virtuelle au complet.
@@ -68,7 +50,7 @@ L'application répond à plusieurs objectifs, catégorisées selon leur importan
   \item L'utilisateur dispose d'un moyen de recharger ses pixels à placer une fois ceux-ci écoulés. Il peut par exemple recevoir un nombre de pixels définis après un temps d'attente également choisi.
 \end{itemize}
 
-\subsubsection{Objectifs \guillemotleft essential\guillemotright}
+\subsubsection{Fonctionnalités \guillemotleft essential\guillemotright}
 
 \begin{itemize}
   \item Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
@@ -79,7 +61,7 @@ L'application répond à plusieurs objectifs, catégorisées selon leur importan
   \item Un administrateur peut choisir une zone à censurer (recouvrir/suppression de pixels d'une couleur) à partir d'un call API en cas de comportement non désiré.
 \end{itemize}
 
-\subsubsection{Objectifs \guillemotleft nice-to-have\guillemotright}
+\subsubsection{Fonctionnalités \guillemotleft nice-to-have\guillemotright}
 
 \begin{itemize}
   \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
@@ -135,3 +117,16 @@ Le projet est séparé en différentes milestones, les dates celles-ci sont adap
 \end{enumerate}
 
 Le travail se termine le jeudi 27 juillet avec la remise du rapport et des autres livrables indiqués plus haut. La défense du travail aura lieu dans les semaines qui suivent.
+
+\subsection{Livrables}
+
+Les livrables à réaliser pour ce travail de bachelor sont les suivants:
+
+\begin{itemize}
+  \item L'application web du r/place en elle-même,
+  \item Un rapport intermédiaire,
+  \item Un rapport final,
+  \item Un résumé publiable,
+  \item Un poster.
+\end{itemize}
+
