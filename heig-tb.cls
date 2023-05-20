@@ -543,3 +543,17 @@
 
 % Custom - Valentin
 \newcommand\bigO[1]{$\mathcal{O}(#1)$}
+
+% Custom - pour le tableau avantages/inconvénients frameworks NodeJS
+\usepackage{geometry}
+\usepackage{ragged2e}
+% \usepackage[svgnames]{xcolor}
+\usepackage{makecell, tabularx}
+\setcellgapes{2pt}
+\makeatletter
+\newcommand*{\compress}{\@minipagetrue}
+\makeatother
+\newcolumntype{I}{ >{\RaggedRight\compress\itemize}X<{\enditemize}}
+\newcommand*{\mcl}[1]{\multicolumn{1}{l|}{#1}}
+\usepackage[skip=1ex]{caption}
+\usepackage{enumitem}

@@ -84,22 +84,67 @@ Pour finir, grâce à l'utilisation de TypeScript dans les deux applications, il
 
 Il existe de nombreux frameworks dans l'écosystème Node.js. La comparaison s'accentue sur les quatre frameworks les plus populaires et les plus maintenus, à savoir Express.js \cite{expressjs}, AdonisJS \cite{adonisjs}, Fastify \cite{fastify} et NestJS \cite{nestjs}.
 
-% TODO: here
+Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur GitHub. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un framework complet avec une architecture complète à disposition ou un simple framework permettant de gérer les routes et les middlewares.
 
 \begin{table}[h]
   \begin{center}
     \caption{Frameworks Backend Node.js}
+    \label{tab:frameworks-backend-nodejs}
     \begin{tabular}{c|l|r}
-      Framework  & Nombre de stars & Type      \\ \hline
-      Express.js & 60.7k           & Librairie \\
-      AdonisJS   & 13.8k           & Framework \\
-      Fastify    & 27.1k           & Librairie \\
-      NestJS     & 56.2k           & Framework \\
+      Framework  & Stars GitHub & Type      \\ \hline
+      Express.js & 60.7k        & Librairie \\
+      AdonisJS   & 13.8k        & Framework \\
+      Fastify    & 27.1k        & Librairie \\
+      NestJS     & 56.2k        & Framework \\
     \end{tabular}
   \end{center}
 \end{table}
 
-Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet. Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Il reste donc AdonisJS et NestJS. Le premier promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. AdonisJS est souvent comparé au framework PHP Laravel sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques. La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS, ce qui est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Le choix s'est donc porté sur NestJS.
+\subsubsection{Express.js et Fastify}
+
+Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet.
+
+De plus, aucune convention n'est imposée par Express, ce qui peut rendre les applications plus difficiles à maintenir. Lorsque l'on revient sur un projet après plusieurs mois, il est souvent difficile de se remettre dans le contexte et de comprendre la logique de l'application. C'est pourquoi il est préférable d'utiliser un framework qui impose des conventions et une architecture.
+
+De son côté, Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Le problème est donc le même que pour Express et trouver une alternative est nécessaire.
+
+\subsubsection{AdonisJS et NestJS}
+
+Il reste donc les deux frameworks plus complets, à savoir AdonisJS et NestJS. AdonisJS promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. Le framework est souvent comparé au framework PHP Laravel \cite{laravel} sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques.
+
+La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS. NestJS utilise un système de Gateway \cite{nestjs-gateway} permettant d'abstraire le concept de WebSockets facilement.  Ce dernier aspect est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Ce qui a fait pencher la balance en faveur de NestJS en plus de sa popularité.
+
+Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nestjs-vs-adonisjs} résume les avantages et les inconvénients principaux de chacun.
+
+\begin{table}
+  \caption{Comparaison NestJS et AdonisJS}
+  \label{tab:nestjs-vs-adonisjs}
+  \makegapedcells
+  \setlist[itemize]{font=\color{black},
+    nosep,
+    leftmargin=*,
+    after=\vspace*{-\baselineskip}}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabularx}{\linewidth}{|>{\RaggedRight}p{16mm}|*{2}{I |}}
+    \hline
+     & \mcl{Avantages}                                                                                                                            & \mcl{Inconvénients} \\
+    \hline
+    AdonisJS
+     & \item[$\bullet$] Architecture plus structurée et clé en main
+    \item[$\bullet$] De nombreuses fonctionnalités incluses dans le framework de base
+     & \item[$\bullet$] Moins populaire donc moins de librairies externes disponibles
+    \item[$\bullet$] Gestion des WebSockets peu complète
+    \\
+    \hline
+    NestJS
+     & \item[$\bullet$] Très populaire donc beaucoup de librairies externes disponibles
+    \item[$\bullet$] Gestion des WebSockets complète
+     & \item[$\bullet$] Repose sur des librairies externes pour certaines fonctionnalités, il faut parfois configurer manuellement ces librairies
+    \item[$\bullet$] Écriture de code parfois plus verbeuse et moins facilement compréhensible
+    \\
+    \hline
+  \end{tabularx}
+\end{table}
 
 \section{Communication temps réel}
 
