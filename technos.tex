@@ -162,7 +162,7 @@ Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire po
 \begin{itemize}
   \item Auto reconnexion: Socket.io gère automatiquement les reconnexions en cas de perte de connexion.
   \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile si nous souhaitons par exemple créer plusieurs toiles simultanément sur l'application.
-  \item Intégration avec Redis: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
+  \item Intégration avec Redis \cite{redis}: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
 \end{itemize}
 
 Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.io pour la communication temps réel.
@@ -171,14 +171,19 @@ Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la lib
 
 \subsection{Bases de données}
 
-L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes de stockage est venue assez naturellement. En effet, la toile actuelle doit être accessible très rapidement afin d'éviter un temps de chargement initial trop important à l'utilisateur lorsque celui-ci arrive sur la page. De plus, il peut être intéressant de stocker des métadonnées en plus des pixels actuels de la toile. Ces métadonnées représentent l'historique des pixels avec la date et l'utilisateur qui l'a placé afin de pouvoir retracer l'évolution de la toile ainsi qu'en faire diverses analyses. Pour conclure, il est nécessaire d'avoir deux types de stockage pour l'application: un très rapide pour l'état actuel de la toile et un second plus durable pour l'historique et diverses métadonnées.
+L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes de stockage est venue assez naturellement. En effet, la toile actuelle doit être accessible très rapidement afin d'éviter un temps de chargement initial trop important à l'utilisateur lorsque celui-ci arrive sur la page. De plus, il peut être intéressant de stocker des métadonnées en plus des pixels actuels de la toile. Ces métadonnées représentent l'historique des pixels avec la date et l'utilisateur qui l'a placé afin de pouvoir retracer l'évolution de la toile ainsi qu'en faire diverses analyses. Pour conclure, il est nécessaire d'avoir deux types de stockage pour l'application:
+
+\begin{enumerate}
+  \item Un stockage rapide pour l'état actuel de la toile
+  \item Un stockage durable pour l'historique et les métadonnées
+\end{enumerate}
 
 \subsection{Stockage de l'état actuel de la toile}
 
-Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis ou simplement une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est un service tiers.
+Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis \cite{redis} ou simplement stocker une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est indépendant de l'application.
 
-D'autres options sont possibles comme utiliser un service de cache comme Memcached mais Redis reste le choix le plus populaire et le plus simple à mettre en place.
+D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached \cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il n'est donc pas
 
 \subsection{Stockage durable}
 
-Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL \cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins d'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite ou MySQL. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
+Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL \cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins n'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite \cite{sqlite} ou MySQL \cite{mysql}. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
