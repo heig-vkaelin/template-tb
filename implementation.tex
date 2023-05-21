@@ -21,6 +21,23 @@ L'avantage est que la version payante dispose d'un essai gratuit d'un mois et qu
 
 \subsection{Canvas}
 
+La toile est le point central de l'application, celle-ci est modélisée grâce à l'élément HTML5 `<canvas>` \cite{canvas}. Cet élément permet de dessiner des formes, des images et du texte. Il est possible de dessiner directement sur le canvas en utilisant le contexte 2D ou 3D. Les formes à dessiner sont très simples dans le cas de BeePlace car il s'agit de pixels représentés par des carrés de couleurs unies.
+
+\subsubsection{Dessin des pixels}
+
+Deux choix sont possibles pour dessiner les pixels sur le canvas:
+
+\begin{enumerate}
+  \item Représenter un pixel comme un pixel du canvas
+  \item Représenter un pixel comme un carré de plusieurs pixels du canvas
+\end{enumerate}
+
+La variante 2 permet d'avoir directement une représentation agrandie de la toile. En effet, si la toile a des dimensions de par exemple 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affichés à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour savoir la position réelle cliquée par l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform du CSS \cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering \cite{image-renderingcss} avec comme valeur `pixelated`. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
+
+\subsubsection{Gestion des événements}
+
+% TODO
+
 
 \subsection{Gestion du state}
 
