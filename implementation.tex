@@ -32,11 +32,23 @@ Deux choix sont possibles pour dessiner les pixels sur le canvas:
   \item Représenter un pixel comme un carré de plusieurs pixels du canvas
 \end{enumerate}
 
-La variante 2 permet d'avoir directement une représentation agrandie de la toile. En effet, si la toile a des dimensions de par exemple 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affichés à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour savoir la position réelle cliquée par l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform du CSS \cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering \cite{image-renderingcss} avec comme valeur `pixelated`. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
+La deuxième variante permet d'avoir directement une représentation agrandie de la toile. En effet, si la toile a par exemple des dimensions de 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affiché à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour connaître les coordonnées réelles du clique de l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform en CSS \cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering \cite{image-renderingcss} avec comme valeur `pixelated`. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
 
-\subsubsection{Gestion des événements}
+\subsection{Pinchzoom}
 
-% TODO
+Écouter les événements utilisateurs pour réaliser des transformations sur un élément (le déplacer, zoomer à un point précis) revient à réaliser ce qu'on appelle un "Pinch-to-Zoom" ou plus simplement "pinchzoom". Ce terme signifie littéralement "pincer pour zoomer". Il s'agit d'un geste utilisé sur les appareils tactiles pour zoomer sur une image ou une page web ainsi que se déplacer. Réaliser une implémentation de ce geste devient vite une tâche fastidieuse. En effet, il est nécessaire d'écouter divers événements différents pour que l'utilisation soit agréable sur tout type d'appareils:
+
+\begin{itemize}
+  \item Les événements de la souris
+  \item Les événements tactiles
+  \item Les événements du pavé tactile qui sont un mélange des deux précédents
+\end{itemize}
+
+Adapter le code en fonction de la nature de l'événement devient vite compliqué et source de bug. Heureusement, plusieurs librairies existent afin de faciliter l'implémentation, surtout dans l'écosystème React très riche. La liste qui suit contient les options testées et les raisons pour lesquelles elles ont ou non été retenues.
+
+\subsubsection{React-zoom-pan-pinch}
+
+% TODO here
 
 
 \subsection{Gestion du state}
