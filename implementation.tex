@@ -13,7 +13,8 @@ Ces méthodes demandent des algorithmes complexes et il est donc préférable d'
 
 La seule vraie alternative open source se nomme Broprint.js \cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon de quelques personnes, nous avons déjà eu des collisions d'identifiants car les ordinateurs potables étaient du même modèle. De même, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable.
 
-Le choix se tourne donc finalement vers FingerprintJS. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\% \cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
+\subsubsection{FingerprintJS}
+Le choix se tourne donc finalement vers FingerprintJS \cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\% \cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
 
 L'avantage est que la version payante dispose d'un essai gratuit d'un mois et que la migration contient littéralement deux lignes \cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
 
@@ -62,8 +63,47 @@ Malheureusement la librairie, react-fast-pinch-zoom \cite{react-fast-pinch-zoom}
 
 \subsection{Gestion du state}
 
+L'application React doit garder un état à jour. Cet état comporte plusieurs éléments:
+
+\begin{itemize}
+  \item Les réglages initiaux de la toile comme sa taille, les couleurs disponibles, le temps d'attente entre chaque pixel, etc.
+  \item Le nombre de pixels posés par l'utilisateur dans l'intervalle de temps.
+  \item Le moment où l'utilisateur pourra à nouveau placer un pixel.
+\end{itemize}
+
+Toutes ces variables sont utilisées dans de nombreux composants React. Il est donc nécessaire de les stocker dans un endroit centralisé afin de pouvoir les utiliser facilement sans devoir les faire passer sur plusieurs niveaux d'imbrication. Pour cela, il existe principalement deux solutions:
+
+\begin{enumerate}
+  \item Utiliser une librairie externe de stockage de state.
+  \item Utiliser le state fourni par React dans un Contexte \cite{react-context} afin de le rendre accessible à tous les composants enfants.
+\end{enumerate}
+
+\subsubsection{Librairie externes}
+
+De nombreuses librairies existent pour gérer le state d'une application React. La plus connue est Redux \cite{react-redux}. Cependant, Redux est une librairie assez lourde et complexe à mettre en place. Elle est également très verbeuse. Il existe des alternatives plus légères et simples comme Zustand \cite{zustand}.
+
+Les avantages de Zustand sur Redux sont les suivants:
+\begin{itemize}
+  \item Plus simple et sans opinion donc plus facile à prendre en main.
+  \item Zustand utilise les hooks de React comme moyen principal de consommer le state, sa syntaxe est donc plus proche de React.
+  \item Zustand peut modifier le state sans forcer le composant à se re-rendre, ce qui peut être utile au niveau des performances.
+\end{itemize}
+
+\subsubsection{Contexte React}
+
+Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte React \cite{react-context}. Celui-ci permet de stocker des données ainsi que des fonctions utilitaires dans un endroit centralisé et de les rendre accessibles à tous les composants enfants. Cependant, les contextes amènent plusieurs problèmes:
+
+\begin{itemize}
+  \item Un contexte React n'est pas fait pour stocker des données qui changent souvent. En effet, à chaque changement de state, tous les composants enfants sont re-rendus, ce qui peut être problématique au niveau des performances.
+  \item Créer un contexte est assez verbeux et nécessite beaucoup de code pour un résultat assez simple.
+  \item Le state dans un contexte n'est pas toujours accessible et à jour. Dans des fonctions de callback d'événements par exemple ou d'événements WebSockets, il faut utiliser des astuces afin de pouvoir accéder au state.
+\end{itemize}
+
+C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustand.
+
 \section{Backend}
 
+% TODO ici
 
 \section{Stockage de l'état actuel de la toile}
 \label{section:stockage}

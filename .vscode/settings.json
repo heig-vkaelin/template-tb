@@ -16,6 +16,7 @@
     "pinchzoom",
     "pnpm",
     "reddit",
-    "Refactoriser"
+    "Refactoriser",
+    "Zustand"
   ],
 }
