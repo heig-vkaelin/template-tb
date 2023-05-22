@@ -48,8 +48,17 @@ Adapter le code en fonction de la nature de l'événement devient vite compliqu�
 
 \subsubsection{React-zoom-pan-pinch}
 
-% TODO here
+Le librairie la plus connue se nomme React-zoom-pan-pinch \cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en TypeScript et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du Pinchzoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
 
+\subsubsection{React-quick-pinch-zoom}
+
+Cette seconde librairie, react-quick-pinch-zoom \cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie JavaScript plus connue nommée simplement PinchZoom.js \cite{pinchzoomjs}. Le soucis de cette libraire arrive lorsque l'élément à l'intérieur du Pinchzoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour BeePlace: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
+
+\subsubsection{React-fast-pinch-zoom}
+
+Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom \cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome \cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre libraire de la même équipe Google Chrome, PointerTracker \cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events \cite{pointer-events} qui contrairement aux anciens événements, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
+
+Malheureusement la librairie, react-fast-pinch-zoom \cite{react-fast-pinch-zoom}, est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes "We recommend defining components as functions instead of classes." \cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
 
 \subsection{Gestion du state}
 
