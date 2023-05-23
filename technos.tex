@@ -110,7 +110,7 @@ De son côté, Fastify, bien que plus rapide et plus moderne que son concurrent 
 
 \subsubsection{AdonisJS et NestJS}
 
-Il reste donc les deux frameworks plus complets, à savoir AdonisJS et NestJS. AdonisJS promet d'inclure tout ce dont nous avons besoin afin d'être le plus productif possible. Le framework est souvent comparé au framework PHP Laravel \cite{laravel} sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques.
+Il reste donc les deux frameworks plus complets, à savoir AdonisJS et NestJS. AdonisJS promet d'inclure tout ce dont le développeur a besoin afin d'être le plus productif possible. Le framework est souvent comparé au framework PHP Laravel \cite{laravel} sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques.
 
 La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS. NestJS utilise un système de Gateway \cite{nestjs-gateway} permettant d'abstraire le concept de WebSockets facilement.  Ce dernier aspect est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Ce qui a fait pencher la balance en faveur de NestJS en plus de sa popularité.
 
@@ -148,7 +148,7 @@ Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nest
 
 \section{Communication temps réel}
 
-Pour la communication en temps réel sur le web, nous avons principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
+Pour la communication en temps réel sur le web, il existe principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
 
 \subsection{Server-Sent Events (SSE)}
 Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
@@ -157,11 +157,11 @@ Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettr
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de BeePlace, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème JavaScript et TypeScript afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les trois fonctionnalités les plus intéressantes qu'elle nous offre sont les suivantes:
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème JavaScript et TypeScript afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
   \item Auto reconnexion: Socket.io gère automatiquement les reconnexions en cas de perte de connexion.
-  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile si nous souhaitons par exemple créer plusieurs toiles simultanément sur l'application.
+  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité d'avoir plusieurs toiles simultanément sur l'application.
   \item Intégration avec Redis \cite{redis}: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
 \end{itemize}
 
