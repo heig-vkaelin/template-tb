@@ -14,10 +14,9 @@ pnpm est une version améliorée du gestionnaire de paquets par défaut présent
   .3 media-player.
   .3 pimp-my-wall.
   .2 deployement.
-  .3 apps.
-  .4 ....
-  .3 cicd.
-  .3 infra.
+  .3 media-player.
+  .3 pimp-my-wall.
+  .3 ....
   .2 docs.
   .2 packages.
   .3 pimp-my-wall.
@@ -30,7 +29,7 @@ Le dossier \mintinline[breaklines]{bash}{apps} contient les applications déjà 
   \item Pimp My Wall : l'application majeure du projet permettant aux utilisateurs de collaborer en temps réel en dessinant sur la même toile virtuelle. Cette application pourra servir de point de repère lors du développement de l'application BeePlace comme ces deux applications ont des fonctionnalités similaires (ex: temps réel, canvas partagé entre les utilisateurs, etc.).
 \end{enumerate}
 
-Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de Docker ainsi que de Docker Compose. Chaque application possède son propre dossier à l'intérieur du dossier \mintinline[breaklines]{bash}{deployment/apps}. Les dossiers \mintinline[breaklines]{bash}{cicd} et \mintinline[breaklines]{bash}{infra} contiennent surtout des instructions sur la configuration des Raspberry Pis, utilisés afin de projeter les créations des utilisateurs de Pimp My Wall sur les murs du festival.
+Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de Docker ainsi que de Docker Compose. Chaque application possède son propre dossier contenant le fichier  \mintinline[breaklines]{bash}{docker-compose.yml} ainsi que les fichiers de configuration des variables d'environnement utilisées en production.
 
 Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet \cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe BeeScreens. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
 
