@@ -103,7 +103,62 @@ C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustan
 
 \section{Backend}
 
-% TODO ici
+\subsection{Configuration}
+
+Pour pouvoir modifier facilement la configuration de la toile, celle-ci est configurée grâce à des variables d'environnement du côté du Backend. En effet, le backend transmet toutes ces valeurs au frontend lors de la première connexion comme expliqué dans la prochaine section \ref{section:connexion-websockets}. Les variables d'environnement intéressantes sont présentées dans le listing \ref{listing:env-variables}.
+
+\begin{listing}[H]
+  \begin{minted}{bash}
+# The width and height of the board
+BOARD_SIZE=64
+
+# The time in seconds user need to wait before they can place another pixel
+COOLDOWN=10
+
+# Array of colors in hex format
+COLORS='["#FFFFFF","#E4E4E4","#888888","#222222","#FFA7D1","#E50000","#E59500", ...]'
+
+# The default stroke color id
+INITIAL_COLOR=3
+
+# The default zoom level
+INITIAL_SCALE=9
+
+# The number of pixels a user can place before they need to wait
+MAX_PIXELS=3
+\end{minted}
+  \caption{Variables d'environnement de configuration de la toile}
+  \label{listing:env-variables}
+\end{listing}
+
+En plus des variables présentées, d'autres plus classiques sont utilisées pour la connexion avec Redis ou choisir le port sur lequel tourne l'application par exemple.
+
+\subsubsection{Validation des variables d'environnement}
+
+Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le répertoire git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended} \cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, le backend ne démarre pas et affiche un message d'erreur. Ces tests sont également effectués dans la pipeline de CI/CD afin d'éviter les erreurs inutiles.
+
+\subsection{Connexion WebSockets}
+\label{section:connexion-websockets}
+
+\fig[H, width=0.8\textwidth]{Diagramme de séquence de la connexion WebSockets}{sequence-websockets.svg}
+
+Comme démontré dans la figure \ref{sequence-websockets.svg}, le Backend envoie l'état actuel de la toile ainsi que les diverses variables d'environnement servant à la configuration lorsque la connexion WebSockets est initiée par le client.
+
+Lorsque le client reçoit cet événement \texttt{INIT\_BOARD}, il envoie à son tour un événement \texttt{FINGERPRINT} au Backend qui contient son empreinte numérique. Le Backend stocke ensuite cet identifiant dans le Socket utilisé pour la connexion avec ce client pour que le client n'ait pas besoin de l'envoyer à chaque nouvelle requête.
+
+Après cette première connexion, le client peut envoyer des événements pour poser des pixels et le serveur envoie lui des événements pour notifier le client de changements sur la toile réalisés par d'autres utilisateurs.
+
+\subsection{Gestion de la durée d'attente entre la pose de pixels}
+
+% TODO
+
+\subsection{Administration}
+
+% TODO
+
+\subsubsection{Remise à zéro de la toile}
+
+% TODO
 
 \section{Stockage de l'état actuel de la toile}
 \label{section:stockage}

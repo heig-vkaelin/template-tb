@@ -1,0 +1,25 @@
+@startuml sequence-websockets
+
+participant Frontend
+participant Backend
+
+Frontend --> Backend: Initialize the WebSockets connection
+Backend --> Frontend: Emit INIT_BOARD event
+
+note right
+  Contains the current state
+  of the board and the configuration
+end note
+
+Frontend --> Backend: Emit FINGERPRINT event
+
+note left
+  Generate a fingerprint
+end note
+
+note right
+  Backend stores the fingerprint
+  in the socket instance
+end note
+
+Backend --> Frontend: Send the current cooldown of the player
