@@ -10,7 +10,7 @@ Baleinev a proposé un premier travail de bachelor en 2019 autour de BeeScreens.
 C'est dans ce contexte-ci qu'est né le projet de ce travail de Bachelor. L'idée est de créer une nouvelle application interactive à projeter sur un sous-ensemble des écrans du festival.
 
 \section{Présentation r/place}
-Reddit (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde a l'habitude de faire des expériences pour le 1er avril. En 2017, reddit présente pour la première fois leur concept de r/place.
+\gls{reddit} (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde a l'habitude de faire des expériences pour le 1er avril. En 2017, \gls{reddit} présente pour la première fois leur concept de r/place.
 
 r/place \cite{rplace} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque utilisateur doit attendre un certain délai (5 minutes) avant de reposer un nouveau pixel, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'oeuvre. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité.
 
@@ -23,13 +23,13 @@ En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions
   \label{fig:rplace2022}
 \end{figure}
 
-Les codes sources de ces deux événements ne sont malheureusement pas disponibles. Cependant, les ingénieurs du r/place ont publié des articles détaillant leur architecture et leur implémentation. Ces articles sont disponibles sur le site de reddit \cite{rplace2017, rplace2022}. Ces articles seront utilisés comme référence pour ce travail de bachelor mais l'architecture ainsi que l'implémentation seront complètement différentes. En effet, le but est de créer seul une version open source de r/place. L'envergure du projet ainsi que la taille du public visé sont évidents bien moindres que ceux du r/place original.
+Les codes sources de ces deux événements ne sont malheureusement pas disponibles. Cependant, les ingénieurs du r/place ont publié des articles détaillant leur architecture et leur implémentation. Ces articles sont disponibles sur le site de \gls{reddit} \cite{rplace2017, rplace2022}. Ces articles seront utilisés comme référence pour ce travail de bachelor mais l'architecture ainsi que l'implémentation seront complètement différentes. En effet, le but est de créer seul une version open source de r/place. L'envergure du projet ainsi que la taille du public visé sont évidents bien moindres que ceux du r/place original.
 
 \section{Cahier des charges}
 
 \subsection{Objectifs}
 
-Le but principal de ce travail de bachelor consiste à recréer une version Open Source du fameux r/place de Reddit. Cette variante sera nommée BeePlace afin de s'aligner avec le nom de l'écosystème BeeScreens.
+Le but principal de ce travail de bachelor consiste à recréer une version Open Source du fameux r/place de \gls{reddit}. Cette variante sera nommée BeePlace afin de s'aligner avec le nom de l'écosystème BeeScreens.
 Cette application, comme le r/place original, a comme but de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs, ceux-ci devront attendre un certain délai entre chaque pose de pixel. Ce délai a également pour but de minimiser les dégâts causés par des utilisateurs malveillants qui pourraient vouloir détruire les oeuvres des autres utilisateurs ou dessiner des images inappropriées.
 
 En plus de l'application en elle-même, des critères non-fonctionnels sont à prendre en compte. Tout d'abord, il est nécessaire d'assurer la scalabilité de l'application afin de supporter des possibles montées en charges, notamment le soir du festival. Ce critère sera vérifié grâce à des tests de montée en charge. De plus, il est important d'assurer l'intégration continue de l'application au sein de l'écosystème BeeScreens. En effet, l'application BeePlace fera partie intégrante de l'écosystème existant et devra donc être correctement intégrée afin de pouvoir être facilement utilisée dans le futur. Pour finir, l'application doit être agréable d'utilisation sur téléphone car les utilisateurs du festival utiliseront principalement leur téléphone pour interagir avec l'application.

@@ -1,10 +1,10 @@
 \section{Environnement existant}
 
-Le code de tous les projets existants réalisés par l'équipe BeeScreen se trouvent dans un unique répertoire GitLab \cite{beescreens}. En effet, le répertoire est organisé sous la forme d'un monorepo. Ce qui signifie, qu'au lieu d'avoir une répertoire par projet comme il était surtout courant auparavant, tous les projets sont regroupés. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite notamment la collaboration entre les développeurs en ayant directement accès au code complet.
+Le code de tous les projets existants réalisés par l'équipe BeeScreen se trouvent dans un unique répertoire \gls{gitlab} \cite{beescreens}. En effet, le répertoire est organisé sous la forme d'un monorepo. Ce qui signifie, qu'au lieu d'avoir une répertoire par projet comme il était surtout courant auparavant, tous les projets sont regroupés. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite notamment la collaboration entre les développeurs en ayant directement accès au code complet.
 
-Le répertoire est organisé grâce à une workspace pnpm \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
+Le répertoire est organisé grâce à une workspace \gls{pnpm} \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
 
-pnpm est une version améliorée du gestionnaire de paquets par défaut présent avec Node.js npm. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, pnpm permet une gestion des monorepos plus efficace grâce à la notion de workspace.
+\gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec Node.js \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} permet une gestion des monorepos plus efficace grâce à la notion de workspace.
 
 \subsection{Structure du répertoire}
 
@@ -33,7 +33,7 @@ Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers néc
 
 Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet \cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe BeeScreens. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
 
-Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \Gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
+Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
 
 % \subsection{CI/CD}
 
@@ -87,7 +87,7 @@ Un dossier ainsi qu'un fichier \mintinline[breaklines]{bash}{package.json} peuve
 
 \subsection{Ajouter l'application au monorepo}
 
-Afin de prévenir pnpm qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \mintinline[breaklines]{bash}{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
+Afin de prévenir \gls{pnpm} qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \mintinline[breaklines]{bash}{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
 
 
 Grâce à cela, il est possible de lancer les tests précédemment créés en filtrant sur les applications souhaitées afin d'observer les résultats affichés dans le terminal.
@@ -112,7 +112,7 @@ Afin d'être sûr que l'IDE VSCode ait connaissance de la nouvelle application, 
 
 \subsection{CI/CD}
 
-L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline GitLab. Pour la première, il faut ajouter au fichier \mintinline[breaklines]{bash}{.husky/pre-push} le code suivant afin de lancer les tests avant chaque push:
+L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline \gls{gitlab}. Pour la première, il faut ajouter au fichier \mintinline[breaklines]{bash}{.husky/pre-push} le code suivant afin de lancer les tests avant chaque push:
 
 \begin{minted}{bash}
 ## BeePlace
@@ -129,7 +129,7 @@ fi
 
 Grâce à la fonction \mintinline[breaklines]{bash}{did_files_change_in_directory}, les tests ne seront lancés que si des fichiers ont été modifiés dans le dossier de l'application.
 
-Pour la pipeline GitLab, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
+Pour la pipeline \gls{gitlab}, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
 
 \begin{minted}{yaml}
 ## Backend
@@ -161,4 +161,4 @@ beeplace::app::frontend::test:
 
 Ce fichier doit être inclus dans le fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/main.yml} afin d'être ajouté à la pipeline globale.
 
-L'application est maintenant prête à être développée. Le code peut être push afin de lancer les tests en local avec Husky et sur la pipeline GitLab.
+L'application est maintenant prête à être développée. Le code peut être push afin de lancer les tests en local avec Husky et sur la pipeline \gls{gitlab}.
