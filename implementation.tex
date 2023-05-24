@@ -7,7 +7,7 @@ Identifier les utilisateurs sans véritable authentification n'est pas trivial. 
 
 \subsection{Fingerprint}
 
-Cette technique consiste à récupérer des informations sur le navigateur de l'utilisateur afin de créer un identifiant unique, notamment via les caractéristiques techniques de l'appareil comme sa résolution d'écran ou ses polices installées.
+Cette technique consiste à récupérer des informations sur le navigateur de l'utilisateur afin de créer un identifiant unique, notamment via les caractéristiques techniques de l'appareil comme sa résolution d'écran ou ses polices installées. La liste des attributs utilisés se doit d'être la plus grande possible afin d'éviter au maximum les collisions entre les utilisateurs. Un exemple plus détaillé sera présenté dans la prochaine sous-section. De plus, les informations doivent être stables afin que l'identifiant de l'utilisateur ne change pas. A partir de toutes ces caractéristiques, l'identifiant est créé via une fonction de hachage.
 
 Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS \cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
 
@@ -16,7 +16,18 @@ La seule vraie alternative open source se nomme Broprint.js \cite{broprintjs}. M
 \subsubsection{FingerprintJS}
 Le choix se tourne donc finalement vers FingerprintJS \cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\% \cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
 
-L'avantage est que la version payante dispose d'un essai gratuit d'un mois et que la migration contient littéralement deux lignes \cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
+Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, \href{https://fingerprintjs.github.io/fingerprintjs}{un exemple de résultat} est donné sur leur site. La liste est conséquente, elle contient notamment:
+
+\begin{itemize}
+  \item Les polices installées, leurs préférences
+  \item Les réglages du navigateur comme sa langue, ses fonctionnalités activées ou pas etc.
+  \item Les réglages de l'ordinateur comme le son, les couleurs, etc.
+  \item Les informations sur la machine physique comme la résolution d'écran, le nombre de coeurs, la mémoire vive, etc.
+\end{itemize}
+
+En plus de toutes ces caractérisées, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
+
+Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions contient littéralement deux lignes \cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
 
 \section{Frontend}
 
