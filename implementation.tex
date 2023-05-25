@@ -33,7 +33,7 @@ Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payan
 
 \subsection{Canvas}
 
-La toile est le point central de l'application, celle-ci est modélisée grâce à l'élément HTML5 `<canvas>` \cite{canvas}. Cet élément permet de dessiner des formes, des images et du texte. Il est possible de dessiner directement sur le canvas en utilisant le contexte 2D ou 3D. Les formes à dessiner sont très simples dans le cas de BeePlace car il s'agit de pixels représentés par des carrés de couleurs unies.
+La toile est le point central de l'application, celle-ci est modélisée grâce à l'élément HTML5 `<canvas>` \cite{canvas}. Cet élément permet de dessiner des formes, des images et du texte. Il est possible de dessiner directement sur le canvas en utilisant le contexte 2D ou 3D. Les formes à dessiner sont très simples dans le cas de \gls{beeplace} car il s'agit de pixels représentés par des carrés de couleurs unies.
 
 \subsubsection{Dessin des pixels}
 
@@ -64,7 +64,7 @@ Le librairie la plus connue se nomme React-zoom-pan-pinch \cite{react-zoom-pan-p
 
 \subsubsection{React-quick-pinch-zoom}
 
-Cette seconde librairie, react-quick-pinch-zoom \cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie JavaScript plus connue nommée simplement PinchZoom.js \cite{pinchzoomjs}. Le soucis de cette libraire arrive lorsque l'élément à l'intérieur du Pinchzoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour BeePlace: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
+Cette seconde librairie, react-quick-pinch-zoom \cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie \gls{javascript} plus connue nommée simplement PinchZoom.js \cite{pinchzoomjs}. Le soucis de cette libraire arrive lorsque l'élément à l'intérieur du Pinchzoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour \gls{beeplace}: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
 
 \subsubsection{React-fast-pinch-zoom}
 
@@ -194,7 +194,7 @@ Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[brea
 
 \subsection{Administration}
 
-Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport \cite{passport} qui est le standard en matière d'authentification dans le monde Node.js. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey \cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
+Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport \cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey \cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
 
 \subsubsection{Remise à zéro de la toile}
 
