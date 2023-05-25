@@ -557,3 +557,14 @@
 \newcommand*{\mcl}[1]{\multicolumn{1}{l|}{#1}}
 \usepackage[skip=1ex]{caption}
 \usepackage{enumitem}
+
+% Custom - liste avec checkbox
+\usepackage{amssymb}
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}%
+  \hspace{-2.5pt}}
+\newcommand{\wontfix}{\rlap{$\square$}{\large\hspace{1pt}\xmark}}

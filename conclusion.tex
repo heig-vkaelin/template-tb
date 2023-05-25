@@ -1,4 +1,37 @@
-Ce rapport intermédiaire signe la fin de la troisième Milestone et l'avancée du Travail de Bachelor est assez conforme au planning prévu. Le seul élément qui n'a pas été complété est le démarrage d'utilisation des tests de montées en charges qui sera reporté à la prochaine Milestone. Cependant, la première version développée de \gls{beeplace} pour le Baleinev Festival se trouve être plus qu'une simple base de travail pour la suite du projet. En effet, quasiment la totalité des fonctionnalités \guillemotleft{} required \guillemotright{} du cahier des charges ont été implémentées. Cela permettra d'avoir le temps de se concentrer sur les différents problèmes évoqués dans la dernière section \ref{poc-ameliorations} ainsi que sur les nombreuses fonctionnalités permettant d'améliorer l'expérience utilisateur.
+\section{Avancement du projet}
+
+Ce rapport intermédiaire signe la fin de la troisième Milestone et l'avancée du Travail de Bachelor est conforme au planning prévu. Voici les tâches du cahier des charges qui étaient à réaliser ainsi que leur état d'avancement :
+
+\begin{itemize}
+  \item Milestone 1 - semaine du 20 au 26 mars
+        \begin{todolist}
+          \item[\done] Rédaction du cahier des charges
+          \item[\done] Rédaction de la partie du rapport concernant l'intégration dans l'environnement \gls{beescreens}
+        \end{todolist}
+  \item Milestone 2 - semaine du 17 au 23 avril
+        \begin{todolist}
+          \item[\done] Intégration à l'environnement \gls{beescreens} de l'application \gls{beeplace}
+          \item[\done] Réalisation d'une première version de l'application afin d'être potentiellement utilisée lors du festival Baleinev de cette année
+        \end{todolist}
+  \item Milestone 3 - semaine du 22 au 28 mai
+        \begin{todolist}
+          \item[\done] Rédaction du rapport intermédiaire
+          \item Utilisation d'outils de tests de montées en charges afin d'identifier les problèmes du code actuel
+        \end{todolist}
+\end{itemize}
+
+Un seul élément qui était planifié n'a pas encore été réalisé, il s'agit des tests de montées en charges. Cette tache sera donc déplacée à la prochaine Milestone. Cependant, la première version développée de \gls{beeplace} pour le Baleinev Festival se trouve être plus qu'un simple prototype. En effet, quasiment la totalité des fonctionnalités \guillemotleft{} required \guillemotright{} du cahier des charges ont été implémentées. Cela permettra d'avoir le temps de se concentrer sur les différents problèmes évoqués dans la dernière section \ref{poc-ameliorations} ainsi que sur les nombreuses fonctionnalités permettant d'améliorer l'expérience utilisateur.
+
+\section{Défis rencontrés et futurs}
+
+Les principales difficultés rencontrées lors de cette première partie de projet concernent le Frontend. Elles sont les suivantes :
+
+\begin{itemize}
+  \item Créer un Pinchzoom qui prend en compte les différents types d'appareils, que ce soit un ordinateur, un mobile ou le pavé tactile.
+  \item Synchroniser le state côté Frontend avant d'avoir utilisé une librairie de gestion de state global (Zustand).
+\end{itemize}
+
+Heureusement, aucun gros blocage n'a été rencontré et les difficultés ont pu être surmontées en y consacrant le temps nécessaire. Pour la suite du projet, le point proposant le plus gros défi est le fait de réussir à tester correctement la montée en charge de l'application. En effet, il ne faut pas que l'ordinateur lançant les tests soit l'élément limitant la montée en charge à la place de l'application. Ce point sera donc à prendre en compte et des solutions comme utiliser plusieurs ordinateurs/serveurs pourront être envisagées.
 
 \vfil
 \hspace{8cm}\makeatletter\@author\makeatother\par
