@@ -4,23 +4,23 @@ Ce chapitre présente les technologies choisies pour le développement de l'appl
 
 Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre incroyable de languages différents. Cependant, concernant partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript \cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs} \cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
 
-Utiliser \gls{javascript} pour réaliser des applications web est donc une évidence. Cependant, \gls{javascript} est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible et de plus en plus courant d'utiliser TypeScript \cite{typescript}.
+Utiliser \gls{javascript} pour réaliser des applications web est donc une évidence. Cependant, \gls{javascript} est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible et de plus en plus courant d'utiliser \gls{typescript} \cite{typescript}.
 
 \subsection{TypeScript}
 
-TypeScript est un langage de programmation créé par Microsoft qui est un sur-ensemble de \gls{javascript}. Il est donc possible de compiler du code TypeScript en \gls{javascript}, ce qui permet de l'utiliser dans n'importe quel environnement. Comme expliqué précédemment, \gls{javascript} peut être utilisé pour développer l'application entière, notamment grâce à \gls{nodejs} pour le backend. C'est bien entendu également le cas pour TypeScript.
+\gls{typescript} est un langage de programmation créé par Microsoft qui est un sur-ensemble de \gls{javascript}. Il est donc possible de compiler du code \gls{typescript} en \gls{javascript}, ce qui permet de l'utiliser dans n'importe quel environnement. Comme expliqué précédemment, \gls{javascript} peut être utilisé pour développer l'application entière, notamment grâce à \gls{nodejs} pour le backend. C'est bien entendu également le cas pour \gls{typescript}.
 
-TypeScript ajoute de nombreuses fonctionnalités à \gls{javascript}, comme la possibilité de créer des types, des interfaces, des énumérations et bien d'autres. Les avantages à utiliser TypeScript sont donc nombreux:
+\gls{typescript} ajoute de nombreuses fonctionnalités à \gls{javascript}, comme la possibilité de créer des types, des interfaces, des énumérations et bien d'autres. Les avantages à utiliser \gls{typescript} sont donc nombreux:
 
 \begin{itemize}
-  \item Meilleure complétion dans les IDE, comme Visual Studio Code.
-  \item Gestion automatique des imports dans les IDE.
+  \item Meilleure complétion dans les \gls{ide}, comme Visual Studio Code.
+  \item Gestion automatique des imports dans les \gls{ide}.
   \item Evite de découvrir de nombreuses erreurs au runtime, car elles sont détectées au moment de la compilation.
-  \item Refactoriser le code de façon plus sure en voyant directement les erreurs de types dans l'IDE.
+  \item Refactoriser le code de façon plus sure en voyant directement les erreurs de types dans l'\gls{ide}.
   \item Lecture et compréhension du code plus facile, car les types sont explicitement définis.
 \end{itemize}
 
-De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pimp My Wall et le Media Player, sont déjà écrites en TypeScript. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
+De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pimp My Wall et le Media Player, sont déjà écrites en \gls{typescript}. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
 
 \section{Frontend}
 
@@ -76,9 +76,9 @@ Le choix s'est tourné vers Tailwind qui est une librairie de plus en plus popul
 
 \subsection{Choix du langage}
 
-Comme expliqué précédemment, le choix s'est tourné vers \gls{nodejs} \cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: TypeScript. \gls{nodejs} permet d'utiliser les connaissances acquises en \gls{javascript} côté client également pour le côté serveur. De plus, \gls{nodejs} est un environnement très populaire, ce qui permet, en combinaison avec \gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. De plus, les performances de \gls{nodejs} sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
+Comme expliqué précédemment, le choix s'est tourné vers \gls{nodejs} \cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: \gls{typescript}. \gls{nodejs} permet d'utiliser les connaissances acquises en \gls{javascript} côté client également pour le côté serveur. De plus, \gls{nodejs} est un environnement très populaire, ce qui permet, en combinaison avec \gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. De plus, les performances de \gls{nodejs} sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
 
-Pour finir, grâce à l'utilisation de TypeScript dans les deux applications, il est possible de partager du code, notamment les types entre les deux applications en créant un package. Cela permet d'éviter la duplication de code ainsi qu'être sûr de la cohérence des données.
+Pour finir, grâce à l'utilisation de \gls{typescript} dans les deux applications, il est possible de partager du code, notamment les types entre les deux applications en créant un package. Cela permet d'éviter la duplication de code ainsi qu'être sûr de la cohérence des données.
 
 \subsection{Framework}
 
@@ -157,7 +157,7 @@ Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettr
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et TypeScript afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
   \item Auto reconnexion: Socket.io gère automatiquement les reconnexions en cas de perte de connexion.

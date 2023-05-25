@@ -60,7 +60,7 @@ Adapter le code en fonction de la nature de l'événement devient vite compliqu�
 
 \subsubsection{React-zoom-pan-pinch}
 
-Le librairie la plus connue se nomme React-zoom-pan-pinch \cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en TypeScript et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du Pinchzoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
+Le librairie la plus connue se nomme React-zoom-pan-pinch \cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en \gls{typescript} et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du Pinchzoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
 
 \subsubsection{React-quick-pinch-zoom}
 
@@ -210,7 +210,7 @@ Voici un exemple d'appels HTTP en ligne de commande sur la route permettant de r
   {"status":"ok","message":"Board reset"}%
 \end{minted}
 
-Grâce à l'implémentation de l'authentification sous la forme d'un décorateur TypeScript \cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth}:
+Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript} \cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth}:
 
 \begin{minted}[breaklines]{typescript}
 @Get()
