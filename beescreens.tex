@@ -1,10 +1,10 @@
 \section{Environnement existant}
 
-Le code de tous les projets existants réalisés par l'équipe \gls{beescreens} se trouvent dans un unique répertoire \gls{gitlab} \cite{beescreens}. En effet, le répertoire est organisé sous la forme d'un monorepo. Ce qui signifie, qu'au lieu d'avoir une répertoire par projet comme il était surtout courant auparavant, tous les projets sont regroupés. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite notamment la collaboration entre les développeurs en ayant directement accès au code complet.
+Le code de tous les projets existants réalisés par l'équipe \gls{beescreens} se trouvent dans un unique répertoire \gls{gitlab}~\cite{beescreens}. En effet, le répertoire est organisé sous la forme d'un monorepo. Ce qui signifie, qu'au lieu d'avoir une répertoire par projet comme il était surtout courant auparavant, tous les projets sont regroupés. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite entre autre la collaboration entre les développeurs en ayant directement accès au code complet.
 
-Le répertoire est organisé grâce à une workspace \gls{pnpm} \cite{pnpmworkspace} afin de gérer le fait qu'il s'agit d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
+Le répertoire est organisé grâce à une workspace \gls{pnpm}~\cite{pnpmworkspace} afin de gérer le fait qu'il s'agisse d'un monorepo. Un fichier de configuration est créé à la racines du répertoire en spécifiant la liste et le chemins vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
 
-\gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec gls{nodejs} \cite{nodejs} \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} permet une gestion des monorepos plus efficace grâce à la notion de workspace.
+\gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec \gls{nodejs}~\cite{nodejs} \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} permet une gestion des monorepos plus efficace grâce à la notion de workspace.
 
 \subsection{Structure du répertoire}
 
@@ -31,7 +31,7 @@ Le dossier \mintinline[breaklines]{bash}{apps} contient les applications déjà 
 
 Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de \gls{docker} ainsi que de \gls{docker-compose}. Chaque application possède son propre dossier contenant le fichier  \mintinline[breaklines]{bash}{docker-compose.yml} ainsi que les fichiers de configuration des variables d'environnement utilisées en production.
 
-Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet \cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe \gls{beescreens}. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
+Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet~\cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe \gls{beescreens}. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
 
 Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
 
@@ -54,7 +54,7 @@ Afin de pallier à ce problème, l'idée de \gls{beeplace} est née. En imposant
 
 \section{Intégration}
 
-Pour réaliser l'intégration de façon optimale, un guide \cite{addapptobeescreens} a été créé par les mainteneurs du projet \gls{beescreens} expliquant les étapes à suivre afin d'ajouter une nouvelle application au répertoire.
+Pour réaliser l'intégration de façon optimale, un guide~\cite{addapptobeescreens} a été créé par les mainteneurs du projet \gls{beescreens} expliquant les étapes à suivre afin d'ajouter une nouvelle application au répertoire.
 
 \subsection{Création d'une nouvelle application}
 
@@ -74,7 +74,7 @@ L'arborescence est donc actuellement la suivante:
 
 Par la suite, un fichier \mintinline[breaklines]{bash}{package.json} est nécessaire par dossier. Ces fichiers sont normalement utilisés dans les projets \gls{javascript} et \gls{nodejs} afin de préciser notamment les scripts, les dépendances et diverses métadonnées du projet. Dans ce cas-ci, ils sont utilisés peu importe les technologies qui seront choisies pour ce projet. En effet, cela permet d'unifier beaucoup d'aspects sur l'entièreté du code \gls{beescreens}. Par exemple, il est possible de lancer les tests unitaires de toutes les applications grâce au fichier \mintinline[breaklines]{bash}{package.json} créé à la racine du répertoire. Si la future application n'est pas développée en \gls{javascript}, les scripts du \mintinline[breaklines]{bash}{package.json} lancerons les commandes nécessaires dans le langage souhaité afin d'abstraire le plus possible les technologies utilisées.
 
-La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens} \cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est la suivante:
+La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens}~\cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est la suivante:
 
 \begin{listing}[h]
   \inputminted{json}{assets/figures/package.json}

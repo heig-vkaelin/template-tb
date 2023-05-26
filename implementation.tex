@@ -30,7 +30,7 @@ Voici tout d'abord quelques figures présentant l'interface sur ordinateur ainsi
 
 \subsection{Canvas}
 
-La toile est le point central de l'application, celle-ci est modélisée grâce à l'élément HTML5 `<canvas>` \cite{canvas}. Cet élément permet de dessiner des formes, des images et du texte. Il est possible de dessiner directement sur le canvas en utilisant le contexte 2D ou 3D. Les formes à dessiner sont très simples dans le cas de \gls{beeplace} car il s'agit de pixels représentés par des carrés de couleurs unies.
+La toile est le point central de l'application, celle-ci est modélisée grâce à l'élément HTML5 `<canvas>`~\cite{canvas}. Cet élément permet de dessiner des formes, des images et du texte. Il est possible de dessiner directement sur le canvas en utilisant le contexte 2D ou 3D. Les formes à dessiner sont très simples dans le cas de \gls{beeplace} car il s'agit de pixels représentés par des carrés de couleurs unies.
 
 \subsubsection{Dessin des pixels}
 
@@ -41,7 +41,7 @@ Deux choix sont possibles pour dessiner les pixels sur le canvas:
   \item Représenter un pixel comme un carré de plusieurs pixels du canvas
 \end{enumerate}
 
-La deuxième variante permet d'avoir directement une représentation agrandie de la toile. En effet, si la toile a par exemple des dimensions de 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affiché à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour connaître les coordonnées réelles du clique de l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform en CSS \cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering \cite{image-renderingcss} avec comme valeur `pixelated`. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
+La deuxième variante permet d'avoir directement une représentation agrandie de la toile. En effet, si la toile a par exemple des dimensions de 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affiché à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour connaître les coordonnées réelles du clique de l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform en CSS~\cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering~\cite{image-renderingcss} avec comme valeur `pixelated`. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
 
 \subsection{Pinchzoom}
 
@@ -57,17 +57,17 @@ Adapter le code en fonction de la nature de l'événement devient vite compliqu�
 
 \subsubsection{React-zoom-pan-pinch}
 
-Le librairie la plus connue se nomme React-zoom-pan-pinch \cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en \gls{typescript} et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du Pinchzoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
+Le librairie la plus connue se nomme React-zoom-pan-pinch~\cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en \gls{typescript} et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du Pinchzoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
 
 \subsubsection{React-quick-pinch-zoom}
 
-Cette seconde librairie, react-quick-pinch-zoom \cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie \gls{javascript} plus connue nommée simplement PinchZoom.js \cite{pinchzoomjs}. Le soucis de cette libraire arrive lorsque l'élément à l'intérieur du Pinchzoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour \gls{beeplace}: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
+Cette seconde librairie, react-quick-pinch-zoom~\cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie \gls{javascript} plus connue nommée simplement PinchZoom.js~\cite{pinchzoomjs}. Le soucis de cette libraire arrive lorsque l'élément à l'intérieur du Pinchzoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour \gls{beeplace}: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
 
 \subsubsection{React-fast-pinch-zoom}
 
-Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom \cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome \cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre libraire de la même équipe Google Chrome, PointerTracker \cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events \cite{pointer-events} qui contrairement aux anciens événements, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
+Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome~\cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre libraire de la même équipe Google Chrome, PointerTracker~\cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events~\cite{pointer-events} qui contrairement aux anciens événements, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
 
-Malheureusement la librairie, react-fast-pinch-zoom \cite{react-fast-pinch-zoom}, est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes "We recommend defining components as functions instead of classes." \cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
+Malheureusement la librairie, react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}, est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes "We recommend defining components as functions instead of classes."~\cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
 
 \subsection{Gestion du state}
 
@@ -83,12 +83,12 @@ Toutes ces variables sont utilisées dans de nombreux composants React. Il est d
 
 \begin{enumerate}
   \item Utiliser une librairie externe de stockage de state.
-  \item Utiliser le state fourni par React dans un Contexte \cite{react-context} afin de le rendre accessible à tous les composants enfants.
+  \item Utiliser le state fourni par React dans un Contexte~\cite{react-context} afin de le rendre accessible à tous les composants enfants.
 \end{enumerate}
 
 \subsubsection{Librairie externes}
 
-De nombreuses librairies existent pour gérer le state d'une application React. La plus connue est Redux \cite{react-redux}. Cependant, Redux est une librairie assez lourde et complexe à mettre en place. Elle est également très verbeuse. Il existe des alternatives plus légères et simples comme Zustand \cite{zustand}.
+De nombreuses librairies existent pour gérer le state d'une application React. La plus connue est Redux~\cite{react-redux}. Cependant, Redux est une librairie assez lourde et complexe à mettre en place. Elle est également très verbeuse. Il existe des alternatives plus légères et simples comme Zustand~\cite{zustand}.
 
 Les avantages de Zustand sur Redux sont les suivants:
 \begin{itemize}
@@ -99,7 +99,7 @@ Les avantages de Zustand sur Redux sont les suivants:
 
 \subsubsection{Contexte React}
 
-Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte React \cite{react-context}. Celui-ci permet de stocker des données ainsi que des fonctions utilitaires dans un endroit centralisé et de les rendre accessibles à tous les composants enfants. Cependant, les contextes amènent plusieurs problèmes:
+Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte React~\cite{react-context}. Celui-ci permet de stocker des données ainsi que des fonctions utilitaires dans un endroit centralisé et de les rendre accessibles à tous les composants enfants. Cependant, les contextes amènent plusieurs problèmes:
 
 \begin{itemize}
   \item Un contexte React n'est pas fait pour stocker des données qui changent souvent. En effet, à chaque changement de state, tous les composants enfants sont re-rendus, ce qui peut être problématique au niveau des performances.
@@ -116,20 +116,20 @@ La bonne identification des utilisateurs est un point crucial de l'application. 
 
 Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas envisageable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrière possible pour pouvoir l'utiliser.
 
-Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées fingerprint \cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur.
+Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées fingerprint~\cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur.
 
 \subsubsection{Fingerprint}
 
 Cette technique consiste à récupérer des informations sur le navigateur de l'utilisateur afin de créer un identifiant unique, notamment via les caractéristiques techniques de l'appareil comme sa résolution d'écran ou ses polices installées. La liste des attributs utilisés se doit d'être la plus grande possible afin d'éviter au maximum les collisions entre les utilisateurs. Un exemple plus détaillé sera présenté dans la prochaine sous-section. De plus, les informations doivent être stables afin que l'identifiant de l'utilisateur ne change pas. A partir de toutes ces caractéristiques, l'identifiant est créé via une fonction de hachage.
 
-Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS \cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
+Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS~\cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
 
-La seule vraie alternative open source se nomme Broprint.js \cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon de quelques personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs potables étaient du même modèle. De plus certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable.
+La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon de quelques personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs potables étaient du même modèle. De plus certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable.
 
 % , comme annoncé lors de la réalisation du POC \ref{poc-ameliorations},
 
 \subsubsection{FingerprintJS}
-Le choix se tourne donc finalement vers FingerprintJS \cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\% \cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
+Le choix se tourne donc finalement vers FingerprintJS~\cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\%~\cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
 
 Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, \href{https://fingerprintjs.github.io/fingerprintjs}{un exemple de résultat} est donné sur leur site. La liste est conséquente, elle contient notamment:
 
@@ -142,7 +142,7 @@ Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, \href
 
 En plus de toutes ces caractérisées, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
 
-Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions contient littéralement deux lignes \cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
+Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions contient littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
 
 \subsection{Configuration}
 
@@ -176,7 +176,7 @@ En plus des variables présentées, d'autres plus classiques sont utilisées pou
 
 \subsubsection{Validation des variables d'environnement}
 
-Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le répertoire git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended} \cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, le backend ne démarre pas et affiche un message d'erreur. Ces tests sont également effectués dans la pipeline de CI/CD afin d'éviter les erreurs inutiles.
+Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le répertoire git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended}~\cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, le backend ne démarre pas et affiche un message d'erreur. Ces tests sont également effectués dans la pipeline de CI/CD afin d'éviter les erreurs inutiles.
 
 \subsection{Connexion WebSockets}
 \label{section:connexion-websockets}
@@ -192,9 +192,9 @@ Après cette première connexion, le client peut envoyer des événements pour p
 \subsection{Stockage de l'état actuel de la toile}
 \label{section:stockage}
 
-Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield \cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17 \cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray \cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
 Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
 \begin{equation}
@@ -224,7 +224,7 @@ Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[brea
 
 \subsection{Administration}
 
-Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport \cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey \cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
+Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
 
 \subsubsection{Remise à zéro de la toile}
 
@@ -240,7 +240,7 @@ Voici un exemple d'appels HTTP en ligne de commande sur la route permettant de r
   {"status":"ok","message":"Board reset"}%
 \end{minted}
 
-Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript} \cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth}:
+Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth}:
 
 \begin{minted}[breaklines]{typescript}
 @Get()
