@@ -1,6 +1,6 @@
 \section{Frontend}
 
-L'application en l'état est disponible et jouable à l'adresse suivante \href{https://place.beescreens.ch}{place.beescreens.ch}.
+L'application en l'état est disponible et jouable par tous à l'adresse suivante \href{https://place.beescreens.ch}{place.beescreens.ch}. Il s'agit de la version en production déployée sur la machine virtuelle \gls{beescreens}.
 
 \subsection{Présentation de l'interface}
 
@@ -45,7 +45,7 @@ La deuxième variante permet d'avoir directement une représentation agrandie de
 
 \subsection{Pinchzoom}
 
-Écouter les événements utilisateurs pour réaliser des transformations sur un élément (le déplacer, zoomer à un point précis) revient à réaliser ce qu'on appelle un "Pinch-to-Zoom" ou plus simplement "pinchzoom". Ce terme signifie littéralement "pincer pour zoomer". Il s'agit d'un geste utilisé sur les appareils tactiles pour zoomer sur une image ou une page web ainsi que se déplacer. Réaliser une implémentation de ce geste devient vite une tâche fastidieuse. En effet, il est nécessaire d'écouter divers événements différents pour que l'utilisation soit agréable sur tout type d'appareils:
+Écouter les événements utilisateurs pour réaliser des transformations sur un élément (le déplacer, zoomer à un point précis) revient à réaliser ce qu'on appelle un "Pinch-to-Zoom" ou plus simplement "PinchZoom". Ce terme signifie littéralement "pincer pour zoomer". Il s'agit d'un geste utilisé sur les appareils tactiles pour zoomer sur une image ou une page web ainsi que se déplacer. Réaliser une implémentation de ce geste devient vite une tâche fastidieuse. En effet, il est nécessaire d'écouter divers événements différents pour que l'utilisation soit agréable sur tout type d'appareils:
 
 \begin{itemize}
   \item Les événements de la souris
@@ -71,7 +71,7 @@ Malheureusement la librairie, react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}
 
 \subsection{Gestion du state}
 
-L'application React doit garder un état à jour. Cet état comporte plusieurs éléments:
+L'application React doit garder en tout temps un état à jour. Cet état comporte plusieurs éléments:
 
 \begin{itemize}
   \item Les réglages initiaux de la toile comme sa taille, les couleurs disponibles, le temps d'attente entre chaque pixel, etc.
@@ -114,7 +114,7 @@ C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustan
 \subsection{Identification des utilisateurs}
 La bonne identification des utilisateurs est un point crucial de l'application. En effet, il est nécessaire de pouvoir vérifier que les utilisateurs attendent bien le temps nécessaire avant de pouvoir placer un nouveau pixel. Pouvoir contourner cette règle casserait complètement le but principal de l'application qui est de faire collaborer les utilisateurs.
 
-Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas envisageable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrière possible pour pouvoir l'utiliser.
+Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas envisageable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir l'utiliser.
 
 Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées fingerprint~\cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur.
 
@@ -192,7 +192,7 @@ Après cette première connexion, le client peut envoyer des événements pour p
 \subsection{Stockage de l'état actuel de la toile}
 \label{section:stockage}
 
-Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
 Afin de convertir la toile en une suite de bits, il est nécessaire de donner un id à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
@@ -205,10 +205,10 @@ Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redi
 
 \subsection{Stockage de l'historique}
 
-Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. La conception de ces données a été réalisée dans une table unique nommée \texttt{pixel} contenant les champs suivants:
+Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. La conception de ces données a été réalisée dans une table SQL unique nommée \texttt{pixel} contenant les champs suivants:
 
 \begin{itemize}
-  \item id: Identifiant unique de l'historique
+  \item id: Identifiant unique de la pose du pixel
   \item x: Position x du pixel
   \item y: Position y du pixel
   \item color: Identifiant de la couleur du pixel
@@ -220,11 +220,13 @@ Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états pa
 
 Redis est également utilisé pour vérifier que le temps d'attente entre chaque pixel est bien respecté pour chaque utilisateur. En effet, il est possible de stocker des données dans Redis avec une durée de vie, qui correspond ici au temps d'attente.
 
-Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[breaklines]{bash}{users:<fingerprint>}. La clé aurait simplement pu être la fingerprint de l'utilisateur mais la préfixer avec \texttt{users:} permet de pouvoir sélectionner rapidement toutes les clés des utilisateurs via un scan. Cela peut être utile pour la remise à zéro des temps d'attente par exemple. Concernant la valeur associée à la clé, il s'agit simplement du nombre de pixels posés par l'utilisateur durant l'intervalle. S'il s'agit du premier pixel, la clé est créée et le temps d'attente démarre. Pour les pixels suivants, la valeur est incrémentée grâce aux méthodes que Redis nous offre. Si le nombre de pixels stockés est égal au nombre maximal de pixels autorisés, l'opération est simplement refusée.
+Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[breaklines]{bash}{users:<fingerprint>}. La clé aurait simplement pu être la fingerprint de l'utilisateur mais la préfixer avec \texttt{users:} permet de pouvoir sélectionner rapidement toutes les clés des utilisateurs via un scan. Cela peut être utile pour la remise à zéro des temps d'attente ou simplement pour vider le cache sans risquer de toucher à l'état de la toile. Concernant la valeur associée à la clé, il s'agit simplement du nombre de pixels posés par l'utilisateur durant l'intervalle. S'il s'agit du premier pixel, la clé est créée et le temps d'attente démarre. Pour les pixels suivants, la valeur est incrémentée grâce aux méthodes que Redis nous offre. Si le nombre de pixels stockés est égal au nombre maximal de pixels autorisés, l'opération est simplement refusée.
 
 \subsection{Administration}
 
 Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
+
+Cette stratégie d'authentification par clé d'API est choisie pour sa facilité d'implémentation. En effet, aucun stockage de session ou même dans une base de données n'est nécessaire. De plus, les besoins d'administration sont très simples pour l'instant et ne nécessitent pas plus que de simples appels HTTP.
 
 \subsubsection{Remise à zéro de la toile}
 
@@ -240,7 +242,7 @@ Voici un exemple d'appels HTTP en ligne de commande sur la route permettant de r
   {"status":"ok","message":"Board reset"}%
 \end{minted}
 
-Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth}:
+Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP:
 
 \begin{minted}[breaklines]{typescript}
 @Get()

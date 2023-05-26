@@ -1,6 +1,6 @@
 \section{Contexte}
 
-Comme expliqué dans le cahier des charges, l'idée était d'avoir un prototype fonctionnel de l'application assez rapidement (durant la Milestone 3 \ref{milestone3}) afin de pouvoir la tester lors du Baleinev Festival de cette année qui a eu lieu le 21 avril 2023. Cela a permis de tester l'application en conditions réelles, de voir les potentiels problèmes qui apparaissent et finalement avoir un retour du public cible.
+Comme expliqué dans le cahier des charges, l'idée était d'avoir un prototype fonctionnel de l'application assez rapidement (durant la Milestone 3, voir \ref{milestone3}) afin de pouvoir la tester lors du Baleinev Festival de cette année qui a eu lieu le 21 avril 2023. Cela a permis de tester l'application en conditions réelles, de voir les potentiels problèmes qui apparaissent et finalement avoir un retour du public cible.
 
 Il a été décidé de déployer l'application \gls{beeplace} sur deux écrans du festival au rez-de-chaussée et non pas sur les tours de l'école. La raison principale est que l'application ne permet pas encore de découper l'affichage en plusieurs parties. Il aurait donc fallu projeter toute la toile sur un écran et cela aurait été difficilement visible à cause de la distance. Divers QRCode ont été disposés à proximité des écrans afin de permettre aux utilisateurs de pouvoir accéder à l'application facilement. Le résultat, après plus de 8 heures de festival, est visible sur la figure \ref{baleinev2023.svg}.
 
@@ -32,9 +32,9 @@ Quant aux réglages choisis lors de la soirée:
   \item Le temps d'attente entre deux pixels était de 10 secondes.
 \end{itemize}
 
-La taille pour la toile a été un choix judicieux. En effet, elle n'était pas trop grande et les joueurs étaient obligés de faire coexister leurs créations sans avoir chacun leur propre espace dédié bien séparé les uns des autres.
+La taille pour la toile a été un choix judicieux. En effet, elle n'était pas trop grande et les joueurs étaient obligés de faire coexister leurs créations sans avoir chacun leur propre espace dédié bien séparé des autres.
 
-Concernant le temps d'attente entre chaque pixel, il a été défini de manière assez arbitraire mais le résultat m'a semblé satisfaisant. L'idée était de forcer plusieurs joueurs à collaborer sans pouvoir remplir la toile tout seul. Cependant, l'envie initiale était que les joueurs puissent poser quelques pixels chaque 10 secondes (deux ou trois par exemple) afin de réduire la frustration. Malheureusement, cette fonctionnalité n'a pas pu être implémentée à temps.
+Concernant le temps d'attente entre chaque pixel, il a été défini de manière assez arbitraire mais le résultat a semblé satisfaisant. L'idée était de forcer plusieurs joueurs à collaborer sans pouvoir remplir la toile tout seul. Cependant, l'envie initiale était que les joueurs puissent poser quelques pixels chaque 10 secondes (deux ou trois par exemple) afin de réduire la frustration. Malheureusement, cette fonctionnalité n'a pas pu être implémentée à temps.
 
 \section{Conclusion}
 
@@ -50,10 +50,10 @@ Du côté du staff de Baleinev le bilan est également positif. En effet, grâce
 Malgré ce premier bilan positif, de nombreux points peuvent être améliorés dans la suite de ce travail de Bachelor.
 
 \subsubsection{Dynamisme de l'application}
-La première amélioration, celle qui touche le plus les joueurs, est l'ajout de la possibilité de poser plusieurs pixels à la fois. En effet, cela permettrait de dynamiser l'application car le nombre de joueurs est clairement plus limité que sur le r/place original et la toile s'actualise donc beaucoup moins souvent. Pouvoir poser un pixel à la fois est donc assez frustrant pour les joueurs. Il faut donc trouver un juste milieu entre le dynamisme de l'application et donner trop de pixels aux joueurs qui pourraient alors réaliser des dessins trop rapidement sans avoir à collaborer avec d'autres joueurs.
+La première amélioration, celle qui touche le plus les joueurs, est l'ajout de la possibilité de poser plusieurs pixels à la fois. En effet, cela permettrait de dynamiser l'application car le nombre de joueurs est clairement plus limité que sur le r/place original et la toile s'actualise donc beaucoup moins souvent. Pouvoir poser un pixel à la fois est assez frustrant pour les joueurs. Il faut donc trouver un juste milieu entre le dynamisme de l'application et donner trop de pixels aux joueurs qui pourraient alors réaliser des dessins trop rapidement sans avoir à collaborer avec d'autres joueurs. Avoir 2 ou 3 pixels toutes les 10 secondes semble être un bon compromis.
 
 \subsubsection{Scalabilité}
-Pour continuer, des tests de montée en charge sont toujours d'actualité afin de pouvoir parer à toute éventualité. En effet, l'application n'a pas été testée avec plus d'une dizaine de joueurs simultanément le soir du festival. Il est donc difficile de savoir comment elle réagirait avec plusieurs centaines voir milliers de joueurs.
+Pour continuer, des tests de montée en charge sont toujours d'actualité afin de pouvoir parer à toute éventualité. En effet, l'application n'a pas été testée avec plus d'une dizaine de joueurs simultanément le soir du festival. Il est donc difficile de savoir comment elle réagirait avec plusieurs centaines voir milliers de joueurs dans le cas d'une utilisation plus intensive.
 
 \subsubsection{Identification des utilisateurs}
 Le soucis majeur rencontré est l'identification des utilisateurs. La problématique a été longuement abordée dans le chapitre (\ref{implementation}) concernant l'implémentation mais il est important de rapidement l'évoquer à nouveau. La technique d'identification afin de vérifier que les utilisateurs respectent le temps d'attente entre deux pixels se repose sur l'empreinte digitale de l'utilisateur, plus couramment appelé Fingerprint~\cite{devicefingerprint}. La librairie utilisée pour cette première version, Broprint.js~\cite{broprintjs} est une librairie open source très pratique. Malheureusement, un utilisateur a fait la démonstration que sur son téléphone, il lui suffisait de rafraîchir la page pour poser un nouveau pixel. Son empreinte était donc différente à chaque chargement de page, ce qui casse le principe de l'application. Ce soucis devra donc être réglé dans le futur.

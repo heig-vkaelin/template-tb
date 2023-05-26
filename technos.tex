@@ -84,7 +84,7 @@ Pour finir, grâce à l'utilisation de \gls{typescript} dans les deux applicatio
 
 Il existe de nombreux frameworks dans l'écosystème \gls{nodejs}. La comparaison s'accentue sur les quatre frameworks les plus populaires et les plus maintenus, à savoir Express.js~\cite{expressjs}, AdonisJS~\cite{adonisjs}, Fastify~\cite{fastify} et NestJS~\cite{nestjs}.
 
-Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un framework complet avec une architecture complète à disposition ou un simple framework permettant de gérer les routes et les middlewares.
+Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou une simple librairie permettant surtout de gérer les routes et les middlewares.
 
 \begin{table}[h]
   \begin{center}
@@ -102,7 +102,7 @@ Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks a
 
 \subsubsection{Express.js et Fastify}
 
-Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les routes, les middlewares, la validation et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet.
+Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les middlewares, la validation, les sessions et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet.
 
 De plus, aucune convention n'est imposée par Express, ce qui peut rendre les applications plus difficiles à maintenir. Lorsque l'on revient sur un projet après plusieurs mois, il est souvent difficile de se remettre dans le contexte et de comprendre la logique de l'application. C'est pourquoi il est préférable d'utiliser un framework qui impose des conventions et une architecture.
 
@@ -154,18 +154,18 @@ Pour la communication en temps réel sur le web, il existe principalement trois 
 Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
 
 \subsection{WebRTC}
-WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
+WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.io et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
-  \item Auto reconnexion: Socket.io gère automatiquement les reconnexions en cas de perte de connexion.
-  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité d'avoir plusieurs toiles simultanément sur l'application.
+  \item Auto reconnexion: Socket.IO gère automatiquement les reconnexions en cas de perte de connexion.
+  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité dans le futur d'avoir plusieurs toiles simultanément sur l'application.
   \item Intégration avec Redis~\cite{redis}: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
 \end{itemize}
 
-Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.io pour la communication temps réel.
+Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.IO pour la communication temps réel.
 
 \section{Stockage}
 
@@ -182,7 +182,7 @@ L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes
 
 Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis~\cite{redis} ou simplement stocker une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est indépendant de l'application.
 
-D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il n'est donc pas
+D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il n'est donc pas nécessaire de chercher plus loin.
 
 \subsection{Stockage durable}
 
