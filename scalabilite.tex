@@ -2,7 +2,7 @@ Comme expliqué plusieurs fois précédemment, assurer la scalabilité de l'appl
 
 \section{Tests de montée en charge}
 
-Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de simuler de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication Websocket, qui s'occupe de toute la synchronisation des données entres les utilisateurs. En effet, aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par Websocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
+Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de simuler de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication WebSocket, qui s'occupe de toute la synchronisation des données entres les utilisateurs. En effet, aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par WebSocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
 
 \subsection{Déploiement de l'application}
 
@@ -18,7 +18,7 @@ Afin de tester les limites de l'application sans affecter la version en producti
 
 \subsection{Choix de l'outil}
 
-Pour pouvoir tester la communication Websocket, il faut tester l'implémentation choisie, à savoir Socket.IO. En effet, Socket.IO utilise son propre protocole de communication~\cite{socket-io-protocol} au-dessus des Websocket classiques, qui n'est pas forcément supporté par tous les outils de test. La documentation officielle de Socket.IO propose deux manières~\cite{socket-io-load-testing} de tester une application utilisant Socket.IO:
+Pour pouvoir tester la communication WebSocket, il faut tester l'implémentation choisie, à savoir Socket.IO. En effet, Socket.IO utilise son propre protocole de communication~\cite{socket-io-protocol} au-dessus des WebSockets classiques, qui n'est pas forcément supporté par tous les outils de test. La documentation officielle de Socket.IO propose deux manières~\cite{socket-io-load-testing} de tester une application utilisant Socket.IO:
 
 \begin{enumerate}
   \item Utiliser l'outil Artillery~\cite{artillery}
@@ -44,14 +44,16 @@ Cette solution très simple à mettre en place semble idéale. Cependant, un nom
 \begin{itemize}
   \item Le script lance parfois une erreur \mintinline[breaklines]{bash}{Error: Callback was already called.} qui stope l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
   \item Artillery ne permet pas de tester facilement la communication du serveur vers les clients. En effet, l'outil est plus adapté à la communication client-serveur. Ce qui est problématique afin de récupérer par exemple la configuration du canvas ou encore les pixels des autres utilisateurs.
-  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les Websocket ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion Websocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les 4 millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
+  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les 4 millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
 \end{itemize}
 
 Ces raisons ont poussé à abandonner Artillery et à chercher une autre solution.
 
 \subsubsection{k6}
 
-k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 starts sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
+k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 stars sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
+
+k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
 
 TODO
 
