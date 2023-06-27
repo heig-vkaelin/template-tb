@@ -1,0 +1,34 @@
+config:
+  target: "https://dev-api-place.beescreens.ch"
+  phases:
+    - duration: 60
+      arrivalCount: 1000
+  processor: "functions.js"
+  plugins:
+    ensure: {}
+  ensure:
+    thresholds:
+      - "http.response_time.p99": 800
+
+scenarios:
+  - name: "Draw 3 random pixels"
+    engine: socketio
+    flow:
+      - think: 1
+      - function: "generateFingerprint"
+      - emit:
+          channel: "join"
+          data: "{{fingerprint}}"
+      - loop:
+          - think: 2
+          - function: "randomPixel"
+          - emit:
+              channel: "pixelFromPlayer"
+              data:
+                x: "{{x}}"
+                y: "{{y}}"
+                color: "{{color}}"
+        count: 3
+      - get:
+          url: "https://dev-place.beescreens.ch"
+      - think: 30

@@ -157,7 +157,7 @@ Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettr
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
   \item Auto reconnexion: Socket.IO gère automatiquement les reconnexions en cas de perte de connexion.
