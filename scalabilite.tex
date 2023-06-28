@@ -67,12 +67,45 @@ Cet exemple de configuration permet de vérifier que 95\% des connexions WebSock
 
 \subsubsection{Solution choisie}
 
+Le choix s'est porté sur k6. Les raisons principales ont pour la plupart déjà été évoquées mais en voici un petit récapitulatif:
+
+\begin{itemize}
+  \item k6 permet une plus grande liberté dans l'écriture des tests grâce à l'utilisation d'un vrai langage de programmation (JavaScript) plutôt que d'un fichier de configuration YAML.
+  \item k6 met à disposition dans ses résultats des métriques plus intéressantes pour tester la communication WebSocket.
+  \item k6 est plus populaire et il est donc plus facile de trouver la documentation nécessaire pour résoudre les problèmes rencontrés.
+\end{itemize}
+
+\subsection{Implémentation du test}
+
+\subsubsection{Types de tests}
+
+Il est tout d'abord nécessaire de trouver quel type de test convient le mieux à la situation. La documentation k6 propose six types de tests de montée en charge:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/load-test-types.png}
+  \caption{Types de tests de montée en charge~\cite{k6-load-test-types}.}
+  \label{fig:load-test-types}
+\end{figure}
+
+\begin{itemize}
+  \item \textbf{Smoke tests}: permettent de valider que le script de test fonctionne et que le système fonctionne correctement sous une charge minimale.
+  \item \textbf{Average-load tests}: évaluent les performances du système dans des conditions normales prévues.
+  \item \textbf{Stress tests}: évaluent les performances du système à ses limites, lorsque la charge dépasse la moyenne prévue.
+  \item \textbf{Soak tests}: évaluent la fiabilité et les performances du système sur des périodes prolongées.
+  \item  \textbf{Spike tests}: valident le comportement et la survie du système en cas d'augmentation soudaine, brève et massive de l'activité.
+  \item \textbf{Breakpoint tests}: augmentent progressivement la charge afin d'identifier les limites de capacité du système.
+\end{itemize}
+
 TODO
 
-
-\subsection{Test}
+\subsubsection{Architecture}
 
 TODO
+
+\subsubsection{Test}
+
+TODO - ajouter code ici
 
 \subsection{Résultats initiaux}
 
