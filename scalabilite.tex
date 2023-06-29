@@ -47,13 +47,13 @@ Cette solution très simple à mettre en place semble idéale. Cependant, un nom
   \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les 4 millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
 \end{itemize}
 
-Ces raisons ont poussé à abandonner Artillery et à chercher une autre solution.
+Ces raisons ont poussé à abandonner Artillery et à chercher une autre solution. Le code source des recherches effectuées avec Artillery n'est plus disponible dans le répertoire \gls{beescreens} mais reste accessible via un commit spécifique \footnote{Voir commit no. \href{https://gitlab.com/beescreens/beescreens/-/merge_requests/255/diffs?commit_id=98e5e73eae3f9ed77026245cc727aa42728cac3b}{98e5e73eae3f9ed77026245cc727aa42728cac3b}}.
 
 \subsubsection{k6}
 
 k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 stars sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
 
-k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
+k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6\footnote{\url{https://github.com/grafana/k6/issues/1306}}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
 
 Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \mintinline[breaklines]{bash}{ws_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration suivante:
 
@@ -97,15 +97,56 @@ Il est tout d'abord nécessaire de trouver quel type de test convient le mieux �
   \item \textbf{Breakpoint tests}: augmentent progressivement la charge afin d'identifier les limites de capacité du système.
 \end{itemize}
 
-TODO
+Le type le plus utile dans l'état actuel de \gls{beeplace} est le \textbf{Breakpoint test}. En effet, ce type de test permet d'observer facilement si les optimisations réalisées sont efficaces. Plus la charge supportée avant que le système ne s'effondre est élevée, plus les optimisations sont utiles.
+
+Dans le futur, afin de vérifier après les optimisations réalisées que le système supporte la charge nécessaire, des \textbf{Spike tests} et des \textbf{Stress tests} seront également réalisés. Ces tests permettent de vérifier que le système ne s'effondre pas sous une charge plus élevée que la moyenne prévue, dans le cas d'un afflux soudain de festivaliers par exemple.
 
 \subsubsection{Architecture}
 
-TODO
+Le code est séparé en deux parties: le code générique permettant de rendre compatible k6 avec Socket.IO et le test en lui-même. Le code générique est placé dans un package nommé \mintinline[breaklines]{bash}{@beescreens/benchmarks} et est importé dans le test \mintinline[breaklines]{bash}{apps/beeplace/tests/load-tests}. Ce code pourrait, dans le futur, être utilisé pour tester d'autres applications du projet \gls{beescreens} implémentant également Socket.IO, comme Pimp My Wall par exemple.
 
-\subsubsection{Test}
+\dirtree{%
+  .1 /.
+  .2 apps.
+  .3 beeplace.
+  .4 tests.
+  .5 load-tests.
+  .4 ....
+  .3 ....
+  .2 packages.
+  .3 benchmarks.
+  .3 ....
+}
 
-TODO - ajouter code ici
+\subsubsection{Test avec K6}
+
+Le test utilisé est une Breakpoint test, l'implémentation a été séparée en trois parties afin de pouvoir la commenter plus facilement.
+
+\begin{listing}[H]
+  \inputminted{ts}{assets/figures/breakpoint-test-1.ts}
+  \caption{Breakpoint test avec k6 - Fonction principale}
+  \label{listing:k6-breakpoint-test-1}
+\end{listing}
+
+La fonction principale de la figure \ref{listing:k6-breakpoint-test-1} est exécutée pour chaque utilisateur virtuel. Elle se connecte à l'endpoint WebSocket grâce à la classe \mintinline[breaklines]{ts}{K6SocketIo} du package précédemment évoqué \mintinline[breaklines]{bash}{@beescreens/benchmarks}. Elle appelle ensuite la fonction \mintinline[breaklines]{bash}{onConnect} détaillée dans la figure \ref{listing:k6-breakpoint-test-3} qui contient le comportement propre à l'utilisateur. Les erreurs sont également comptabilisées afin de les afficher à la fin du test.
+
+\begin{listing}[H]
+  \inputminted{ts}{assets/figures/breakpoint-test-2.ts}
+  \caption{Breakpoint test avec k6 - Options}
+  \label{listing:k6-breakpoint-test-2}
+\end{listing}
+
+La figure \ref{listing:k6-breakpoint-test-2} présente les options du test. Le test dure un maximum de 5 minutes et va ajouter un nombre d'utilisateurs virtuels croissant jusqu'à l'objectif souhaité de 1000 utilisateurs. Le test ne se soucie pas de l'éventuelle latence de l'application grâce à l'exécuteur \mintinline[breaklines]{bash}{ramping-arrival-rate}.
+
+Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse 800 millisecondes pour 95\% des utilisateurs virtuels.
+
+\begin{listing}[H]
+  \inputminted{ts}{assets/figures/breakpoint-test-3.ts}
+  \caption{Breakpoint test avec k6 - Comportement des utilisateurs virtuels}
+  \label{listing:k6-breakpoint-test-3}
+\end{listing}
+
+Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 10 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs.
 
 \subsection{Résultats initiaux}
 
