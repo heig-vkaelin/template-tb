@@ -190,6 +190,60 @@ Pour conclure, avec la version initiale de \gls{beeplace}, le test est exécuté
 
 \section{Profiling}
 
+Pour trouver plus facilement les optimisations à effectuer, il est nécessaire de profiler l'application. Le profiling permet de trouver les parties du code qui prennent le plus de temps à s'exécuter et qui sont donc plus intéressantes à optimiser.
+
+\subsection{Choix de l'outil}
+
+\subsubsection{Solution native à Node.js}
+
+Node.js propose un outil de profiling natif qu'il est possible d'appeler en utilisant simplement l'argument \mintinline[breaklines]{bash}{node --prof}. Cet outil permet de générer un fichier de profiling illisible en lui-même. Heureusement, l'argument \mintinline[breaklines]{bash}{node --prof-process} permet d'analyser ce fichier de log et de générer un fichier textuel plus compréhensible.
+
+L'inconvénient de cette approche est que le fichier texte des résultats reste pas très pratique à utiliser. Il est difficile de voir quelles fonctions sont les plus gourmandes en ressources sans une interface graphique.
+
+\subsubsection{Parca}
+
+Parca~\cite{parca} est un outil de profiling open-source développé par l'équipe derrière le projet Kubernetes. Son objectif est d'être très léger afin de pouvoir être utilisé en production sans affecter les performances de l'application. Ces performances sont possibles car Parca utilise une approche basée sur la technologie eBPF (extended Berkeley Packet Filter)~\cite{ebpf}. Cette technique permet d'exécuter du code dans le noyau Linux sans avoir besoin de modifier directement le code source.
+
+Le problème de cette technique est qu'elle n'est pas supportée par tous les systèmes d'exploitation. Parca ne peut donc pas être utilisé sur Windows ou macOS. Il n'est donc pas possible de tester en local l'optimisation avec Parca dans le cadre du projet \gls{beeplace}. Cependant, Parca reste un choix intéressant lorsqu'il s'agira de tester l'optimisation sur le serveur de production.
+
+\subsubsection{Pyroscope}
+
+Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilise facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les 10 secondes.
+
+Malheureusement, le dashboard proposé n'est pas le plus intuitif, il ne met pas à disposition de nombreux filtres et cela rend l'analyse des résultats difficile.
+
+\subsection{Clinic.js}
+
+Clinic.js~\cite{clinicjs} est une suite d'outils de profiling développé par des membres de l'équipe derrière Node.js. Il suffit d'installer le projet comme une dépendance \gls{npm} globale pour avoir accès à 4 outils différents:
+
+\begin{itemize}
+  \item \textbf{Doctor} permet de diagnostiquer les problèmes de performance d'une applications en identifiant les symptômes tels que des problèmes de lecture/écriture ou des problèmes de mémoire.
+  \item \textbf{Flame} permet d'identifier rapidement et précisément les goulots d'étranglement du code grâce à des graphiques en flammes qui visualisent les chemins d'exécution les plus fréquents.
+  \item \textbf{Bubbleprof} observe les opérations asynchrones de l'application et les affiche dans un graphique en bulles pour visualiser les différents délais.
+  \item \textbf{Heap Profiler} met également à disposition des graphiques en flammes comme le mode Flame mais pour l'utilisation de la mémoire.
+\end{itemize}
+
+Le mode le plus intéressant pour le projet \gls{beeplace} est le mode Flame. Il permet de visualiser les chemins d'exécution les plus fréquents et donc de trouver les fonctions qui prennent le plus de temps à s'exécuter. Celles-ci doivent donc être optimisées en priorité.
+
+L'utilisation de Clinic.js est plus pensée pour le local. En effet, le rapport de profiling est généré lorsque l'application Node s'arrête. Ce qui n'est pas envisageable en production. Il est donc nécessaire de tester l'optimisation en local avant de la déployer sur le serveur de production.
+
+\subsection{Solution choisie}
+
+Le choix final s'est donc tourné vers un profiling en local à l'aide de Clinic.js afin d'avoir un retour rapide sur l'efficacité des optimisations réalisées. Pour récapituler, le processus est le suivant:
+
+\begin{enumerate}
+  \item Lancer l'application Node.js en local avec Clinic.js: \mintinline[breaklines]{bash}{clinic flame -- node app.js}
+  \item Démarrer le test de montée en charge en local avec k6
+  \item Arrêter l'application Node.js une fois le test terminé
+  \item Analyser le rapport de Clinic.js
+  \item Optimiser le code
+  \item Recommencer
+\end{enumerate}
+
+Une fois les optimisations effectuées et testées en local, il est possible de les déployer sur le serveur de test de montée en charge pour comparer les résultats avec la version initiale \ref{table:k6-initial-results}.
+
+\subsection{Analyses}
+
 TODO
 
 \section{Optimisations}
