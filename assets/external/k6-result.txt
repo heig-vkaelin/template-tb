@@ -1,0 +1,45 @@
+
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+   /          \   |  |\  \ |  (‾)  | 
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+     script: dist/main.js
+     output: -
+
+  scenarios: (100.00%) 1 scenario, 1000 max VUs, 5m0s max duration (incl. graceful stop):
+           * Breakpoint_test: Up to 1000.00 iterations/s for 5m0s over 1 stages (maxVUs: 1000)
+
+
+     ✓ error
+
+     data_received..................: 26 MB  1.1 MB/s
+     data_sent......................: 769 kB 33 kB/s
+     drawnPixels....................: 1160   50.343779/s
+   ✓ Errors.........................: 0      0/s
+     http_req_blocked...............: avg=80.88ms  min=55.66ms med=75.02ms  max=179.62ms p(90)=104.56ms p(95)=117.66ms
+     http_req_connecting............: avg=25.27ms  min=16.05ms med=23.87ms  max=57.3ms   p(90)=32.02ms  p(95)=37.61ms 
+     http_req_duration..............: avg=37.97ms  min=23.88ms med=33.88ms  max=108.4ms  p(90)=54.4ms   p(95)=64.62ms 
+       { expected_response:true }...: avg=37.97ms  min=23.88ms med=33.88ms  max=108.4ms  p(90)=54.4ms   p(95)=64.62ms 
+     http_req_failed................: 0.00%  ✓ 0          ✗ 364   
+     http_req_receiving.............: avg=1.51ms   min=15µs    med=72.5µs   max=56.58ms  p(90)=3.04ms   p(95)=7.17ms  
+     http_req_sending...............: avg=63.53µs  min=26µs    med=55µs     max=1.73ms   p(90)=79.7µs   p(95)=92.54µs 
+     http_req_tls_handshaking.......: avg=55.53ms  min=33.87ms med=50.29ms  max=126.07ms p(90)=75.87ms  p(95)=88.33ms 
+     http_req_waiting...............: avg=36.39ms  min=23.77ms med=33.12ms  max=86.41ms  p(90)=50.26ms  p(95)=59.05ms 
+     http_reqs......................: 364    15.797531/s
+     iteration_duration.............: avg=12.94s   min=10.29s  med=12.88s   max=16.01s   p(90)=14.46s   p(95)=15.35s  
+     iterations.....................: 61     2.647388/s
+     vus............................: 557    min=1        max=557 
+     vus_max........................: 1000   min=1000     max=1000
+   ✗ ws_connecting..................: avg=445.69ms min=72.55ms med=215.82ms max=1.64s    p(90)=1.16s    p(95)=1.33s   
+     ws_msgs_received...............: 16622  721.391627/s
+     ws_msgs_sent...................: 2366   102.683948/s
+     ws_session_duration............: avg=12.94s   min=10.29s  med=12.88s   max=16.01s   p(90)=14.46s   p(95)=15.35s  
+     ws_sessions....................: 589    25.562488/s
+
+
+running (0m23.0s), 0000/1000 VUs, 61 complete and 592 interrupted iterations
+Breakpoint_test ✗ [=>------------------------------------] 0477/1000 VUs  0m19.8s/5m0s  0066.01 iters/s
+ERRO[0023] thresholds on metrics 'ws_connecting' were crossed; at least one has abortOnFail enabled, stopping test prematurely 

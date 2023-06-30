@@ -138,7 +138,7 @@ La fonction principale de la figure \ref{listing:k6-breakpoint-test-1} est exéc
 
 La figure \ref{listing:k6-breakpoint-test-2} présente les options du test. Le test dure un maximum de 5 minutes et va ajouter un nombre d'utilisateurs virtuels croissant jusqu'à l'objectif souhaité de 1000 utilisateurs. Le test ne se soucie pas de l'éventuelle latence de l'application grâce à l'exécuteur \mintinline[breaklines]{bash}{ramping-arrival-rate}.
 
-Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse 800 millisecondes pour 95\% des utilisateurs virtuels.
+Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse 1200 millisecondes pour 95\% des utilisateurs virtuels.
 
 \begin{listing}[H]
   \inputminted{ts}{assets/figures/breakpoint-test-3.ts}
@@ -146,11 +146,47 @@ Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lo
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 10 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs.
+Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 10 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
 
 \subsection{Résultats initiaux}
 
-TODO
+Les résultats des tests k6 contiennent de nombreuses métriques intéressantes. Les comparaisons vont se baser sur un échantillon d'entre elles mais un exemple complet est disponible au lien en note de bas de page \footnote{\url{https://github.com/heig-vkaelin/template-tb/blob/main/assets/external/k6-result.txt}}.
+
+Les métriques utilisées pour pouvoir vérifier par la suite si les optimisations sont efficaces sont les suivantes:
+
+\begin{itemize}
+  \item Temps d'exécution du test avant que le seuil de latence ne soit atteint (1200 ms pour la connexion WebSocket).
+  \item Nombre d'utilisateurs virtuels créés
+  \item Nombre de pixels dessinés
+\end{itemize}
+
+Le test a été lancé 10 fois afin de prévenir les éventuelles erreurs de mesure. Les résultats sont présentés dans le tableau \ref{table:k6-initial-results}.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Test}    & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    1                & 22385.053 ms               & 703                            & 1317                     \\ \hline
+    2                & 20921.705 ms               & 589                            & 1168                     \\ \hline
+    3                & 22353.215 ms               & 704                            & 1366                     \\ \hline
+    4                & 23175.281 ms               & 707                            & 1389                     \\ \hline
+    5                & 30976.405 ms               & 797                            & 1672                     \\ \hline
+    6                & 24097.739 ms               & 702                            & 1382                     \\ \hline
+    7                & 25074.294 ms               & 699                            & 1319                     \\ \hline
+    8                & 22141.945 ms               & 630                            & 1455                     \\ \hline
+    9                & 32062.651 ms               & 786                            & 1596                     \\ \hline
+    10               & 20743.08 ms                & 452                            & 1056                     \\ \hline
+    \textbf{Moyenne} & \textbf{24393.147 ms}      & \textbf{676.9}                 & \textbf{1372}            \\ \hline
+    \textbf{Médiane} & \textbf{22780.167 ms}      & \textbf{702.5}                 & \textbf{1374}            \\ \hline
+  \end{tabular}
+  \caption{Résultats initiaux des tests de montée en charge avec k6}
+  \label{table:k6-initial-results}
+\end{table}
+
+La médiane sera préférée à la moyenne pour les futurs comparaisons car elle est moins sensible aux valeurs extrêmes. Même si les valeurs des 10 itérations du test sont relativement proches dans ce cas-ci.
+
+Pour conclure, avec la version initiale de \gls{beeplace}, le test est exécuté pendant environ \textbf{23 secondes} en créant \textbf{702 utilisateurs virtuels} qui dessinent au total \textbf{1374 pixels}.
 
 \section{Profiling}
 

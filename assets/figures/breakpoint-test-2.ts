@@ -9,6 +9,6 @@ export const options: Options = {
 		},
 	},
 	thresholds: {
-		ws_connecting: [{ threshold: 'p(95)<800', abortOnFail: true }],
+		ws_connecting: [{ threshold: 'p(95)<1200', abortOnFail: true }],
 	},
 };
