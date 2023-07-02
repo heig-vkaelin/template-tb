@@ -244,7 +244,66 @@ Une fois les optimisations effectuées et testées en local, il est possible de 
 
 \subsection{Analyses}
 
-TODO
+\subsubsection{Rapport initial}
+
+% Used results: file:///Users/valentin/code/beescreens/apps/beeplace/backend/.clinic/59944.clinic-flame.html
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame1-overview.png}
+  \caption{Vision d'ensemble du rapport initial de Clinic.js}
+  \label{fig:flame1-overview}
+\end{figure}
+
+A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interpretable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \mintinline[breaklines]{javascript}{writevGeneric}, \mintinline[breaklines]{javascript}{onwrite} ou \mintinline[breaklines]{javascript}{flush}.
+
+En filtrant pour garder uniquement le code du projet, car il s'agit du code qu'il est possible d'optimiser, le graphique devient plus lisible comme le montre la figure \ref{fig:flame1-filtered}.
+
+\subsubsection{Rapport filtré}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame1-filtered.png}
+  \caption{Vision filtrée du rapport initial de Clinic.js}
+  \label{fig:flame1-filtered}
+\end{figure}
+
+Plus de 34\% du temps d'exécution est passé dans la fonction \mintinline[breaklines]{javascript}{addPixel}. Celle-ci est appelée à chaque fois qu'un utilisateur envoie un nouveau pixel au serveur. Elle contient la logique suivante:
+
+\begin{enumerate}
+  \item Récupérer le nombre de pixels posés par l'utilisateur
+  \item Ajouter le pixel dans le BitField Redis ainsi que dans l'historique PostgreSQL
+  \item Incrémenter le nombre de pixels posés par l'utilisateur (ou le créer s'il n'existe pas)
+  \item Partager le pixel avec les autres utilisateurs connectés (broadcast WebSockets)
+\end{enumerate}
+
+La deuxième fonction la plus utilisée est \mintinline[breaklines]{javascript}{placePixel} avec 0.7\% du temps d'exécution. Celle-ci s'occupe du point numéro 2. de la fonction \mintinline[breaklines]{javascript}{addPixel}. Elle est donc fortement liée à la fonction \mintinline[breaklines]{javascript}{addPixel}.
+
+Les fonctions suivantes ne dépassent pas les 0.6\% du temps d'exécution, il s'agit notamment de la récupération de l'état actuel du BitField Redis ainsi que de l'initialisation de la connexion WebSockets.
+
+Il faudra donc dans un premier temps se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel}. Pour commencer, il est possible de regrouper les tâches de la fonction en deux catégories à optimiser:
+
+\begin{enumerate}
+  \item Sauvegarde du pixel
+  \item Broadcast du pixel
+\end{enumerate}
+
+Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel} et d'afficher à nouveau les fonctions des dépendances comme la figure \ref{fig:flame1-addPixel} le montre.
+
+\subsubsection{Fonction addPixel}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame1-addPixel.png}
+  \caption{Zoom sur la fonction \mintinline[breaklines]{javascript}{addPixel} du rapport initial de Clinic.js}
+  \label{fig:flame1-addPixel}
+\end{figure}
+
+Cette figure \ref{fig:flame1-addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \mintinline[breaklines]{javascript}{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \mintinline[breaklines]{javascript}{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel}.
+
+\subsubsection{Conclusion initiale}
+
+La fonction \mintinline[breaklines]{javascript}{addPixel} appelée à chaque fois qu'un utilisateur pose un pixel est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
 
 \section{Optimisations}
 \label{sec:optimisations}
