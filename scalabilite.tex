@@ -146,7 +146,7 @@ Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lo
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 10 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
 
 \subsection{Résultats initiaux}
 
@@ -308,4 +308,215 @@ La fonction \mintinline[breaklines]{javascript}{addPixel} appelée à chaque foi
 \section{Optimisations}
 \label{sec:optimisations}
 
+\subsection{Mise en place}
+
+Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créés avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \mintinline{bash}{.env}.
+
+Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ce qui permet de limiter les différences de résultats entre les tests dues à des facteurs externes.
+
+\subsection{Optimisation du broadcast}
+
+Afin d'optimiser la fonction \mintinline[breaklines]{javascript}{addPixel} vue précédemment, il est possible de revoir la manière d'envoyer le pixel aux autres utilisateurs connectés.
+
+Pour l'instant, le pixel dessiné par l'utilisateur est transmis immédiatement à tous les autres utilisateurs connectés par le serveur. Ce qui résulte en un nombre de messages WebSockets envoyés très important. L'idée d'optimisation est de regrouper les pixels dessinés par l'utilisateur dans un intervalle de temps donné et de les envoyer en un seul message WebSockets.
+
+\subsubsection{Implémentation}
+
+Toute la logique est implémentée dans la classe \mintinline[breaklines]{javascript}{BoardGateway}, qui s'occupe de la communication WebSocket.
+
+\begin{listing}[H]
+  \inputminted[highlightlines={3,13,19,29}]{ts}{assets/figures/opti-interval.ts}
+  \caption{Optimisation du broadcast avec un intervalle de temps}
+  \label{listing:opti-interval}
+\end{listing}
+
+Au démarrage de l'application, un interval JavaScript est créé. Celui-ci appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \mintinline{bash}{BOARD_REFRESH_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
+
+Une Map est utilisée pour stocker les différents pixels dessinés au cours de l'intervalle. Chaque clé de la Map correspond à sa position sur le canvas. Cette implémentation permet de garder uniquement le dernier pixel dessiné à une position donnée. Ainsi, si plusieurs utilisateurs dessinent un pixel à la même position pendant le court intervalle, seul le dernier pixel dessiné sera envoyé aux autres utilisateurs.
+
+Avant d'envoyer la mise-à-jour aux autres utilisateurs, une vérification est effectuée pour savoir si des pixels ont été dessinés pendant l'intervalle. Si ce n'est pas le cas l'envoi du message est annulé. Cela permet d'éviter d'envoyer de nombreux messages inutiles aux utilisateurs. Cette vérification permet de se rapprocher du comportement initial de l'application qui envoyait une mise-à-jour quand un pixel était dessiné. La seule modification perceptible est l'ajout des 100 millisecondes de délai.
+
+\subsubsection{Résultats}
+
+Dans la suite des tableaux et des graphiques, la version non optimisée sera notée \textbf{Initiale} et la version optimisée avec l'intervalle sera notée \textbf{Intervalle}.
+
+% DE BASE
+% Mean duration: 19197.170700000002 ms
+% Median duration: 18908.497000000003 ms
+
+% Mean vusers: 542.3
+% Median vusers: 558
+
+% Mean pixels: 1008
+% Median pixels: 1017
+
+% INTERVAL
+% Mean duration: 30491.0314 ms
+% Median duration: 29275.9285 ms
+
+% Mean vusers: 1371.8
+% Median vusers: 1348.5
+
+% Mean pixels: 3201.5
+% Median pixels: 3078.5
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Version} & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    Initiale         & 18908.497 ms               & 558                            & 1017                     \\ \hline
+    Intervalle       & 29275.929 ms               & 1348.5                         & 3078.5                   \\ \hline
+  \end{tabular}
+  \caption{Médiane des résultats de 10 tests entre le code initial et la première optimisation}
+  \label{table:v2}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        /pgf/number format/.cd,
+        use comma,
+        1000 sep={},
+        ylabel={Millisecondes},
+        ymin=0,
+        ymax=35000,
+        xtick={1,2},
+        xticklabels={Initiale, Intervalle},
+        nodes near coords,
+        nodes near coords align={vertical},
+        every axis plot/.append style={
+            ybar,
+            bar width=0.08,
+            bar shift=0pt,
+            fill
+          },
+        enlarge x limits={0.2},
+      ]
+      \addplot[fill=blue!30] coordinates {
+          (1,18908.497)
+        };
+      \addplot[fill=green!30] coordinates {
+          (2,29275.929)
+        };
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Temps d'exécution du test entre la version initiale et l'optimisation avec l'intervalle}
+  \label{fig:chart-opti-initial-interval-duration}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        /pgf/number format/.cd,
+        use comma,
+        1000 sep={},
+        ylabel={Utilisateurs},
+        ymin=0,
+        ymax=1600,
+        xtick={1,2},
+        xticklabels={Initiale, Intervalle},
+        nodes near coords,
+        nodes near coords align={vertical},
+        every axis plot/.append style={
+            ybar,
+            bar width=0.08,
+            bar shift=0pt,
+            fill
+          },
+        enlarge x limits={0.2},
+      ]
+      \addplot[fill=blue!30] coordinates {
+          (1,558)
+        };
+      \addplot[fill=green!30] coordinates {
+          (2,1348.5)
+        };
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Utilisateurs supportés entre la version initiale et l'optimisation avec l'intervalle}
+  \label{fig:chart-opti-initial-interval-users}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        /pgf/number format/.cd,
+        use comma,
+        1000 sep={},
+        ylabel={Pixels},
+        ymin=0,
+        ymax=3600,
+        xtick={1,2},
+        xticklabels={Initiale, Intervalle},
+        nodes near coords,
+        nodes near coords align={vertical},
+        every axis plot/.append style={
+            ybar,
+            bar width=0.08,
+            bar shift=0pt,
+            fill
+          },
+        enlarge x limits={0.2},
+      ]
+      \addplot[fill=blue!30] coordinates {
+          (1,1017)
+        };
+      \addplot[fill=green!30] coordinates {
+          (2,3078.5)
+        };
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Pixels dessinés entre la version initiale et l'optimisation avec l'intervalle}
+  \label{fig:chart-opti-initial-interval-pixels}
+\end{figure}
+
+Pour conclure, l'optimisation avec l'intervalle est très effective. Cette nouvelle version supporte la montée en charge pendant \textbf{54.82\%} de temps en plus. Le nombre d'utilisateurs virtuels supportés est augmenté de \textbf{141.67\%} et le nombre de pixels dessinés est augmenté de \textbf{202.70\%}.
+
+Le nombre d'utilisateurs supportés avant que le temps de réponse devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si tous les festivaliers de Baleinev se connectent en même temps.
+
+Cependant, il est intéressant de vérifier si d'autres optimisations ne pourraient pas être également implémentées et utiles. Un nouveau profiling avec Clinic.js est donc effectué sur cette version.
+
+% Source: file:///Users/valentin/code/beescreens/apps/beeplace/backend/.clinic/51448.clinic-flame.html#selectedNode=5976&zoomedNode=5976&exclude=8000-0-0-6-f000&merged=true
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame2-filtered.png}
+  \caption{Vision filtrée du rapport après optimisation avec l'intervalle}
+  \label{fig:flame2-filtered}
+\end{figure}
+
+En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant de broadcast les pixels aux utilisateurs, à savoir \mintinline{javascript}{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
+
+\subsection{Format des données}
+
 TODO
+
+\subsection{Autres optimisations}
+
+TODO
+
+\subsection{Résultats finaux}
+
+TODO
+
+
+% FAIT / testé:
+
+% - setInterval
+% - tentative de ImageData
+% - -> binary (int16 psk sinon max 255x255 pour le canvas)
+% - tentative du package du custom parser
+% - augmenter nbr de fichiers lus sur vm
+% - pour frontend: rien fait
+
+% - moins opti avec binaire, cause: surement parser pas très opti, 2 calls websockets:
+% https://github.com/socketio/socket.io-parser/issues/61
+
+% - version avec string, plus lent que interval mais on send moins de data donc bien pour user final
+% plus lent psk plus de calculs coté serveur, par contre maybe plus efficace si on prend en compte le temps de transfert des données donc test end-to-end
+
+% Pour comparer: images Docker avec tag

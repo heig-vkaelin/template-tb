@@ -224,7 +224,6 @@
   leftsub = \flq{},%
   rightsub = \frq{} %
 ]{dirtytalk}
-\RequirePackage{pgfgantt}
 \RequirePackage{pdflscape}
 \RequirePackage{dirtree}
 
@@ -568,3 +567,9 @@
 \newcommand{\done}{\rlap{$\square$}{\raisebox{2pt}{\large\hspace{1pt}\cmark}}%
   \hspace{-2.5pt}}
 \newcommand{\wontfix}{\rlap{$\square$}{\large\hspace{1pt}\xmark}}
+
+
+% Custom - pour les plots
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.9}
+\pgfplotsset{scaled y ticks=false} % dégager la notation scientifique sur l'axe y
