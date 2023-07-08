@@ -493,7 +493,39 @@ En regardant le graphique en flamme de la version optimisée, il est possible de
 
 \subsection{Format des données}
 
-TODO
+Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'objets JSON transformé automatiquement par Socket.IO en chaîne de caractères. Chaque objet contient les coordonnées du pixel ainsi que sa couleur. Les clés sont répétées pour chaque pixel ce qui augmente la taille du message:
+
+\begin{minted}{json}
+  [
+    { "x": 12, "y": 56, "color": 12 },
+    { "x": 33, "y": 42, "color": 8 }
+    // ...
+  ]
+\end{minted}
+
+\subsubsection{Format binaire}
+
+La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \mintinline{javascript}{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre la figure \ref{listing:opti-binary}.
+
+\begin{listing}[H]
+  \inputminted[highlightlines={9}]{ts}{assets/figures/opti-binary.ts}
+  \caption{Optimisation du broadcast avec un format binaire}
+  \label{listing:opti-binary}
+\end{listing}
+
+Du côté du client, il suffit simplement de lire le tableau 3 valeurs à la fois pour obtenir les pixels individuellement pour les afficher.
+
+Une comparaison rapide de la taille gagnée est réalisable facilement. Les deux pixels précédents sont utilisés comme exemple. Tous les caractères utilisés sont des caractères ASCII, ils utilisent donc 1 octet chacun.
+
+\begin{minted}{json}
+  [{"x":12,"y":56,"color":12},{"x":33,"y":42,"color":8}] // ->  54 caractères -> 54 octets
+  [12,56,12,33,42,8]                     // ->  6 entiers sur 2 octets chacun -> 12 octets
+\end{minted}
+
+Le résultat est donc \textbf{4.5 fois} plus léger en utilisant le format binaire. A noter que ce ratio peut être encore meilleur dans le cas où les coordonnées des pixels sont plus grandes. En effet, jusqu'à 65'535, les entiers restent stockés sur 2 octets mais la chaîne de caractère augmente en taille (ex: longueur 5 à partir de 10'000 donc 5 octets).
+
+% TODO: montrer résultats du bench et dire que c 2 paquets update donc pas fou (parser)
+
 
 \subsection{Autres optimisations}
 
@@ -506,7 +538,6 @@ TODO
 
 % FAIT / testé:
 
-% - setInterval
 % - tentative de ImageData
 % - -> binary (int16 psk sinon max 255x255 pour le canvas)
 % - tentative du package du custom parser
