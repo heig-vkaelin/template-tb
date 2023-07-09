@@ -580,19 +580,44 @@ La dernière version avec la chaîne de caractères optimisée est donc utilisé
 
 \subsection{Autres optimisations}
 
-TODO
+La documentation de Socket.IO~\cite{socket-io-performance-tuning} explique diverses techniques afin d'optimiser les performances de son application. Celles-ci sont regroupées en deux catégories: les optimisations au niveau WebSocket et les optimisations au niveau du système d'exploitation.
+
+\subsubsection{Optimisations au niveau WebSocket}
+
+Concernant les optimisations au niveau WebSocket, il s'agit en réalité pour la plupart d'options déjà testées. Comme par exemple utiliser un parseur customisé lors de l'envoi de données binaires. Socket.IO propose également d'utiliser une autre implémentation WebSocket du côté du serveur appelée \mintinline{javascript}{eiows}. Cependant, ce module n'est pas très utilisé ni maintenu et il n'est pas disponible en TypeScript ni sur Windows. Il n'a donc pas été testé. Socket.IO propose également des modules permettant d'accélérer certaines opérations en utilisant des implémentations natives en C++. Le module \mintinline{javascript}{bufferutil} a donc été installé mais les gains de performance n'étaient pas véritablement visibles. Il a quand même été gardé car il s'agit d'une dépendance optionnelle, qui n'est utilisée que lorsqu'elle est disponible.
+
+\subsubsection{Optimisations au niveau du système d'exploitation}
+
+La documentation de Socket.IO explique qu'il existe deux configurations au niveau du système d'exploitation Linux pour accepter un nombre important de connexions en simultané:
+
+\begin{enumerate}
+  \item Le nombre maximal de fichiers ouverts en simultané
+  \item Le nombre de ports disponibles
+\end{enumerate}
+
+Le premier point était initialement limité à 1024, il a donc été passé à plus d'un million comme la documentation le propose. Concernant le nombre de ports, la configuration initiale permettait d'avoir environ 28'000 connexions simultanées. Ce qui est bien au-dessus des besoins du projet. La configuration n'a donc pas été modifiée.
 
 \subsection{Résultats finaux}
 
-TODO
+L'optimisation n'est donc pas allée plus loin que la version avec la chaîne de caractères optimisée. Cependant, les résultats sont très satisfaisants en ayant en tête les besoins de l'application. Tous les festivaliers pourront utiliser l'application en simultané sans problème majeur.
 
+Pour rappel, les résultats de la version finale sont les suivants:
+
+\begin{itemize}
+  \item \textbf{Temps d'exécution} (avant d'arriver au seuil des 1.2s de latence): 29291.747 ms
+  \item \textbf{Utilisateurs virtuels}: 1341.5
+  \item \textbf{Pixels dessinés}: 3087
+\end{itemize}
+
+Pour conclure, il aurait été intéressant de pouvoir tester les différentes versions avec des tests de montées en charge qui simulent mieux des utilisateurs en utilisant des navigateurs headless (sans interface graphique). En effet, cela aurait permis d'avoir une vision plus réaliste des temps de communication et pas uniquement du point de vue du backend. Malheureusement, les problèmes de ces tests avec navigateur sont les suivants:
+
+\begin{itemize}
+  \item Il est difficile de créer une charge réaliste, un ordinateur, même puissant, de pourra pas lancer plus de quelques dizaines voir centaines de navigateurs en simultané
+  \item La version de k6 permettant d'utiliser un navigateur headless~\cite{k6-browser} est vraiment expérimentale est peu stable. Il n'a d'ailleurs pas été possible de la faire fonctionner.
+\end{itemize}
+
+A noter qu'il est tout à fait possible d'augmenter le délai entre deux rafraîchissements afin d'améliorer encore les performances dans des moments critiques. Comme expliqué précédemment, il suffit de modifier la variable d'environnement et de relancer le backend de l'application pour que le changement opère. La valeur des \textbf{100 ms} actuellement utilisée est un bon compromis entre performance et fluidité de l'application. En ajustant la valeur à \textbf{400 ms} par exemple, ce qui reste un délai acceptable pour l'utilisateur, l'application peut supporter jusqu'à \textbf{1737 utilisateurs virtuels} et \textbf{4047 pixels dessinés}.
 
 % FAIT / testé:
-
 % - tentative de ImageData
-% - augmenter nbr de fichiers lus sur vm
 % - pour frontend: rien fait
-
-
-% - version avec string, plus lent que interval mais on send moins de data donc bien pour user final
-% plus lent psk plus de calculs coté serveur, par contre maybe plus efficace si on prend en compte le temps de transfert des données donc test end-to-end
