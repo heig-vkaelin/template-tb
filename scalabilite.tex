@@ -369,7 +369,7 @@ Dans la suite des tableaux et des graphiques, la version non optimisée sera not
     Intervalle       & 29275.929 ms               & 1348.5                         & 3078.5                   \\ \hline
   \end{tabular}
   \caption{Médiane des résultats de 10 tests entre le code initial et la première optimisation}
-  \label{table:v2}
+  \label{table:first-opti-results}
 \end{table}
 
 \begin{figure}[H]
@@ -489,7 +489,7 @@ Cependant, il est intéressant de vérifier si d'autres optimisations ne pourrai
   \label{fig:flame2-filtered}
 \end{figure}
 
-En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant de broadcast les pixels aux utilisateurs, à savoir \mintinline{javascript}{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
+En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant uniquement de broadcast les pixels aux utilisateurs, à savoir \mintinline{javascript}{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
 
 \subsection{Format des données}
 
@@ -524,8 +524,59 @@ Une comparaison rapide de la taille gagnée est réalisable facilement. Les deux
 
 Le résultat est donc \textbf{4.5 fois} plus léger en utilisant le format binaire. A noter que ce ratio peut être encore meilleur dans le cas où les coordonnées des pixels sont plus grandes. En effet, jusqu'à 65'535, les entiers restent stockés sur 2 octets mais la chaîne de caractère augmente en taille (ex: longueur 5 à partir de 10'000 donc 5 octets).
 
-% TODO: montrer résultats du bench et dire que c 2 paquets update donc pas fou (parser)
+Pour vérifier si cette optimisation est efficace, un nouveau benchmark est effectué. Les résultats sont présentés dans la figure \ref{table:second-opti-results}.
 
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Version} & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    Initiale         & 18908.497 ms               & 558                            & 1017                     \\ \hline
+    Intervalle       & 29275.929 ms               & 1348.5                         & 3078.5                   \\ \hline
+    Binaire          & 29267.474 ms               & 1332.5                         & 2967                     \\ \hline
+  \end{tabular}
+  \caption{Médiane des résultats de 10 tests entre trois versions de l'application}
+  \label{table:second-opti-results}
+\end{table}
+
+Malheureusement, ces résultats ne sont pas très concluants. En effet, la version utilisant du format binaire est légèrement moins performante que la version précédente. Ce comportement peut être expliqué avec le comportement de Socket.IO. Comme l'explique une issue \gls{github}~\cite{socket-io-binary-issue}, Socket.IO envoie deux paquets par message s'il s'agit d'un contenu binaire. Un parseur customisé~\cite{socket-io-msgpack-parser} a été créé par l'équipe de Socket.IO mais il n'a malheureusement pas été possible de le faire fonctionner dans le cadre de \gls{beeplace}. La supposition est que la version de Socket.IO utilisée par NestJS n'est pas compatible avec ce parseur.
+
+\subsubsection{Format string}
+
+Pour ne pas avoir ce soucis de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \mintinline{javascript}{toString} comme le montre la figure \ref{listing:opti-string}.
+
+\begin{listing}[H]
+  \inputminted[highlightlines={5,6}]{ts}{assets/figures/opti-string.ts}
+  \caption{Optimisation du broadcast avec une chaîne de caractères}
+  \label{listing:opti-string}
+\end{listing}
+
+En prenant toujours les mêmes deux pixels en exemple, le résultat est le suivant:
+
+\begin{minted}{json}
+  [{"x":12,"y":56,"color":12},{"x":33,"y":42,"color":8}] // ->  54 caractères -> 54 octets
+  [12,56,12,33,42,8]                                     // ->  18 caractères -> 18 octets
+\end{minted}
+
+La version avec la string optimisée est \textbf{3 fois} plus légère que la version initiale en JSON. Il est donc possible de tester cette nouvelle version pour la comparer aux précédentes.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Version} & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    Initiale         & 18908.497 ms               & 558                            & 1017                     \\ \hline
+    Intervalle       & 29275.929 ms               & 1348.5                         & 3078.5                   \\ \hline
+    Binaire          & 29267.474 ms               & 1332.5                         & 2967                     \\ \hline
+    String           & 29291.747 ms               & 1341.5                         & 3087                     \\ \hline
+  \end{tabular}
+  \caption{Médiane des résultats de 10 tests entre trois versions de l'application}
+  \label{table:third-opti-results}
+\end{table}
+
+Les résultats de cette dernière version sont quasiment équivalents à la meilleure version, celle utilisant simplement le format JSON. Il faut prendre en compte que le test vérifie principalement si le backend de l'application tient toujours la route. Ajouter de la complexité pour transformer le format des pixels résulte donc dans une perte de performance sur le test réalisé. Cependant, cela ne veut pas dire que cette optimisation n'est pas efficace. En effet, le test ne prend pas en compte le temps de transfert des données. L'utilisateur final pourrait donc avoir une meilleure expérience avec cette version ou du moins utiliser moins de bande passante.
+
+La dernière version avec la chaîne de caractères optimisée est donc utilisée pour la suite du projet. Il s'agit d'un bon compromis entre la version initiale très verbeuse en JSON et la version binaire qui est moyennement compatible avec le parseur de base de Socket.IO.
 
 \subsection{Autres optimisations}
 
@@ -539,15 +590,9 @@ TODO
 % FAIT / testé:
 
 % - tentative de ImageData
-% - -> binary (int16 psk sinon max 255x255 pour le canvas)
-% - tentative du package du custom parser
 % - augmenter nbr de fichiers lus sur vm
 % - pour frontend: rien fait
 
-% - moins opti avec binaire, cause: surement parser pas très opti, 2 calls websockets:
-% https://github.com/socketio/socket.io-parser/issues/61
 
 % - version avec string, plus lent que interval mais on send moins de data donc bien pour user final
 % plus lent psk plus de calculs coté serveur, par contre maybe plus efficace si on prend en compte le temps de transfert des données donc test end-to-end
-
-% Pour comparer: images Docker avec tag
