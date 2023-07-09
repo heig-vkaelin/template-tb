@@ -128,7 +128,7 @@ Le test utilisé est une Breakpoint test, l'implémentation a été séparée en
   \label{listing:k6-breakpoint-test-1}
 \end{listing}
 
-La fonction principale de la figure \ref{listing:k6-breakpoint-test-1} est exécutée pour chaque utilisateur virtuel. Elle se connecte à l'endpoint WebSocket grâce à la classe \mintinline[breaklines]{ts}{K6SocketIo} du package précédemment évoqué \mintinline[breaklines]{bash}{@beescreens/benchmarks}. Elle appelle ensuite la fonction \mintinline[breaklines]{bash}{onConnect} détaillée dans la figure \ref{listing:k6-breakpoint-test-3} qui contient le comportement propre à l'utilisateur. Les erreurs sont également comptabilisées afin de les afficher à la fin du test.
+La fonction principale de la figure \ref{listing:k6-breakpoint-test-1} est exécutée pour chaque utilisateur virtuel. Elle se connecte à l'endpoint WebSocket grâce à la classe \mintinline[breaklines]{ts}{K6SocketIo} du package précédemment évoqué \mintinline[breaklines]{bash}{@beescreens/benchmarks}. Elle appelle ensuite la fonction \mintinline[breaklines]{bash}{drawMaxRandomPixels} détaillée dans la figure \ref{listing:k6-breakpoint-test-3} qui contient le comportement propre à l'utilisateur. Les erreurs sont également comptabilisées afin de les afficher à la fin du test.
 
 \begin{listing}[H]
   \inputminted{ts}{assets/figures/breakpoint-test-2.ts}
@@ -146,7 +146,7 @@ Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lo
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Ensuite, il fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
 
 \subsection{Résultats initiaux}
 

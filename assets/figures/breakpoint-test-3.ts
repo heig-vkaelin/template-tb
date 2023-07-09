@@ -1,15 +1,16 @@
-async function onConnect(socket: K6SocketIo) {
-	socket.setEventMessageHandle(ServerEvent.PIXEL_TO_PLAYERS, () => {});
+export async function drawMaxRandomPixels(
+	socket: K6SocketIo,
+	CounterPixels: Counter,
+	sleepBetweenPixels = 3,
+	sleepAfter = 30,
+) {
+	socket.setEventMessageHandle(ServerEvent.UPDATE_BOARD, () => {});
 
-	const { data } = await socket.sendWithAck<JoinResponse>(
-		ClientEvent.JOIN,
-		uuidv4(),
-	);
-
-	const { canvasSize, colors, maxPixels } = data.initialState;
+	const { initialState } = await joinRoom(socket);
+	const { canvasSize, colors, maxPixels } = initialState;
 
 	for (let i = 0; i < maxPixels; i++) {
-		sleep(random(3));
+		sleep(random(sleepBetweenPixels));
 		CounterPixels.add(1);
 		socket.send(
 			ClientEvent.PIXEL_FROM_PLAYER,
@@ -17,6 +18,10 @@ async function onConnect(socket: K6SocketIo) {
 			null,
 		);
 	}
-	sleep(10);
+
+	const protocol = __ENV.PROD === 'true' ? 'https' : 'http';
+	http.get(`${protocol}://${__ENV.FRONTEND}`);
+	sleep(sleepAfter);
+
 	socket.close();
 }
