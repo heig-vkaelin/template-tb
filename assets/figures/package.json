@@ -2,7 +2,7 @@
 	"name": "@beescreens/beeplace-backend",
 	"version": "0.0.0",
 	"description": "BeePlace Backend",
-	"license": "GPLv3",
+	"license": "AGPL-3.0",
 	"repository": {
 		"type": "git",
 		"url": "git+https://gitlab.com/beescreens/beescreens.git"

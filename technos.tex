@@ -2,7 +2,7 @@ Ce chapitre présente les technologies choisies pour le développement de l'appl
 
 \section{Language de programmation}
 
-Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre incroyable de languages différents. Cependant, concernant partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
+Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre conséquent de languages différents. Cependant, concernant partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
 
 Utiliser \gls{javascript} pour réaliser des applications web est donc une évidence. Cependant, \gls{javascript} est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible et de plus en plus courant d'utiliser \gls{typescript}~\cite{typescript}.
 
@@ -13,20 +13,20 @@ Utiliser \gls{javascript} pour réaliser des applications web est donc une évid
 \gls{typescript} ajoute de nombreuses fonctionnalités à \gls{javascript}, comme la possibilité de créer des types, des interfaces, des énumérations et bien d'autres. Les avantages à utiliser \gls{typescript} sont donc nombreux:
 
 \begin{itemize}
-  \item Meilleure complétion dans les \gls{ide}, comme Visual Studio Code.
-  \item Gestion automatique des imports dans les \gls{ide}.
-  \item Evite de découvrir de nombreuses erreurs au runtime, car elles sont détectées au moment de la compilation.
-  \item Refactoriser le code de façon plus sure en voyant directement les erreurs de types dans l'\gls{ide}.
+  \item Meilleure complétion dans les \gls{ide}, comme Visual Studio Code;
+  \item Gestion automatique des imports dans les \gls{ide};
+  \item Évite de découvrir de nombreuses erreurs au moment de l'exécution, car elles sont détectées au moment de la compilation;
+  \item Refactoriser le code de façon plus sûre en voyant directement les erreurs de types dans l'\gls{ide};
   \item Lecture et compréhension du code plus facile, car les types sont explicitement définis.
 \end{itemize}
 
-De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pimp My Wall et le Media Player, sont déjà écrites en \gls{typescript}. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
+De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pimp My Wall et Media Player, sont déjà écrites en \gls{typescript}. Il est donc agréable d'avoir une certaine cohérence et uniformité dans les technologies utilisées.
 
 \section{Frontend}
 
 \subsection{Framework}
 
-De nombreux frameworks \gls{javascript} sont disponibles actuellement pour réaliser la partie frontend des applications web mais les trois principaux concurrents en terme de popularité sont React~\cite{react}, Vue.js~\cite{vue} et Angular~\cite{angular}. D'innombrables autres possibilités voient le jour chaque année mais ces trois frameworks sont les plus populaires, les plus utilisés et les plus stables. Il est donc pertinent de se focaliser sur ces trois options pour le développement de \gls{beeplace}.
+De nombreux frameworks \gls{javascript} sont disponibles actuellement pour réaliser la partie frontend des applications web mais les trois principaux concurrents en terme de popularité sont React~\cite{react}, Vue.js~\cite{vue} et Angular~\cite{angular}. De plus en plus de possibilités voient le jour chaque année mais ces trois frameworks sont les plus populaires, les plus utilisés et les plus stables. Il est donc pertinent de se focaliser sur ces trois options pour le développement de \gls{beeplace}.
 
 \subsubsection{Angular}
 
@@ -40,19 +40,20 @@ Les deux options restantes sont donc React et Vue. Les différences entre les de
   \item React reste plus populaire comme l'indique Google Trends~\cite{google-trends-js-frameworks} et dispose donc de librairies pour répondre à tous les besoins qui pourraient survenir.
   \item De par sa popularité, React dispose d'une plus grande communauté et donc d'une plus grande quantité de ressources et d'aide en ligne.
   \item React est développé par un géant de l'industrie, Méta, ce qui lui assure une certaine pérennité.
-  \item React est plus proche du \gls{javascript} classique que Vue, ce qui permet de plus facilement l'appréhender pour un développeur connaissant déjà \gls{javascript}.
-  \item L'application Pimp My Wall existante est elle-même écrite en React, ce qui permet d'uniformiser les technologie.
+  \item L'application Pimp My Wall existante est elle-même écrite en React, ce qui permet d'uniformiser les technologies.
 \end{itemize}
 
 Pour conclure, les deux frameworks étant très similaires et performants, la popularité de React a été le facteur principal dans le choix du framework afin de ne pas rencontrer de problèmes de ressources ou de documentation.
 
 \subsubsection{React vs Next.js}
 
+% TODO: heureusement
+
 Comme expliqué précédemment, React n'est pas vraiment un framework mais plus une librairie. Le développeur doit donc chercher quelles librairies utiliser pour répondre à ses besoins et les imbriquer ensemble. Cette solution est plus flexible mais demande également plus de temps pour la mise en place du projet. Heureusement, il existe des solutions qui permettent de créer un projet React rapidement avec des choix concernant les bonnes pratiques déjà effectués. Le plus connu d'entre eux est Next.js~\cite{nextjs}, un framework basé sur React. Les avantages principaux sont les suivants:
 
 \begin{itemize}
   \item Système de routage intégré en fonction de la structure du projet.
-  \item Rendre des pages côté serveur afin d'améliorer le référencement.
+  \item Rendre des pages côté serveur afin d'améliorer le référencement et potentiellement les performances.
   \item Créer des fonctions côté serveur afin de ne pas exposer les clés d'API.
   \item Utilisation des variables d'environnement pour la configuration.
 \end{itemize}
@@ -64,7 +65,7 @@ Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de c
 Il existe principalement deux catégories de librairie afin de styliser des applications web:
 
 \begin{itemize}
-  \item Les librairies avec des opinions très arrêtées et des composants prêts à être assemblés comme Bootstrap~\cite{bootstrap} ou Material UI~\cite{mui}.
+  \item Les librairies avec des opinions très arrêtées et des composants prêts à être assemblés comme Bootstrap~\cite{bootstrap} ou Material UI~\cite{mui};
   \item Les librairies facilitant l'écriture de CSS, comme Tailwind~\cite{tailwindcss} ou UnoCSS~\cite{unocss}.
 \end{itemize}
 
@@ -88,7 +89,7 @@ Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks a
 
 \begin{table}[h]
   \begin{center}
-    \caption{Frameworks Backend Node.js}
+    \caption{Frameworks backend Node.js}
     \label{tab:frameworks-backend-nodejs}
     \begin{tabular}{c|l|r}
       Framework  & Stars GitHub & Type      \\ \hline
@@ -154,7 +155,7 @@ Pour la communication en temps réel sur le web, il existe principalement trois 
 Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
 
 \subsection{WebRTC}
-WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre amis afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
+WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre connaissances afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
 Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
@@ -182,7 +183,7 @@ L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes
 
 Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis~\cite{redis} ou simplement stocker une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est indépendant de l'application.
 
-D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il n'est donc pas nécessaire de chercher plus loin.
+D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il a donc été choisi comme solution de stockage à accès rapide.
 
 \subsection{Stockage durable}
 

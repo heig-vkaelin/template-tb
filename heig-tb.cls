@@ -231,7 +231,7 @@
   backref=true,
   backend=biber,
   style=numeric,
-  sorting=ynt
+  sorting=none
 ]{biblatex}
 
 \RequirePackage[
@@ -345,7 +345,7 @@
   \chapter*{\preamblename}
   \addcontentsline{toc}{chapter}{\preamblename}
 
-  Ce travail de Bachelor (ci-après \textbf{TB}) est réalisé en fin de cursus d'études, en vue de l'obtention du titre de Bachelor of Science HES-SO en \@field.
+  Ce travail de Bachelor (ci-après \textbf{TB}) est réalisé en fin de cursus d'études, en vue de l'obtention du titre de Bachelor of Science HES-SO en Informatique et systèmes de communication.
 
   En tant que travail académique, son contenu, sans préjuger de sa valeur, n'engage ni la responsabilité de l'auteur, ni celles du jury du travail de Bachelor et de l'École.
 
@@ -568,8 +568,10 @@
   \hspace{-2.5pt}}
 \newcommand{\wontfix}{\rlap{$\square$}{\large\hspace{1pt}\xmark}}
 
-
 % Custom - pour les plots
 \RequirePackage{pgfplots}
 \pgfplotsset{compat=1.9}
 \pgfplotsset{scaled y ticks=false} % dégager la notation scientifique sur l'axe y
+
+% Custom - pour les listings
+\RequirePackage{tcolorbox}
