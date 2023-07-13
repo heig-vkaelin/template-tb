@@ -208,18 +208,18 @@ Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redi
 Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états passés de chaque pixel. De plus, il ne contient aucune information concernant la date ou l'utilisateur ayant posé le pixel. La conception de ces données a été réalisée dans une table SQL unique nommée \texttt{pixel} contenant les champs suivants:
 
 \begin{itemize}
-  \item id: Identifiant unique de la pose du pixel
-  \item x: Position x du pixel
-  \item y: Position y du pixel
-  \item color: Couleur du pixel en hexadécimal
-  \item created\_at: Date et heure à laquelle le pixel a été posé
-  \item user\_id: Identifiant de l'utilisateur ayant posé le pixel
-  \item is\_admin: Booléen indiquant si l'utilisateur est un administrateur
+  \item \texttt{id}: identifiant unique de la pose du pixel;
+  \item \texttt{x}: position x du pixel;
+  \item \texttt{y}: position y du pixel;
+  \item \texttt{color}: couleur du pixel en hexadécimal;
+  \item \texttt{created\_at}: date et heure à laquelle le pixel a été posé;
+  \item \texttt{user\_id}: identifiant de l'utilisateur ayant posé le pixel;
+  \item \texttt{is\_admin}: booléen indiquant si l'utilisateur est un administrateur.
 \end{itemize}
 
 La valeur hexadécimal de la couleur est stockée à la place de l'identifiant de la couleur car les couleurs peuvent varier au fil du temps. Il est donc nécessaire de stocker sa valeur à la pose du pixel pour avoir un historique correct.
 
-Le Booléen permettant de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non est utile afin d'identifier les actions de modération. Ce point sera détaillé dans la section \ref{section:administration} concernant l'administration.
+Le booléen permettant de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non est utile afin d'identifier les actions de modération. Ce point sera détaillé dans la section \ref{section:administration} concernant l'administration.
 
 \subsection{Gestion de la durée d'attente entre la pose de pixels}
 
@@ -230,28 +230,33 @@ Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[brea
 \subsection{Administration}
 \label{section:administration}
 
-Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées stratégies. Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
+Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées "stratégies". Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
 
 Cette stratégie d'authentification par clé d'API est choisie pour sa facilité d'implémentation. En effet, aucun stockage de session ou même dans une base de données n'est nécessaire. De plus, les besoins d'administration sont très simples pour l'instant et ne nécessitent pas plus que de simples appels HTTP.
 
 \subsubsection{Remise à zéro de la toile}
 
-Voici un exemple d'appels HTTP en ligne de commande sur la route permettant de remettre à zéro la toile pour tous les utilisateurs. Lorsque la clé d'API est incorrecte ou absente, une erreur 401 est retournée nous signifiant que l'utilisateur n'est pas autorisé à effectuer cette action.
+Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en ligne de commande sur la route permettant de remettre à zéro la toile pour tous les utilisateurs. Lorsque la clé d'API est incorrecte ou absente, une erreur 401 est retournée nous signifiant que l'utilisateur n'est pas autorisé à effectuer cette action.
 
-\begin{minted}[breaklines]{bash}
+\begin{listing}[h]
+  \begin{minted}[breaklines]{bash}
   # Version sans clé dans l'entête ou clé incorrecte
-  curl http://localhost:4000/board
+  curl -X POST http://localhost:4000/board
   {"statusCode":401,"message":"Unauthorized"}%
 
   # Version avec clé correcte dans l'entête
-  curl http://localhost:4000/board --header "apiKey: API_KEY"
+  curl -X POST http://localhost:4000/board --header "apiKey: API_KEY"
   {"status":"ok","message":"Board reset"}%
 \end{minted}
+  \caption{Appels HTTP pour remettre à zéro la toile}
+  \label{listing:http-call-reset-board}
+\end{listing}
 
-Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP:
+Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP comme le montre le listing \ref{listing:admin-methods-auth}.
 
-\begin{minted}[breaklines]{typescript}
-@Get()
+\begin{listing}[h]
+  \begin{minted}[breaklines, highlightlines={2}, linenos]{typescript}
+@Post()
 @ApiKeyAuth()
 async reset() {
   await this.boardGateway.resetBoard();
@@ -262,6 +267,9 @@ async reset() {
   };
 }
 \end{minted}
+  \caption{Protection des méthodes d'administration par décorateur}
+  \label{listing:admin-methods-auth}
+\end{listing}
 
 La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité et de censurer rapidement les oeuvres inappropriées.
 
@@ -271,7 +279,7 @@ Afin d'éviter la duplication de code lorsque celui-ci est utilisé à la fois d
 
 \subsection{Solutions d'implémentation possibles}
 
-\subsubsection{Vrai package NPM}
+\subsubsection{Vrai package npm}
 
 Comme le monorepo utilise \gls{pnpm}, il est possible de créer un package et d'ensuite le référencer dans les fichiers \mintinline[breaklines]{bash}{package.json} des deux applications sans devoir le publier sur un registre. C'est d'ailleurs cette solution qui a été choisie pour l'application Pimp My Wall existante. Cependant, cette manière de faire nécessite de réaliser un build du package après chaque modification du code TypeScript, ce qui est loin d'être idéal en terme de productivité.
 
@@ -283,11 +291,12 @@ Les Project References~\cite{project-references} sont une fonctionnalité TypeSc
 
 Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un outil permettant également de faciliter la gestion des monorepos, propose une solution innovante à ce problème de code partagé: les internal packages. Il s'agit de packages qui ne contiennent pas de fichier \mintinline[breaklines]{bash}{tsconfig.json}. De plus, ils se contentent d'exporter directement les fichiers TypeScript dans leur fichier \mintinline[breaklines]{bash}{package.json} à la place des fichiers JavScript transpilés.
 
-\begin{minted}[breaklines]{json}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{json}
   {
     "name": "@beescreens/beeplace"
-    "main": "./src/index.ts", // à la place de  "./dist/index.js"
-    "types": "./src/index.ts", // à la place de "./dist/index.d.ts",
+    "main": "./src/index.ts", // instead of "./dist/index.js"
+    "types": "./src/index.ts", // instead of "./dist/index.d.ts",
     "dependencies": {
       // ...
     },
@@ -296,16 +305,23 @@ Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un out
     }
   }
 \end{minted}
+  \caption{Exemple de \texttt{package.json} d'un internal package}
+  \label{listing:internal-package-json}
+\end{listing}
 
-Cette solution est idéale car très facile à mettre en place. Cependant, il est nécessaire que les applications qui consument le package transpilent le code TypeScript. En effet, le code TypeScript ne peut pas être exécuté directement une fois importé, il doit être transpilé avec le reste de l'application. Next.js permet cette option en ajoutant le package à transpiler dans la configuration du framework:
+Cette solution est idéale car très facile à mettre en place. Cependant, il est nécessaire que les applications qui consument le package transpilent le code TypeScript. En effet, le code TypeScript ne peut pas être exécuté directement une fois importé, il doit être transpilé avec le reste de l'application. Next.js permet cette option en ajoutant le package à transpiler dans la configuration du framework comme le montre le listing \ref{listing:next-transpile-package}.
 
-\begin{minted}[breaklines]{javascript}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{javascript}
   /** @type {import('next').NextConfig} */
   const nextConfig = {
     transpilePackages: ['@beescreens/beeplace'],
   };
   module.exports = nextConfig;
 \end{minted}
+  \caption{Modification de la configuration Next pour transpiler un package}
+  \label{listing:next-transpile-package}
+\end{listing}
 
 Malheureusement, ce n'est pas le cas de Nest.js. Nest n'a pas de compilateur dédié en dehors du compilateur TypeScript. Il faudrait ajouter un utilitaire comme Webpack~\cite{webpack} qui s'occuperait de transpiler le code TypeScript du package. Cependant, cela ajouterait une complexité assez conséquente au projet et une maintenabilité réduite. Il est donc préférable de trouver une autre solution.
 
@@ -313,18 +329,23 @@ Malheureusement, ce n'est pas le cas de Nest.js. Nest n'a pas de compilateur dé
 
 Une autre solution est d'importer directement dans l'application souhaitée le code TypeScript du package. Bien entendu, les chemins relatifs seraient assez peu agréables et maintenables. Heureusement, TypeScript propose de créer des Path alias dans le fichier de configuration \mintinline[breaklines]{bash}{tsconfig.json}.
 
-\begin{minted}[breaklines]{json}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{json}
   "paths": {
     "@/*": ["./src/*"],
     "@beescreens/beeplace": ["../common/src/index"]
   }
 \end{minted}
+  \caption{Path alias dans le fichier de configuration TypeScript \texttt{tsconfig.json}}
+  \label{listing:path-alias-tsconfig}
+\end{listing}
 
 L'application a donc directement accès au fichier \mintinline[breaklines]{bash}{index} du package qui s'occupe d'exporter tout le code en commun.
 
 Cependant, une subtilité apparaît pour faire fonctionner cette solution. Il faut annoncer au compilateur Next.js que le projet utilise des fichiers en dehors du dossier de l'application en elle-même. Autrement, le code du package ne sera pas transpilé et une erreur apparaîtra au lancement de l'application.
 
-\begin{minted}[breaklines]{javascript}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{javascript}
   /** @type {import('next').NextConfig} */
   const nextConfig = {
     experimental: {
@@ -333,15 +354,23 @@ Cependant, une subtilité apparaît pour faire fonctionner cette solution. Il fa
   };
   module.exports = nextConfig;
 \end{minted}
+  \caption{Modification de la configuration Next pour gérer le path alias}
+  \label{listing:next-external-dir}
+\end{listing}
 
-Du côté de Nest, le package est automatiquement transpilé et ajouté au dossier de build \mintinline[breaklines]{bash}{.nest}. Cependant, cela change la hiérarchie des dossiers une fois build et il faut donc préciser à Nest quel fichier exécuter au lancement de l'application. Cette configuration se fait facilement dans le fichier \mintinline[breaklines]{bash}{nest-cli.json}:
+Du côté de Nest, le package est automatiquement transpilé et ajouté au dossier de build \mintinline[breaklines]{bash}{.nest}. Cependant, cela change la hiérarchie des dossiers une fois build et il faut donc préciser à Nest quel fichier exécuter au lancement de l'application. Cette configuration se fait facilement dans le fichier \mintinline[breaklines]{bash}{nest-cli.json}.
 
-\begin{minted}[breaklines]{json}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{json}
   {
     // ...
     "entryFile": "backend/src/main"
+    // ...
   }
 \end{minted}
+  \caption{Modification de la configuration Nest pour gérer le path alias}
+  \label{listing:nest-entry-file}
+\end{listing}
 
 \subsubsection{Solution choisie}
 
@@ -349,16 +378,22 @@ Le choix s'est donc finalement tourné vers les path alias. En dehors des quelqu
 
 Pour conclure, il ne s'agit plus vraiment d'un package à proprement parler mais plutôt d'un simple dossier partagé entre les deux applications. En effet, il n'est plus build indépendamment ni importé dans les fichiers \mintinline[breaklines]{bash}{package.json} des applications respectives. Ces raisons ont poussé à renommer le dossier en \mintinline[breaklines]{bash}{common} et le déplacer à côté des deux applications dans le répertoire beeplace:
 
-\dirtree{%
-  .1 /.
-  .2 apps.
-  .3 beeplace.
-  .4 backend.
-  .4 common.
-  .4 frontend.
-  .3 ....
-  .2 ....
-}
+\begin{listing}[H]
+  \begin{tcolorbox}[arc=0mm,colback=white!5!white]
+    \dirtree{%
+      .1 /.
+      .2 apps.
+      .3 beeplace.
+      .4 backend.
+      .4 common.
+      .4 frontend.
+      .3 ....
+      .2 ....
+    }
+  \end{tcolorbox}
+  \caption{Structure du répertoire de l'application BeePlace avec le code partagé}
+  \label{listing:beeplace-repo-structure-v2}
+\end{listing}
 
 \subsection{Code partagé}
 

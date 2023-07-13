@@ -2,7 +2,7 @@ Comme expliqué plusieurs fois précédemment, assurer la scalabilité de l'appl
 
 \section{Tests de montée en charge}
 
-Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de simuler de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication WebSocket, qui s'occupe de toute la synchronisation des données entres les utilisateurs. En effet, aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par WebSocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
+Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de simuler de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication WebSocket, qui s'occupe de toute la synchronisation des données entres les utilisateurs. Aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par WebSocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
 
 \subsection{Déploiement de l'application}
 
@@ -14,7 +14,7 @@ Afin de tester les limites de l'application sans affecter la version en producti
   \item 50 Go de disque
 \end{itemize}
 
-\gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \mintinline[breaklines]{bash}{deployement/beeplace} du répertoire git.
+\gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \mintinline[breaklines]{bash}{deployement/beeplace} du répertoire Git.
 
 \subsection{Choix de l'outil}
 
@@ -32,7 +32,7 @@ La deuxième solution n'est pas l'idéale car elle ne permet pas d'avoir des sta
 Artillery propose différents moteurs utilisables pour tester une application. Il existe donc un moteur Socket.IO permettant d'avoir une solution clé en main pour tester facilement \gls{beeplace}. Les tests sont définis dans un fichier de configuration YAML, qui permet de définir les différentes phases de test ainsi que le comportement des utilisateurs virtuels (appelés scénarios). Ce fichier YAML peut importer un fichier JavaScript afin d'ajouter de la logique supplémentaire aux tests.
 
 \begin{listing}[h]
-  \inputminted{yaml}{assets/figures/artillery-test.yml}
+  \inputminted[linenos]{yaml}{assets/figures/artillery-test.yml}
   \caption{Test de montée en charge avec Artillery}
   \label{listing:artillery}
 \end{listing}
@@ -53,15 +53,19 @@ Ces raisons ont poussé à abandonner Artillery et à chercher une autre solutio
 
 k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 stars sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
 
-k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6\footnote{\url{https://github.com/grafana/k6/issues/1306}}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
+k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6~\cite{k6-socket-io-issue}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
 
-Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \mintinline[breaklines]{bash}{ws_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration suivante:
+Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \mintinline[breaklines]{bash}{ws_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration présentée dans le listing \ref{listing:k6-thresholds}.
 
-\begin{minted}[breaklines]{js}
+\begin{listing}[H]
+  \begin{minted}[breaklines]{js}
   thresholds: {
     ws_connecting: [{ threshold: 'p(95)<1200', abortOnFail: true }],
   }
 \end{minted}
+  \caption{Utilisation de la latence de la connexion WebSocket dans k6}
+  \label{listing:k6-thresholds}
+\end{listing}
 
 Cet exemple de configuration permet de vérifier que 95\% des connexions WebSocket ne dépassent pas 1200 millisecondes. Si ce seuil est dépassé, le test est considéré comme un échec et s'arrête. Cela sera particulièrement utile dans la phase d'optimisation du code \ref{sec:optimisations} afin de vérifier que les changements apportés aient un impact positif sur la latence des connexions.
 
@@ -84,7 +88,10 @@ Il est tout d'abord nécessaire de trouver quel type de test convient le mieux �
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{./assets/figures/load-test-types.png}
-  \caption{Types de tests de montée en charge~\cite{k6-load-test-types}.}
+  \begin{center}
+    \textit{Schéma de la documentation k6~\cite{k6-load-test-types}}
+  \end{center}
+  \caption{Types de tests de montée en charge}
   \label{fig:load-test-types}
 \end{figure}
 
@@ -105,25 +112,31 @@ Dans le futur, afin de vérifier après les optimisations réalisées que le sys
 
 Le code est séparé en deux parties: le code générique permettant de rendre compatible k6 avec Socket.IO et le test en lui-même. Le code générique est placé dans un package nommé \mintinline[breaklines]{bash}{@beescreens/benchmarks} et est importé dans le test \mintinline[breaklines]{bash}{apps/beeplace/tests/load-tests}. Ce code pourrait, dans le futur, être utilisé pour tester d'autres applications du projet \gls{beescreens} implémentant également Socket.IO, comme Pimp My Wall par exemple.
 
-\dirtree{%
-  .1 /.
-  .2 apps.
-  .3 beeplace.
-  .4 tests.
-  .5 load-tests.
-  .4 ....
-  .3 ....
-  .2 packages.
-  .3 benchmarks.
-  .3 ....
-}
+\begin{listing}[H]
+  \begin{tcolorbox}[arc=0mm,colback=white!5!white]
+    \dirtree{%
+      .1 /.
+      .2 apps.
+      .3 beeplace.
+      .4 tests.
+      .5 load-tests.
+      .4 ....
+      .3 ....
+      .2 packages.
+      .3 benchmarks.
+      .3 ....
+    }
+  \end{tcolorbox}
+  \caption{Structure des tests de montée en charge de \gls{beeplace}
+    \label{listing:load-tests-structure}}
+\end{listing}
 
 \subsubsection{Test avec K6}
 
 Le test utilisé est une Breakpoint test, l'implémentation a été séparée en trois parties afin de pouvoir la commenter plus facilement.
 
 \begin{listing}[H]
-  \inputminted{ts}{assets/figures/breakpoint-test-1.ts}
+  \inputminted[linenos]{ts}{assets/figures/breakpoint-test-1.ts}
   \caption{Breakpoint test avec k6 - Fonction principale}
   \label{listing:k6-breakpoint-test-1}
 \end{listing}
@@ -208,7 +221,7 @@ Le problème de cette technique est qu'elle n'est pas supportée par tous les sy
 
 \subsubsection{Pyroscope}
 
-Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilise facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les 10 secondes.
+Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilise facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les dix secondes.
 
 Malheureusement, le dashboard proposé n'est pas le plus intuitif, il ne met pas à disposition de nombreux filtres et cela rend l'analyse des résultats difficile.
 
