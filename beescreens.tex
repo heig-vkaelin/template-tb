@@ -89,7 +89,7 @@ Par la suite, un fichier \mintinline[breaklines]{bash}{package.json} est nécess
 La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens}~\cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est visible dans le listing~\ref{listing:beeplace-backend-package-json}.
 
 \begin{listing}[h]
-  \inputminted[tabsize=4]{json}{assets/figures/package.json}
+  \inputminted[tabsize=4, linenos]{json}{assets/figures/package.json}
   \caption{package.json initial du backend l'application BeePlace}
   \label{listing:beeplace-backend-package-json}
 \end{listing}
@@ -131,8 +131,8 @@ Afin d'être sûr que l'\gls{ide} Visual Studio Code ait connaissance de la nouv
 
 L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline en ligne de \gls{gitlab}. Pour la première, il faut ajouter au fichier \mintinline[breaklines]{bash}{.husky/pre-push} le code visible sur le listing \ref{listing:husky-tests} afin de lancer les tests avant chaque push.
 
-\begin{listing}[h]
-  \begin{minted}{bash}
+\begin{listing}[H]
+  \begin{minted}[linenos]{bash}
 ## BeePlace
 if
   did_files_change_in_directory "apps/beeplace/**/*"
@@ -150,10 +150,10 @@ fi
 
 Grâce à la fonction \mintinline[breaklines]{bash}{did_files_change_in_directory}, les tests ne seront lancés que si des fichiers ont été modifiés dans le dossier de l'application.
 
-Pour la pipeline \gls{gitlab}, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
+Pour la pipeline \gls{gitlab}, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml} visible dans le listing \ref{listing:gitlab-beeplace-tests}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
 
-\begin{listing}[h]
-  \begin{minted}{yaml}
+\begin{listing}[H]
+  \begin{minted}[linenos]{yaml}
 ## Backend
 
 # test

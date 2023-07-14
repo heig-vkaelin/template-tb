@@ -37,14 +37,14 @@ Artillery propose différents moteurs utilisables pour tester une application. I
   \label{listing:artillery}
 \end{listing}
 
-Le test d'exemple \ref{listing:artillery} génère 1000 utilisateurs en une minute (soit environ 16 à 17 utilisateurs par seconde). Chaque utilisateur va dessiner 3 pixels aléatoirement sur le canvas et attendre ensuite 30 secondes. Cette attente est importante car le client va recevoir les pixels des autres utilisateurs pendant cette période, ce qui simule un comportement plus réaliste. La logique pour générer un pixel aléatoire ainsi que la fingerprint sont définis dans le fichier JavaScript importé \mintinline[breaklines]{bash}{functions.js}.
+Le test d'exemple \ref{listing:artillery} génère 1000 utilisateurs en une minute (soit environ 16 à 17 utilisateurs par seconde). Chaque utilisateur va dessiner trois pixels aléatoirement sur le canvas et attendre ensuite 30 secondes. Cette attente est importante car le client va recevoir les pixels des autres utilisateurs pendant cette période, ce qui simule un comportement plus réaliste. La logique pour générer un pixel aléatoire ainsi que la fingerprint sont définis dans le fichier JavaScript importé \mintinline[breaklines]{bash}{functions.js}.
 
 Cette solution très simple à mettre en place semble idéale. Cependant, un nombre important de problèmes est survenu:
 
 \begin{itemize}
   \item Le script lance parfois une erreur \mintinline[breaklines]{bash}{Error: Callback was already called.} qui stope l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
   \item Artillery ne permet pas de tester facilement la communication du serveur vers les clients. En effet, l'outil est plus adapté à la communication client-serveur. Ce qui est problématique afin de récupérer par exemple la configuration du canvas ou encore les pixels des autres utilisateurs.
-  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les 4 millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
+  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les quatre millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
 \end{itemize}
 
 Ces raisons ont poussé à abandonner Artillery et à chercher une autre solution. Le code source des recherches effectuées avec Artillery n'est plus disponible dans le répertoire \gls{beescreens} mais reste accessible via un commit spécifique \footnote{Voir commit no. \href{https://gitlab.com/beescreens/beescreens/-/merge_requests/255/diffs?commit_id=98e5e73eae3f9ed77026245cc727aa42728cac3b}{98e5e73eae3f9ed77026245cc727aa42728cac3b}}.
@@ -58,7 +58,7 @@ k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{b
 Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \mintinline[breaklines]{bash}{ws_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration présentée dans le listing \ref{listing:k6-thresholds}.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{js}
+  \begin{minted}[breaklines, linenos]{js}
   thresholds: {
     ws_connecting: [{ threshold: 'p(95)<1200', abortOnFail: true }],
   }
@@ -141,25 +141,29 @@ Le test utilisé est une Breakpoint test, l'implémentation a été séparée en
   \label{listing:k6-breakpoint-test-1}
 \end{listing}
 
-La fonction principale de la figure \ref{listing:k6-breakpoint-test-1} est exécutée pour chaque utilisateur virtuel. Elle se connecte à l'endpoint WebSocket grâce à la classe \mintinline[breaklines]{ts}{K6SocketIo} du package précédemment évoqué \mintinline[breaklines]{bash}{@beescreens/benchmarks}. Elle appelle ensuite la fonction \mintinline[breaklines]{bash}{drawMaxRandomPixels} détaillée dans la figure \ref{listing:k6-breakpoint-test-3} qui contient le comportement propre à l'utilisateur. Les erreurs sont également comptabilisées afin de les afficher à la fin du test.
+La fonction principale du listing \ref{listing:k6-breakpoint-test-1} est exécutée pour chaque utilisateur virtuel. Elle se connecte à l'endpoint WebSocket grâce à la classe \texttt{K6SocketIo} du package précédemment évoqué \texttt{\\@beescreens/benchmarks}. Elle appelle ensuite la fonction \texttt{drawMaxRandomPixels} détaillée dans le listing \ref{listing:k6-breakpoint-test-3} qui contient le comportement propre à l'utilisateur. Les erreurs sont également comptabilisées afin de les afficher à la fin du test.
 
 \begin{listing}[H]
-  \inputminted{ts}{assets/figures/breakpoint-test-2.ts}
+  \inputminted[linenos]{ts}{assets/figures/breakpoint-test-2.ts}
   \caption{Breakpoint test avec k6 - Options}
   \label{listing:k6-breakpoint-test-2}
 \end{listing}
 
-La figure \ref{listing:k6-breakpoint-test-2} présente les options du test. Le test dure un maximum de 5 minutes et va ajouter un nombre d'utilisateurs virtuels croissant jusqu'à l'objectif souhaité de 1000 utilisateurs. Le test ne se soucie pas de l'éventuelle latence de l'application grâce à l'exécuteur \mintinline[breaklines]{bash}{ramping-arrival-rate}.
+Le listing \ref{listing:k6-breakpoint-test-2} présente les options du test. Le test dure un maximum de 5 minutes et va ajouter un nombre d'utilisateurs virtuels croissant jusqu'à l'objectif souhaité de 1000 utilisateurs. Le test ne se soucie pas de l'éventuelle latence de l'application grâce à l'exécuteur \texttt{ramping-arrival-rate}.
 
-Le \mintinline[breaklines]{bash}{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse 1200 millisecondes pour 95\% des utilisateurs virtuels.
+Le \texttt{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse \textbf{1200 millisecondes} pour \textbf{95\%} des utilisateurs virtuels.
+
+Ces nombres sont choisis de la manière suivante: plusieurs valeurs sont mises à disposition par k6 pour les différentes métriques des résultats: \texttt{avg}, \texttt{med}, \texttt{min}, \texttt{max}, \texttt{p(90)} et \texttt{p(95)}. Ces valeurs correspondent respectivement à la moyenne, la médiane, la valeur minimale, la valeur maximale, la valeur du percentile 90 et la valeur du percentile 95. Le percentile 95 indique par exemple la valeur pour laquelle 95\% des utilisateurs virtuels se trouvent trouvent en dessous. Utiliser le percentile 95 permet de ne pas prendre en compte les valeurs extrêmes qui pourraient être dues à des problèmes de réseau par exemple tout en ayant une valeur représentative de la majorité des utilisateurs virtuels.
+
+Concernant la valeur choisie pour la latence de la connexion WebSocket, elle se base sur les bonnes pratiques du web. Un article~\cite{how-fast-should-a-website-load-in-2023} indique que le chargement d'un site, d'autant plus sur mobile, devrait idéalement se faire en une à deux secondes. La valeur de 1200 millisecondes est donc choisie pour être dans la partie basse de cette intervalle afin d'avoir une certaine marge. En effet, il faut également prendre en compte que la latence est calculée uniquement sur la connexion WebSocket avec le backend. Pour un utilisateur réel, il faudrait également ajouter le délai du chargement du frontend de l'application.
 
 \begin{listing}[H]
-  \inputminted{ts}{assets/figures/breakpoint-test-3.ts}
+  \inputminted[linenos]{ts}{assets/figures/breakpoint-test-3.ts}
   \caption{Breakpoint test avec k6 - Comportement des utilisateurs virtuels}
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, la figure \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Ensuite, il fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Ensuite, il fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
 
 \subsection{Résultats initiaux}
 
@@ -211,7 +215,7 @@ Pour trouver plus facilement les optimisations à effectuer, il est nécessaire 
 
 Node.js propose un outil de profiling natif qu'il est possible d'appeler en utilisant simplement l'argument \mintinline[breaklines]{bash}{node --prof}. Cet outil permet de générer un fichier de profiling illisible en lui-même. Heureusement, l'argument \mintinline[breaklines]{bash}{node --prof-process} permet d'analyser ce fichier de log et de générer un fichier textuel plus compréhensible.
 
-L'inconvénient de cette approche est que le fichier texte des résultats reste pas très pratique à utiliser. Il est difficile de voir quelles fonctions sont les plus gourmandes en ressources sans une interface graphique.
+L'inconvénient de cette approche réside dans le fait que le fichier texte des résultats reste peu pratique à utiliser. Il est difficile de voir quelles fonctions sont les plus gourmandes en ressources sans une interface graphique avec un système de filtre.
 
 \subsubsection{Parca}
 
@@ -301,7 +305,7 @@ Il faudra donc dans un premier temps se concentrer sur la fonction \mintinline[b
   \item Broadcast du pixel
 \end{enumerate}
 
-Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel} et d'afficher à nouveau les fonctions des dépendances comme la figure \ref{fig:flame1-addPixel} le montre.
+Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel} et d'afficher à nouveau les fonctions des dépendances comme montre la figure \ref{fig:flame1-addPixel}.
 
 \subsubsection{Fonction addPixel}
 
@@ -312,11 +316,11 @@ Afin de vérifier quelle partie doit être optimisée en priorité, il est possi
   \label{fig:flame1-addPixel}
 \end{figure}
 
-Cette figure \ref{fig:flame1-addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \mintinline[breaklines]{javascript}{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \mintinline[breaklines]{javascript}{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel}.
+Cette figure \ref{fig:flame1-addPixel} qui se concentre sur la fonction \mintinline[breaklines]{javascript}{addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \mintinline[breaklines]{javascript}{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \mintinline[breaklines]{javascript}{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel}.
 
 \subsubsection{Conclusion initiale}
 
-La fonction \mintinline[breaklines]{javascript}{addPixel} appelée à chaque fois qu'un utilisateur pose un pixel est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
+La fonction \mintinline[breaklines]{javascript}{addPixel}, appelée à chaque fois qu'un utilisateur pose un pixel, est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
 
 \section{Optimisations}
 \label{sec:optimisations}
@@ -338,16 +342,16 @@ Pour l'instant, le pixel dessiné par l'utilisateur est transmis immédiatement 
 Toute la logique est implémentée dans la classe \mintinline[breaklines]{javascript}{BoardGateway}, qui s'occupe de la communication WebSocket.
 
 \begin{listing}[H]
-  \inputminted[highlightlines={3,13,19,29}]{ts}{assets/figures/opti-interval.ts}
+  \inputminted[highlightlines={3,12,18,19,29},linenos]{ts}{assets/figures/opti-interval.ts}
   \caption{Optimisation du broadcast avec un intervalle de temps}
   \label{listing:opti-interval}
 \end{listing}
 
-Au démarrage de l'application, un interval JavaScript est créé. Celui-ci appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \mintinline{bash}{BOARD_REFRESH_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
+Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \mintinline[breaklines]{bash}{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \mintinline{bash}{BOARD_REFRESH_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
 
 Une Map est utilisée pour stocker les différents pixels dessinés au cours de l'intervalle. Chaque clé de la Map correspond à sa position sur le canvas. Cette implémentation permet de garder uniquement le dernier pixel dessiné à une position donnée. Ainsi, si plusieurs utilisateurs dessinent un pixel à la même position pendant le court intervalle, seul le dernier pixel dessiné sera envoyé aux autres utilisateurs.
 
-Avant d'envoyer la mise-à-jour aux autres utilisateurs, une vérification est effectuée pour savoir si des pixels ont été dessinés pendant l'intervalle. Si ce n'est pas le cas l'envoi du message est annulé. Cela permet d'éviter d'envoyer de nombreux messages inutiles aux utilisateurs. Cette vérification permet de se rapprocher du comportement initial de l'application qui envoyait une mise-à-jour quand un pixel était dessiné. La seule modification perceptible est l'ajout des 100 millisecondes de délai.
+Avant d'envoyer la mise-à-jour aux autres utilisateurs, une vérification est effectuée pour savoir si des pixels ont été dessinés pendant l'intervalle. Si ce n'est pas le cas l'envoi du message est annulé. Cela permet d'éviter d'envoyer de nombreux messages inutiles aux utilisateurs. Cette vérification permet de se rapprocher du comportement initial de l'application qui envoyait une mise-à-jour quand un pixel était dessiné. La seule modification potentiellement perceptible est l'ajout des 100 millisecondes de délai.
 
 \subsubsection{Résultats}
 
@@ -489,7 +493,7 @@ Dans la suite des tableaux et des graphiques, la version non optimisée sera not
 
 Pour conclure, l'optimisation avec l'intervalle est très effective. Cette nouvelle version supporte la montée en charge pendant \textbf{54.82\%} de temps en plus. Le nombre d'utilisateurs virtuels supportés est augmenté de \textbf{141.67\%} et le nombre de pixels dessinés est augmenté de \textbf{202.70\%}.
 
-Le nombre d'utilisateurs supportés avant que le temps de réponse devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si tous les festivaliers de Baleinev se connectent en même temps.
+Le nombre d'utilisateurs supportés avant que le temps de réponse devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si toutes les personnes présentes à Baleinev se connectent en même temps.
 
 Cependant, il est intéressant de vérifier si d'autres optimisations ne pourraient pas être également implémentées et utiles. Un nouveau profiling avec Clinic.js est donc effectué sur cette version.
 
@@ -506,22 +510,26 @@ En regardant le graphique en flamme de la version optimisée, il est possible de
 
 \subsection{Format des données}
 
-Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'objets JSON transformé automatiquement par Socket.IO en chaîne de caractères. Chaque objet contient les coordonnées du pixel ainsi que sa couleur. Les clés sont répétées pour chaque pixel ce qui augmente la taille du message:
+Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'objets JSON transformé automatiquement par Socket.IO en chaîne de caractères. Chaque objet contient les coordonnées du pixel ainsi que sa couleur. Les clés sont répétées pour chaque pixel ce qui augmente la taille du message comme le montre le listing \ref{listing:pixels-initial-json-format}.
 
-\begin{minted}{json}
+\begin{listing}[H]
+  \begin{minted}[linenos]{json}
   [
     { "x": 12, "y": 56, "color": 12 },
     { "x": 33, "y": 42, "color": 8 }
     // ...
   ]
 \end{minted}
+  \caption{Format initial des pixels en JSON}
+  \label{listing:pixels-initial-json-format}
+\end{listing}
 
 \subsubsection{Format binaire}
 
-La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \mintinline{javascript}{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre la figure \ref{listing:opti-binary}.
+La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \mintinline{javascript}{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
 
 \begin{listing}[H]
-  \inputminted[highlightlines={9}]{ts}{assets/figures/opti-binary.ts}
+  \inputminted[highlightlines={9}, linenos]{ts}{assets/figures/opti-binary.ts}
   \caption{Optimisation du broadcast avec un format binaire}
   \label{listing:opti-binary}
 \end{listing}
@@ -530,14 +538,18 @@ Du côté du client, il suffit simplement de lire le tableau 3 valeurs à la foi
 
 Une comparaison rapide de la taille gagnée est réalisable facilement. Les deux pixels précédents sont utilisés comme exemple. Tous les caractères utilisés sont des caractères ASCII, ils utilisent donc 1 octet chacun.
 
-\begin{minted}{json}
+\begin{listing}[H]
+  \begin{minted}[linenos]{json}
   [{"x":12,"y":56,"color":12},{"x":33,"y":42,"color":8}] // ->  54 caractères -> 54 octets
   [12,56,12,33,42,8]                     // ->  6 entiers sur 2 octets chacun -> 12 octets
 \end{minted}
+  \caption{Comparaison entre le format JSON et le format binaire}
+  \label{listing:json-vs-binary}
+\end{listing}
 
 Le résultat est donc \textbf{4.5 fois} plus léger en utilisant le format binaire. A noter que ce ratio peut être encore meilleur dans le cas où les coordonnées des pixels sont plus grandes. En effet, jusqu'à 65'535, les entiers restent stockés sur 2 octets mais la chaîne de caractère augmente en taille (ex: longueur 5 à partir de 10'000 donc 5 octets).
 
-Pour vérifier si cette optimisation est efficace, un nouveau benchmark est effectué. Les résultats sont présentés dans la figure \ref{table:second-opti-results}.
+Pour vérifier si cette optimisation est efficace, un nouveau benchmark est effectué. Les résultats sont présentés dans le tableau \ref{table:second-opti-results}.
 
 \begin{table}[H]
   \centering
@@ -556,20 +568,24 @@ Malheureusement, ces résultats ne sont pas très concluants. En effet, la versi
 
 \subsubsection{Format string}
 
-Pour ne pas avoir ce soucis de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \mintinline{javascript}{toString} comme le montre la figure \ref{listing:opti-string}.
+Pour ne pas avoir ce soucis de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \mintinline{javascript}{toString} comme le montre le listing \ref{listing:opti-string}.
 
 \begin{listing}[H]
-  \inputminted[highlightlines={5,6}]{ts}{assets/figures/opti-string.ts}
+  \inputminted[highlightlines={5,6}, linenos]{ts}{assets/figures/opti-string.ts}
   \caption{Optimisation du broadcast avec une chaîne de caractères}
   \label{listing:opti-string}
 \end{listing}
 
 En prenant toujours les mêmes deux pixels en exemple, le résultat est le suivant:
 
-\begin{minted}{json}
+\begin{listing}[H]
+  \begin{minted}[linenos]{json}
   [{"x":12,"y":56,"color":12},{"x":33,"y":42,"color":8}] // ->  54 caractères -> 54 octets
   [12,56,12,33,42,8]                                     // ->  18 caractères -> 18 octets
 \end{minted}
+  \caption{Comparaison entre le format JSON et le format en chaîne de caractères}
+  \label{listing:json-vs-string}
+\end{listing}
 
 La version avec la string optimisée est \textbf{3 fois} plus légère que la version initiale en JSON. Il est donc possible de tester cette nouvelle version pour la comparer aux précédentes.
 
@@ -597,7 +613,7 @@ La documentation de Socket.IO~\cite{socket-io-performance-tuning} explique diver
 
 \subsubsection{Optimisations au niveau WebSocket}
 
-Concernant les optimisations au niveau WebSocket, il s'agit en réalité pour la plupart d'options déjà testées. Comme par exemple utiliser un parseur customisé lors de l'envoi de données binaires. Socket.IO propose également d'utiliser une autre implémentation WebSocket du côté du serveur appelée \mintinline{javascript}{eiows}. Cependant, ce module n'est pas très utilisé ni maintenu et il n'est pas disponible en TypeScript ni sur Windows. Il n'a donc pas été testé. Socket.IO propose également des modules permettant d'accélérer certaines opérations en utilisant des implémentations natives en C++. Le module \mintinline{javascript}{bufferutil} a donc été installé mais les gains de performance n'étaient pas véritablement visibles. Il a quand même été gardé car il s'agit d'une dépendance optionnelle, qui n'est utilisée que lorsqu'elle est disponible.
+Concernant les optimisations au niveau WebSocket, il s'agit en réalité pour la plupart d'options déjà testées. Comme par exemple utiliser un parseur customisé lors de l'envoi de données binaires. Socket.IO propose également d'utiliser une autre implémentation WebSocket du côté du serveur appelée \texttt{eiows}. Cependant, ce module n'est pas très utilisé ni maintenu et il n'est pas disponible en TypeScript ni sur Windows. Il n'a donc pas été testé. Socket.IO propose également des modules permettant d'accélérer certaines opérations en utilisant des implémentations natives en C++. Les modules \texttt{bufferutil} et \texttt{utf-8-validate} ont donc été installés mais les gains de performance n'étaient pas véritablement perceptibles. Ils ont quand même été gardés car il s'agit de dépendances optionnelles qui permettent de mieux respecter la spécification WebSocket. Ces dépendances sont utilisées uniquement lorsqu'elles sont disponibles dans l'environnement de l'application.
 
 \subsubsection{Optimisations au niveau du système d'exploitation}
 

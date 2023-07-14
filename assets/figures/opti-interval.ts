@@ -1,7 +1,6 @@
 class BoardGateway {
   private server: BeePlaceSocketServer;
-  private pixels: Map<Coord, Pixel> = new Map();
-  private interval?: NodeJS.Timer;
+  private pixels: Map<Coordinate, Pixel> = new Map();
 
   // ...
 
@@ -16,11 +15,12 @@ class BoardGateway {
 
   onModuleInit() {
     const refreshRate = this.configService.get(BOARD_REFRESH_RATE);
-    this.interval = setInterval(this.broadcastBoardUpdates, refreshRate);
+    const interval = setInterval(this.broadcastBoardUpdates, refreshRate);
+    this.schedulerRegistry.addInterval(INTERVAL_NAME, interval);
   }
 
   onModuleDestroy() {
-    clearInterval(this.interval);
+    this.schedulerRegistry.deleteInterval(INTERVAL_NAME);
   }
 
   @SubscribeMessage(ClientEvent.PIXEL_FROM_PLAYER)

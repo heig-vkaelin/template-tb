@@ -149,7 +149,7 @@ Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payan
 Pour pouvoir modifier facilement la configuration de la toile, celle-ci est configurée grâce à des variables d'environnement du côté du backend. En effet, le backend transmet toutes ces valeurs au frontend lors de la première connexion comme expliqué dans la prochaine section \ref{section:connexion-websockets}. Les variables d'environnement intéressantes sont présentées dans le listing \ref{listing:env-variables}.
 
 \begin{listing}[H]
-  \begin{minted}{bash}
+  \begin{minted}[linenos]{bash}
 # The width and height of the board
 BOARD_SIZE=64
 
@@ -292,7 +292,7 @@ Les Project References~\cite{project-references} sont une fonctionnalité TypeSc
 Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un outil permettant également de faciliter la gestion des monorepos, propose une solution innovante à ce problème de code partagé: les internal packages. Il s'agit de packages qui ne contiennent pas de fichier \mintinline[breaklines]{bash}{tsconfig.json}. De plus, ils se contentent d'exporter directement les fichiers TypeScript dans leur fichier \mintinline[breaklines]{bash}{package.json} à la place des fichiers JavScript transpilés.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{json}
+  \begin{minted}[breaklines, linenos]{json}
   {
     "name": "@beescreens/beeplace"
     "main": "./src/index.ts", // instead of "./dist/index.js"
@@ -312,7 +312,7 @@ Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un out
 Cette solution est idéale car très facile à mettre en place. Cependant, il est nécessaire que les applications qui consument le package transpilent le code TypeScript. En effet, le code TypeScript ne peut pas être exécuté directement une fois importé, il doit être transpilé avec le reste de l'application. Next.js permet cette option en ajoutant le package à transpiler dans la configuration du framework comme le montre le listing \ref{listing:next-transpile-package}.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{javascript}
+  \begin{minted}[breaklines, linenos]{javascript}
   /** @type {import('next').NextConfig} */
   const nextConfig = {
     transpilePackages: ['@beescreens/beeplace'],
@@ -330,7 +330,7 @@ Malheureusement, ce n'est pas le cas de Nest.js. Nest n'a pas de compilateur dé
 Une autre solution est d'importer directement dans l'application souhaitée le code TypeScript du package. Bien entendu, les chemins relatifs seraient assez peu agréables et maintenables. Heureusement, TypeScript propose de créer des Path alias dans le fichier de configuration \mintinline[breaklines]{bash}{tsconfig.json}.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{json}
+  \begin{minted}[breaklines, linenos]{json}
   "paths": {
     "@/*": ["./src/*"],
     "@beescreens/beeplace": ["../common/src/index"]
@@ -345,7 +345,7 @@ L'application a donc directement accès au fichier \mintinline[breaklines]{bash}
 Cependant, une subtilité apparaît pour faire fonctionner cette solution. Il faut annoncer au compilateur Next.js que le projet utilise des fichiers en dehors du dossier de l'application en elle-même. Autrement, le code du package ne sera pas transpilé et une erreur apparaîtra au lancement de l'application.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{javascript}
+  \begin{minted}[breaklines, linenos]{javascript}
   /** @type {import('next').NextConfig} */
   const nextConfig = {
     experimental: {
@@ -361,7 +361,7 @@ Cependant, une subtilité apparaît pour faire fonctionner cette solution. Il fa
 Du côté de Nest, le package est automatiquement transpilé et ajouté au dossier de build \mintinline[breaklines]{bash}{.nest}. Cependant, cela change la hiérarchie des dossiers une fois build et il faut donc préciser à Nest quel fichier exécuter au lancement de l'application. Cette configuration se fait facilement dans le fichier \mintinline[breaklines]{bash}{nest-cli.json}.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines]{json}
+  \begin{minted}[breaklines, linenos]{json}
   {
     // ...
     "entryFile": "backend/src/main"
