@@ -607,6 +607,80 @@ Les résultats de cette dernière version sont quasiment équivalents à la meil
 
 La dernière version avec la chaîne de caractères optimisée est donc utilisée pour la suite du projet. Il s'agit d'un bon compromis entre la version initiale très verbeuse en JSON et la version binaire qui est moyennement compatible avec le parseur de base de Socket.IO.
 
+\subsection{Taille de la toile}
+
+Un élément qui n'a pas encore été abordé est la taille de la toile de dessin. En effet, pour les tests précédents celle-ci était fixée à 64x64 pixels, soit la taille choisie pour le Baleinev Festival 2023. Cette taille était bien adaptée car l'application ne disposait pas encore de mode display et l'affichage n'était donc pas partagé entre plusieurs écrans. Lors des prochaines éditions, il faut partir du principe que l'application sera utilisée sur des écrans plus grands où la résolution de la toile pourra être plus importante.
+
+\subsubsection{Version initiale}
+
+Des tests ont donc été réalisés avec une toile de 256x256 pixels, soit 16 fois plus grand que l'initiale. Les résultats sont présentés dans le tableau \ref{table:canvas-size-results}.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Taille de la toile} & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    64x64                       & 29299.209 ms               & 1342                           & 3088                     \\ \hline
+    256x256                     & 25149.732 ms               & 909                            & 2108                     \\ \hline
+  \end{tabular}
+  \caption{Médiane des résultats de 10 tests en changeant la taille de la toile}
+  \label{table:canvas-size-results}
+\end{table}
+
+Les résultats sont clairs, les performances chutent d'environ \textbf{32\%} pour le nombre d'utilisateurs et de pixels dessinés. Cela est dû au fait que le tableau contenant toutes les couleurs de la toile est envoyé à chaque client lors de la connexion WebSocket. Ce tableau passe de 4096 éléments à 65536 éléments, soit d'environ 4Kb à 64Kb, ce qui n'est pas négligeable. Cependant, la conclusion avait été faites grâce aux tests précédents que la taille des messages WebSocket envoyés n'avait pas ou peu d'impact sur les performances. Un nouveau profiling à l'aide de Clinic.js est donc nécessaire.
+
+% Source des 2 img: file:///Users/valentin/code/beescreens/apps/beeplace/backend/.clinic/41133.clinic-flame.html
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame3-filtered.png}
+  \caption{Code de l'application filtré par Clinic.js}
+  \label{fig:flame3-filtered}
+\end{figure}
+
+Étonnamment, la figure \ref{fig:flame3-filtered} montre que la fonction \mintinline[breaklines]{javascript}{getBoard} est maintenant la plus coûteuse à 27.3\%, devant \mintinline[breaklines]{javascript}{broadcastBoardUpdates} à seulement 18.8\%  qui était la fonction la plus coûteuse dans les tests précédents. Il est nécessaire de se concentrer sur cette fonction afin de trouver de potentielles optimisations. Tout d'abord, le code de cette fonction est présenté dans le listing \ref{listing:getBoard}.
+
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos]{ts}
+  async getBoard() {
+    const bitfield = await this.redisClient.get(BOARD_KEY);
+    const buffer = Buffer.from(bitfield, UTF8);
+    return Array.from(buffer);
+  }
+\end{minted}
+  \caption{Méthode \mintinline[breaklines]{javascript}{getBoard} initiale}
+  \label{listing:getBoard}
+\end{listing}
+
+Cette méthode se contente de récupérer le Bitfield dans Redis contenant les couleurs de la toile. Ces valeurs se trouvent sous la forme d'une chaîne de caractères qu'il faut ensuite convertir en tableau JavaScript.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/flame/flame3-getBoard.png}
+  \caption{Zoom sur la fonction \mintinline[breaklines]{javascript}{getBoard} du rapport Clinic.js}
+  \label{fig:flame3-getBoard}
+\end{figure}
+
+En mettant l'accent sur cette fonction \mintinline[breaklines]{javascript}{getBoard} dans la figure \ref{fig:flame3-getBoard}, il est possible de voir que la majorité du temps se passe dans la création du tableau JavaScript à l'aide de la fonction \mintinline[breaklines]{javascript}{Array.from} vue précédemment. Il semble donc être intéressant de mettre en cache, dans la mémoire de l'application, le tableau des couleurs de la toile.
+
+\subsubsection{Version optimisée}
+
+% TODO: code ici, dire que subtilité: attendre que le board soit setup
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Version}  & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
+    64x64 initiale    & 29299.209 ms               & 1342                           & 3088                     \\ \hline
+    64x64 optimisée   & 29318.824 ms               & 1347.5                         & 3093                     \\ \hline
+    256x256 initiale  & 25149.732 ms               & 909                            & 2108                     \\ \hline
+    256x256 optimisée & 29243.296 ms               & 1249.5                         & 2921                     \\ \hline
+  \end{tabular}
+  \caption{Médiane des résultats de 10 tests en changeant la taille de la toile avec la version optimisée}
+  \label{table:canvas-size-results-optimized}
+\end{table}
+
 \subsection{Autres optimisations}
 
 La documentation de Socket.IO~\cite{socket-io-performance-tuning} explique diverses techniques afin d'optimiser les performances de son application. Celles-ci sont regroupées en deux catégories: les optimisations au niveau WebSocket et les optimisations au niveau du système d'exploitation.
