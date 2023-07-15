@@ -665,7 +665,23 @@ En mettant l'accent sur cette fonction \mintinline[breaklines]{javascript}{getBo
 
 \subsubsection{Version optimisée}
 
-% TODO: code ici, dire que subtilité: attendre que le board soit setup
+\begin{listing}[H]
+  \inputminted[highlightlines={4,10,11},linenos]{ts}{assets/figures/opti-storage-1.ts}
+  \caption{Optimisation du stockage de la toile - stockage en mémoire}
+  \label{listing:opti-storage-1}
+\end{listing}
+
+Le tableau des couleurs de la toile, appelé \texttt{board}, est maintenant stocké en mémoire dans l'application comme attribut de la classe \texttt{BoardGateway} comme le montre le listing \ref{listing:opti-storage-1}. Il est récupéré dans le Bitfield Redis au lancement de l'application dans la méthode \texttt{onModuleInit}. La subtilité a été qu'il est nécessaire d'attendre que le BitField soit bien initialisé par le \texttt{BoardService} avant de le récupérer. Pour ce faire, la méthode \texttt{setupBoard} du service est appelée avant la récupération du tableau.
+
+\begin{listing}[H]
+  \inputminted[highlightlines={9,22},linenos]{ts}{assets/figures/opti-storage-2.ts}
+  \caption{Optimisation du stockage de la toile - accès et mise à jour du cache}
+  \label{listing:opti-storage-2}
+\end{listing}
+
+Par la suite, le tableau en mémoire, \texttt{board}, est envoyé aux utilisateurs se connectant à l'application dans la méthode \texttt{join} afin de pouvoir être affiché. Pour que le tableau soit toujours à jour, son contenu est actualisé dans la méthode \texttt{adPixel} lorsqu'un utilisateur pose un nouveau pixel sur la toile.
+
+Il est maintenant possible de relancer les tests de montées en charge pour s'assurer que les performances sont meilleures.
 
 \begin{table}[H]
   \centering
@@ -673,13 +689,15 @@ En mettant l'accent sur cette fonction \mintinline[breaklines]{javascript}{getBo
     \hline
     \textbf{Version}  & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
     64x64 initiale    & 29299.209 ms               & 1342                           & 3088                     \\ \hline
-    64x64 optimisée   & 29318.824 ms               & 1347.5                         & 3093                     \\ \hline
+    64x64 optimisée   & 29318.824 ms               & 1347.5                         & 3093                     \\ \Xhline{4\arrayrulewidth}
     256x256 initiale  & 25149.732 ms               & 909                            & 2108                     \\ \hline
     256x256 optimisée & 29243.296 ms               & 1249.5                         & 2921                     \\ \hline
   \end{tabular}
   \caption{Médiane des résultats de 10 tests en changeant la taille de la toile avec la version optimisée}
   \label{table:canvas-size-results-optimized}
 \end{table}
+
+Comme le montre la table \ref{table:canvas-size-results-optimized}, les performances entre les deux versions sont quasiment équivalentes lorsque la taille de la toile est de 64x64 pixels. Ce qui était attendu car les soucis de performances apparaissaient avec une taille plus élevée. Pour la toile de 256x256 pixels, soit 16 fois plus grande, les performances sont bien meilleures avec la nouvelle version optimisée. Ils sont environ 37\% plus rapides que la version précédente et seulement 7\% plus lents que les résultats avec la petite toile de 64x64. Les conclusions de cette optimisation sont donc positives et celle-ci est conservée.
 
 \subsection{Autres optimisations}
 
