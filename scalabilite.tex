@@ -163,7 +163,16 @@ Concernant la valeur choisie pour la latence de la connexion WebSocket, elle se 
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel se connecte à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Ensuite, il fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel en ajoutant une charge sur le frontend. Il se connecte ensuite à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+
+Poser des pixels de position et de couleur aléatoires permet d'obtenir de jolis résultats visuels comme affiché sur la figure \ref{fig:load-test-result}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{assets/figures/load-test-result.png}
+  \caption{Résultat visuel des tests de montée en charge}
+  \label{fig:load-test-result}
+\end{figure}
 
 \subsection{Résultats initiaux}
 
