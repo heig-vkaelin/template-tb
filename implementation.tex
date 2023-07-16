@@ -289,7 +289,7 @@ Les Project References~\cite{project-references} sont une fonctionnalité TypeSc
 
 \subsubsection{Internal Package}
 
-Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un outil permettant également de faciliter la gestion des monorepos, propose une solution innovante à ce problème de code partagé: les internal packages. Il s'agit de packages qui ne contiennent pas de fichier \mintinline[breaklines]{bash}{tsconfig.json}. De plus, ils se contentent d'exporter directement les fichiers TypeScript dans leur fichier \mintinline[breaklines]{bash}{package.json} à la place des fichiers JavScript transpilés.
+Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un outil permettant également de faciliter la gestion des monorepos, propose une solution innovante à ce problème de code partagé: les internal packages. Il s'agit de packages qui ne contiennent pas de fichier \mintinline[breaklines]{bash}{tsconfig.json}. De plus, ils se contentent d'exporter directement les fichiers TypeScript dans leur fichier \mintinline[breaklines]{bash}{package.json} à la place des fichiers JavaScript transpilés.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{json}
@@ -397,12 +397,106 @@ Pour conclure, il ne s'agit plus vraiment d'un package à proprement parler mais
 
 \subsection{Code partagé}
 
-TODO
+Le code en commun contient majoritairement deux catégories de code:
+
+\begin{itemize}
+  \item Des types TypeScript qui seront supprimés du code lors de la transpilation en JavaScript;
+  \item Des énumérations TypeScript qui seront transformées en objets dans le code JavaScript.
+\end{itemize}
+
+Il aurait également été possible d'ajouter par exemple des fonctions utilitaires ou des classes en commun. Cependant, ce besoin n'est pas apparu durant le développement du projet.
 
 \subsubsection{Types}
 
-TODO
+Les types partagés sont par exemple l'interface représentant un pixel ou encore l'état initial reçu par le client lors de la connexion à l'application comme le montre le listing \ref{listing:shared-types}.
 
-\subsubsection{Evénements WebSockets}
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos]{ts}
+    export interface Coordinate {
+      x: number;
+      y: number;
+    }
 
-TODO
+    export interface Pixel extends Coordinate {
+      color: number;
+    }
+
+    export interface InitialState {
+      board: number[];
+      canvasSize: number;
+      colors: string[];
+      cooldown: number;
+      initialColor: number;
+      // ...
+    }
+\end{minted}
+  \caption{Exemples de types partagés entre le backend et le frontend}
+  \label{listing:shared-types}
+\end{listing}
+
+\subsubsection{Enumérations et événements WebSockets}
+
+Des énumérations sont utilisées pour représenter les événements WebSockets. Il en existe deux catégories: les événements envoyés par le client \texttt{ClientEvent} et les événements envoyés par le serveur \texttt{ServerEvent}.
+
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos]{ts}
+    export enum ServerEvent {
+      READ_ONLY = 'readOnly',
+      RESET_BOARD = 'resetBoard',
+      UPDATE_BOARD = 'u', // shortest possible name to reduce bandwidth usage for end users
+    }
+
+    export enum ClientEvent {
+      JOIN = 'join',
+      PIXEL_FROM_PLAYER = 'pixelFromPlayer',
+    }
+\end{minted}
+  \caption{Énumérations des événements WebSockets}
+  \label{listing:websocket-events-enums}
+\end{listing}
+
+Par la suite, ces énumérations sont utilisées dans le code des deux applications mais également dans le code commun. En effet, depuis Socket.IO 3, il est possible de typer complètement les événements WebSocket. Il suffit de créer des interfaces pour chaque événement, en typant les paramètres et le retour de la fonction.
+
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos]{ts}
+    interface ServerToClientEvents {
+      [ServerEvent.READ_ONLY]: (readOnly: boolean) => void;
+      [ServerEvent.RESET_BOARD]: () => void;
+      [ServerEvent.UPDATE_BOARD]: (data: string) => void;
+    }
+
+    interface ClientToServerEvents {
+      [ClientEvent.JOIN]: (
+        fingerprint: string,
+        callback: (response: JoinResponse) => void,
+      ) => void;
+      [ClientEvent.PIXEL_FROM_PLAYER]: (pixel: Pixel) => void;
+    }
+\end{minted}
+  \caption{Interfaces des événements WebSockets}
+  \label{listing:websockets-events-interfaces}
+\end{listing}
+
+Pour finir, il suffit d'utiliser ces interfaces dans les types fournis par Socket.IO afin d'exposer les versions typées des sockets pour le client et le serveur Socket.IO. Il est également possible de typer le \texttt{SocketData}, un objet de stockage propre à chaque instance de Socket côté serveur. Celui-ci est utilisé pour stocker la Fingerprint associée au client dans le cas de \gls{beeplace}.
+
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos]{ts}
+    interface SocketData {
+      fingerprint: string;
+    }
+
+    export type BeePlaceFrontendSocket = ClientSocket<
+      ServerToClientEvents,
+      ClientToServerEvents
+    >;
+    export type BeePlaceBackendSocket = Socket<
+      ClientToServerEvents,
+      ServerToClientEvents,
+      SocketData
+    >;
+\end{minted}
+  \caption{Sockets client et serveur Socket.IO typés}
+  \label{listing:typed-socket-io}
+\end{listing}
+
+Les applications utilisent donc ces Sockets typées dans leur code respectif. Cela permet d'avoir une très bonne expérience pour le développeur. Il lui suffit d'utiliser l'énumération des événements disponibles et tout le reste de la fonction sera typé automatiquement. Cela évite notamment les erreurs basiques lorsque le code est modifié à un endroit mais pas dans les autres occurrences.

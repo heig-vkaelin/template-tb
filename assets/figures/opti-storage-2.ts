@@ -6,7 +6,7 @@ class BoardGateway {
     // ...
     return {
       initialState: {
-        board: this.board ?? [],
+        board: this.board,
         // ...
       },
     };
@@ -17,9 +17,7 @@ class BoardGateway {
     // ...
 
     // Add to the board cache to prevent Redis calls
-    if (this.board) {
-      const offset = pixel.y * this.configService.get(BOARD_SIZE) + pixel.x;
-      this.board[offset] = pixel.color;
-    }
+    const offset = pixel.y * this.configService.get(BOARD_SIZE) + pixel.x;
+    this.board[offset] = pixel.color;
   }
 }

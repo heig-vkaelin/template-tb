@@ -683,12 +683,12 @@ En mettant l'accent sur cette fonction \mintinline[breaklines]{javascript}{getBo
 Le tableau des couleurs de la toile, appelé \texttt{board}, est maintenant stocké en mémoire dans l'application comme attribut de la classe \texttt{BoardGateway} comme le montre le listing \ref{listing:opti-storage-1}. Il est récupéré dans le Bitfield Redis au lancement de l'application dans la méthode \texttt{onModuleInit}. La subtilité a été qu'il est nécessaire d'attendre que le BitField soit bien initialisé par le \texttt{BoardService} avant de le récupérer. Pour ce faire, la méthode \texttt{setupBoard} du service est appelée avant la récupération du tableau.
 
 \begin{listing}[H]
-  \inputminted[highlightlines={9,22},linenos]{ts}{assets/figures/opti-storage-2.ts}
+  \inputminted[highlightlines={9,21},linenos]{ts}{assets/figures/opti-storage-2.ts}
   \caption{Optimisation du stockage de la toile - accès et mise à jour du cache}
   \label{listing:opti-storage-2}
 \end{listing}
 
-Par la suite, le tableau en mémoire, \texttt{board}, est envoyé aux utilisateurs se connectant à l'application dans la méthode \texttt{join} afin de pouvoir être affiché. Pour que le tableau soit toujours à jour, son contenu est actualisé dans la méthode \texttt{adPixel} lorsqu'un utilisateur pose un nouveau pixel sur la toile.
+Par la suite, le tableau en mémoire, \texttt{board}, est envoyé aux utilisateurs se connectant à l'application dans la méthode \texttt{join} afin de pouvoir être affiché. Pour que le tableau soit toujours à jour, son contenu est actualisé en même temps que le Bitfield Redis dans la méthode \texttt{adPixel} lorsqu'un utilisateur pose un nouveau pixel sur la toile.
 
 Il est maintenant possible de relancer les tests de montées en charge pour s'assurer que les performances sont meilleures.
 
