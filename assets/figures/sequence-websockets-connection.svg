@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="336px" preserveAspectRatio="none" style="width:778px;height:336px;background:#FFFFFF;" version="1.1" viewBox="0 0 778 336" width="778px" zoomAndPan="magnify"><defs/><g><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="171" x2="171" y1="36.2969" y2="301.3594"/><line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="506" x2="506" y1="36.2969" y2="301.3594"/><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="77" x="133" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="140" y="24.9951">Frontend</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="77" x="133" y="300.3594"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="140" y="320.3545">Frontend</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="75" x="469" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="476" y="24.9951">Backend</text><rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="75" x="469" y="300.3594"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="476" y="320.3545">Backend</text><polygon fill="#181818" points="494.5,63.4297,504.5,67.4297,494.5,71.4297,498.5,67.4297" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="171.5" x2="500.5" y1="67.4297" y2="67.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="232" x="178.5" y="62.3638">Initialize the WebSockets connection</text><polygon fill="#181818" points="494.5,138.6953,504.5,142.6953,494.5,146.6953,498.5,142.6953" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="171.5" x2="500.5" y1="142.6953" y2="142.6953"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="29" x="178.5" y="137.6294">Emit</text><text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="32" x="211.5" y="137.6294">JOIN</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="36" x="247.5" y="137.6294">event</text><path d="M5,112.9961 L5,137.9961 L167,137.9961 L167,122.9961 L157,112.9961 L5,112.9961 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M157,112.9961 L157,122.9961 L167,122.9961 L157,112.9961 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141" x="11" y="130.063">Generate a fingerprint</text><path d="M511,105.4297 L511,145.4297 L725,145.4297 L725,115.4297 L715,105.4297 L511,105.4297 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M715,105.4297 L715,115.4297 L725,115.4297 L715,105.4297 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="193" x="517" y="122.4966">Backend stores the fingerprint</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="140" x="517" y="137.6294">in the socket instance</text><polygon fill="#181818" points="182.5,218.5273,172.5,222.5273,182.5,226.5273,178.5,222.5273" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="176.5" x2="505.5" y1="222.5273" y2="222.5273"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72" x="188.5" y="217.4614">Respond to</text><text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="32" x="264.5" y="217.4614">JOIN</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="199" x="300.5" y="217.4614">event, send initial configuration</text><path d="M511,180.6953 L511,250.6953 L771,250.6953 L771,190.6953 L761,180.6953 L511,180.6953 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M761,180.6953 L761,190.6953 L771,190.6953 L761,180.6953 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="182" x="517" y="197.7622">Initial configuration contains:</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="176" x="517" y="212.895">- Current state of the board</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="239" x="517" y="228.0278">- Board configuration (colors, size, ...)</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="154" x="517" y="243.1606">- Cooldown of the player</text><path d="M58,261.2266 L58,286.2266 L166,286.2266 L166,271.2266 L156,261.2266 L58,261.2266 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M156,261.2266 L156,271.2266 L166,271.2266 L156,261.2266 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="87" x="64" y="278.2935">Display board</text><!--MD5=[0a4a486be4898ca3e448f545b491db76]
+@startuml sequence-websockets-connection
+
+participant Frontend
+participant Backend
+
+Frontend - -> Backend: Initialize the WebSockets connection
+
+|||
+
+Frontend - -> Backend: Emit ""JOIN"" event
+
+note left
+  Generate a fingerprint
+end note
+
+note right
+  Backend stores the fingerprint
+  in the socket instance
+end note
+
+|||
+
+Backend - -> Frontend: Respond to ""JOIN"" event, send initial configuration
+
+note right
+  Initial configuration contains:
+  - Current state of the board
+  - Board configuration (colors, size, ...)
+  - Cooldown of the player
+end note
+
+note left Frontend
+  Display board
+end note
+@end
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

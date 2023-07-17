@@ -1,0 +1,34 @@
+@startuml sequence-websockets-connection
+
+participant Frontend
+participant Backend
+
+Frontend --> Backend: Initialize the WebSockets connection
+
+|||
+
+Frontend --> Backend: Emit ""JOIN"" event
+
+note left
+  Generate a fingerprint
+end note
+
+note right
+  Backend stores the fingerprint
+  in the socket instance
+end note
+
+|||
+
+Backend --> Frontend: Respond to ""JOIN"" event, send initial configuration
+
+note right
+  Initial configuration contains:
+  - Current state of the board
+  - Board configuration (colors, size, ...)
+  - Cooldown of the player
+end note
+
+note left Frontend
+  Display board
+end note

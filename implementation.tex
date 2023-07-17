@@ -207,7 +207,7 @@ L'application actuelle avec la version gratuite de FingerPrintJS est fonctionnel
 
 \subsection{Configuration}
 
-Pour pouvoir modifier facilement la configuration de la toile, celle-ci est configurée grâce à des variables d'environnement du côté du backend. En effet, le backend transmet toutes ces valeurs au frontend lors de la première connexion comme expliqué dans la prochaine section \ref{section:connexion-websockets}. Les variables d'environnement intéressantes sont présentées dans le listing \ref{listing:env-variables}.
+Pour pouvoir modifier facilement la configuration de la toile, celle-ci est configurée grâce à des variables d'environnement du côté du backend. En effet, le backend transmet toutes ces valeurs au frontend lors de la première connexion comme expliqué dans la prochaine section \ref{section:communication-websockets}. Les variables d'environnement intéressantes sont présentées dans le listing \ref{listing:env-variables}.
 
 \begin{listing}[H]
   \begin{minted}[linenos]{bash}
@@ -239,16 +239,24 @@ En plus des variables présentées, d'autres plus classiques sont utilisées pou
 
 Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le répertoire git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended}~\cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, la pipeline de CI/CD ainsi qu'Husky en local ne passeront pas. Cela permet d'éviter les erreurs inutiles lorsqu'un développeur ajoute ou modifie une variable d'environnement.
 
-\subsection{Connexion WebSockets}
-\label{section:connexion-websockets}
+\subsection{Communication WebSockets}
+\label{section:communication-websockets}
 
-\fig[H, width=0.8\textwidth]{Diagramme de séquence de la connexion WebSockets}{sequence-websockets.svg}
+\subsubsection{Connexion initiale}
 
-Comme démontré dans la figure \ref{sequence-websockets.svg}, le backend envoie l'état actuel de la toile ainsi que les diverses variables d'environnement servant à la configuration lorsque la connexion WebSockets est initiée par le client.
+\fig[H, width=0.9\textwidth]{Diagramme de séquence de la connexion WebSockets}{sequence-websockets-connection.svg}
 
-Lorsque le client reçoit cet événement \texttt{INIT\_BOARD}, il envoie à son tour un événement \texttt{FINGERPRINT} au backend qui contient son empreinte numérique. Le backend stocke ensuite cet identifiant dans le Socket utilisé pour la connexion avec ce client pour que le client n'ait pas besoin de l'envoyer à chaque nouvelle requête.
+Comme démontré dans la figure \ref{sequence-websockets-connection.svg}, le frontend initialise la connexion WebSocket avec le backend. Il génère ensuite son identifiant unique, sa fingerprint, et l'envoie à l'aide de l'événement \texttt{JOIN} au backend. Le backend stocke ensuite cet identifiant dans le Socket utilisé pour la connexion avec ce client pour que le client n'ait pas besoin de l'envoyer à chaque nouvelle requête. Le backend répond ensuite au frontend en lui envoyant la configuration de la toile, son état initial, les couleurs disponibles, etc. Il envoie également le potentiel temps d'attente actuel de l'utilisateur avant de pouvoir reposer un pixel.
 
-Après cette première connexion, le client peut envoyer des événements pour poser des pixels et le serveur envoie lui des événements pour notifier le client de changements sur la toile réalisés par d'autres utilisateurs.
+Une fois cet état initial reçu et stocké du côté du frontend, la toile est affichée. Le client peut ensuite envoyer des événements pour poser des pixels et le serveur enverra lui des événements pour notifier le client de changements sur la toile réalisés par d'autres utilisateurs comme démontré dans la figure \ref{sequence-websockets-pixels.svg}.
+
+\subsubsection{Pose de pixels}
+
+\fig[H, width=0.8\textwidth]{Diagramme de séquence de la pose d'un pixel}{sequence-websockets-pixels.svg}
+
+Le déroulement de la pose d'un pixel est assez intuitif. Le client qui pose le pixel envoie un événement \texttt{PIXEL\_FROM\_PLAYER} au serveur avec les coordonnées et la couleur du pixel. Le serveur vérifie que l'utilisateur est autorisé à réaliser cette action avant de stocker le nouveau pixel comme la prochaine section \ref{section:stockage} l'explique. Le serveur envoie ensuite un événement \texttt{UPDATE\_BOARD} à tous les clients connectés pour qu'ils mettent à jour leur toile.
+
+La subtilité se trouve dans le fait que le client qui a placé le pixel va en réalité le dessiner deux fois sur le canvas: immédiatement lors de son clique sur le bouton "Place" ainsi qu'à la réception de l'événement \texttt{UPDATE\_BOARD}. Cela permet d'avoir un retour instantané pour l'utilisateur qui a posé le pixel, sans devoir prendre en compte une potentielle latence du serveur.
 
 \subsection{Stockage de l'état actuel de la toile}
 \label{section:stockage}

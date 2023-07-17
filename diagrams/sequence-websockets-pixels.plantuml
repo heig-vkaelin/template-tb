@@ -1,0 +1,29 @@
+@startuml sequence-websockets-pixels
+!pragma teoz true
+
+
+box "Users" #LightBlue
+skinparam ParticipantPadding 20
+participant User1
+participant User2
+end box
+
+note left User1
+  Pixel is drawn for User1
+end note
+
+User1 --> Backend: Emit ""PIXEL_FROM_PLAYER"" event
+
+note right Backend
+  Backend stores the pixel in Redis
+  and the database
+end note
+
+Backend --> User1 & User2: Emit ""UPDATE_BOARD"" event
+
+note over User1, User2
+  Pixel is drawn for User1 and User2
+end note
+
+|||
+
