@@ -110,6 +110,7 @@ Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte
 C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustand.
 
 \subsection{Mode affichage}
+\label{display-mode}
 
 Comme discuté rapidement dans le chapitre \ref{poc}, Proof of concept, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir être projetée sur les tours de l'école. Ce mode est implémenté en deux parties:
 
@@ -156,6 +157,8 @@ La page s'occupe d'ensuite calculer la position et la dimensions de la toile afi
 
 Si l'utilisateur accède à la page \texttt{/display} sans paramètre, l'application se contente d'afficher la toile la plus grande possible pour l'écran actuel. Cela permet d'afficher l'application sur un seul écran très facilement, sans avoir à passer par l'étape de configuration.
 
+L'affichage est le même que sur l'application normale, la seule différence étant qu'aucune autre interface en dehors de la toile n'est affichée.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{./assets/figures/display-mode-example.png}
@@ -165,14 +168,12 @@ Si l'utilisateur accède à la page \texttt{/display} sans paramètre, l'applica
 
 Dans le futur, il serait intéressant de pouvoir définir une taille de toile rectangulaire afin d'utiliser au mieux l'espace disponible sur les écrans. Comme cela n'était pas prévu dans le cahier des charges initial et qu'il faudrait modifier passablement l'application, cette fonctionnalité a été mise de côté pour après la fin du travail de Bachelor.
 
-\section{Backend}
-
 \subsection{Identification des utilisateurs}
 La bonne identification des utilisateurs est un point crucial de l'application. En effet, il est nécessaire de pouvoir vérifier que les utilisateurs attendent bien le temps nécessaire avant de pouvoir placer un nouveau pixel. Pouvoir contourner cette règle casserait complètement le but principal de l'application qui est de faire collaborer les utilisateurs.
 
-Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas envisageable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir l'utiliser.
+Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas souhaitable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir l'utiliser.
 
-Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées "fingerprint"~\cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur.
+Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées "fingerprint"~\cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur par exemple. Cette méthode d'authentification se déroule quasiment uniquement dans le navigateur de l'utilisateur, du côté frontend. C'est la raison pour laquelle la phase d'identification est traitée dans cette section.
 
 \subsubsection{Fingerprint}
 
@@ -197,6 +198,8 @@ Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, un ex
 En plus de toutes ces caractérisées, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
 
 Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions concerne littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival.
+
+\section{Backend}
 
 \subsection{Configuration}
 
@@ -377,7 +380,7 @@ La dernière action disponible pour les administrateurs est la possibilité de p
 
 L'implémentation côté backend est simple. Il s'agit d'un attribut booléen stocké dans l'instance de la classe \texttt{BoardGateway}. Lorsque celui-ci est à \texttt{true}, la méthode \texttt{addPixel} ne fait rien. A chaque fois que ce booléen est modifié, sa nouvelle valeur est envoyé à tous les utilisateurs via WebSocket.
 
-L'interface de l'utilisateur se met à jour directement à la réception de la nouvelle valeur. Si la toile est en lecture seule, l'application affiche la version de la toile normalement utilisée dans le mode affichage discuté dans la section TODO: ajouter ici ref mode display. Cela permet d'empêcher facilement aux utilisateurs de modifier la toile en enlever simplement l'interface de pose de pixel.
+L'interface de l'utilisateur se met à jour directement à la réception de la nouvelle valeur. Si la toile est en lecture seule, l'application affiche la version de la toile normalement utilisée dans le mode affichage discuté dans la section \ref{display-mode}. Cela permet d'empêcher facilement aux utilisateurs de modifier la toile en enlever simplement l'interface de pose de pixel.
 
 De plus, un message indiquant aux utilisateurs que la toile se trouve en lecture seule est affiché afin de les informer de la situation. Cela permet d'éviter de la frustration s'ils pensent que l'application ne fonctionne pas correctement.
 

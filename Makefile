@@ -27,7 +27,7 @@ $(FIGS_SVG): $(BUILDDIR)/%.svg.pdf: %.svg | dirs
 $(FIGS_PY): $(BUILDDIR)/%.py.pdf: %.py | dirs
 	python3 $< > $@
 
-# TODO: disable drawio for now
+# Custom: disable drawio for now
 # $(FIGS_DIO): $(BUILDDIR)/%.drawio.pdf: %.drawio | dirs
 # 	xvfb-run -a $(DRAWIO) --crop --export --format pdf --output $@ $< --disable-gpu --headless --no-sandbox
 
