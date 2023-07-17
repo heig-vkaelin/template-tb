@@ -109,6 +109,62 @@ Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte
 
 C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustand.
 
+\subsection{Mode affichage}
+
+Comme discuté rapidement dans le chapitre "Proof of concept" \ref{poc}, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir être projetée sur les tours de l'école. Ce mode est implémenté en deux parties:
+
+\begin{itemize}
+  \item Une page permettant de configurer les détails du mode affichage;
+  \item Une page permettant d'afficher une partie de l'application.
+\end{itemize}
+
+\subsubsection{Configuration de l'affichage}
+
+La configuration est disponible à l'adresse \texttt{/displays} comme la figure \ref{fig:display-mode-config} le montre. Il est possible de définir les paramètres suivants:
+
+\begin{itemize}
+  \item La largeur d'un écran en pixels;
+  \item La hauteur d'un écran en pixels;
+  \item Le nombre d'écrans en largeur;
+  \item Le nombre d'écrans en hauteur.
+\end{itemize}
+
+Tous ces paramètres ont des valeurs par défaut configurée dans des variables d'environnement. Lorsque l'utilisateur en modifie un, la valeur est stockée dans le local storage du navigateur. Ainsi, la prochaine fois que l'utilisateur accède à la page de configuration, les valeurs sont déjà pré-remplies. L'interface de droite est mise à jour en temps réel afin de montrer à l'utilisateur à quoi ressemblera l'affichage.
+
+L'utilisateur peut ensuite cliquer sur l'écran qu'il souhaite afficher et il sera redirigé vers la bonne page d'affichage.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/display-mode-config.png}
+  \caption{Interface de configuration du mode affichage}
+  \label{fig:display-mode-config}
+\end{figure}
+
+\subsubsection{Affichage d'une partie de la toile}
+
+Une fois le lien cliqué, l'utilisateur est redirigé vers une page d'affichage contenant les bons paramètres dans l'URL, par exemple \texttt{/display?i=1\&w=504\&h=380\&c=3\&r=2}. La signification de ces paramètres est la suivante:
+
+\begin{itemize}
+  \item \texttt{i}: L'index de l'écran à afficher;
+  \item \texttt{w}: La largeur d'un écran en pixels;
+  \item \texttt{h}: La hauteur d'un écran en pixels;
+  \item \texttt{c}: Le nombre d'écrans en largeur (nombre de colonnes);
+  \item \texttt{r}: Le nombre d'écrans en hauteur (nombre de lignes).
+\end{itemize}
+
+La page s'occupe d'ensuite calculer la position et la dimensions de la toile afin de maximiser la taille de celle-ci. En effet, comme la toile est forcément carrée mais que les écrans sont souvent rectangulaires, il est nécessaire de calculer la plus grande taille possible pour la toile. La toile est donc centrée sur les écrans comme la figure \ref{fig:display-mode-example} le montre avec un exemple contenant six écrans.
+
+Si l'utilisateur accède à la page \texttt{/display} sans paramètre, l'application se contente d'afficher la toile la plus grande possible pour l'écran actuel. Cela permet d'afficher l'application sur un seul écran très facilement, sans avoir à passer par l'étape de configuration.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{./assets/figures/display-mode-example.png}
+  \caption{Example d'affichage sur 6 écrans (6 fenêtres de navigateur)}
+  \label{fig:display-mode-example}
+\end{figure}
+
+Dans le futur, il serait intéressant de pouvoir définir une taille de toile rectangulaire afin d'utiliser au mieux l'espace disponible sur les écrans. Comme cela n'était pas prévu dans le cahier des charges initial et qu'il faudrait modifier passablement l'application, cette fonctionnalité a été mise de côté pour après la fin du travail de Bachelor.
+
 \section{Backend}
 
 \subsection{Identification des utilisateurs}
@@ -242,11 +298,11 @@ Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en lign
 \begin{listing}[h]
   \begin{minted}[breaklines]{bash}
   # Version sans clé dans l'entête ou clé incorrecte
-  curl -X POST http://localhost:4000/board
+  curl -X POST http://localhost:4000/board/reset
   {"statusCode":401,"message":"Unauthorized"}%
 
   # Version avec clé correcte dans l'entête
-  curl -X POST http://localhost:4000/board --header "apiKey: API_KEY"
+  curl -X POST http://localhost:4000/board/reset --header "apiKey: API_KEY"
   {"status":"ok","message":"Board reset"}%
 \end{minted}
   \caption{Appels HTTP pour remettre à zéro la toile}
