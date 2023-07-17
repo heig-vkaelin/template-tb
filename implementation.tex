@@ -214,12 +214,11 @@ Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états pa
   \item \texttt{color}: couleur du pixel en hexadécimal;
   \item \texttt{created\_at}: date et heure à laquelle le pixel a été posé;
   \item \texttt{user\_id}: identifiant de l'utilisateur ayant posé le pixel;
-  \item \texttt{is\_admin}: booléen indiquant si l'utilisateur est un administrateur.
 \end{itemize}
 
 La valeur hexadécimal de la couleur est stockée à la place de l'identifiant de la couleur car les couleurs peuvent varier au fil du temps. Il est donc nécessaire de stocker sa valeur à la pose du pixel pour avoir un historique correct.
 
-Le booléen permettant de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non est utile afin d'identifier les actions de modération. Ce point sera détaillé dans la section \ref{section:administration} concernant l'administration.
+Initialement, un booléen \texttt{is\_admin} permettait de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non. Il a été jugé inutile, en effet il suffit d'utiliser un identifiant comme \texttt{"ADMIN"} dans le champ \texttt{user\_id} pour identifier les actions de modération à la place d'une FingerPrint.
 
 \subsection{Gestion de la durée d'attente entre la pose de pixels}
 
@@ -233,6 +232,8 @@ Chaque utilisateur est stocké selon le format de clé suivant: \mintinline[brea
 Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées "stratégies". Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \mintinline[breaklines]{bash}{API_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
 
 Cette stratégie d'authentification par clé d'API est choisie pour sa facilité d'implémentation. En effet, aucun stockage de session ou même dans une base de données n'est nécessaire. De plus, les besoins d'administration sont très simples pour l'instant et ne nécessitent pas plus que de simples appels HTTP.
+
+Dans les fonctionnalités "nice-to-have" du cahier du charges, il était question de réaliser un dashboard pour faciliter les tâches d'administration. Malheureusement, le temps a manqué pour implémenter cette tâche lors de ce travail de Bachelor. Ce dashboard sera donc réalisé dans le futur et les administrateurs utiliseront pour l'instant les appels HTTP.
 
 \subsubsection{Remise à zéro de la toile}
 
@@ -272,6 +273,59 @@ async reset() {
 \end{listing}
 
 La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité et de censurer rapidement les oeuvres inappropriées.
+
+\subsubsection{Censurer une partie de la toile}
+
+Il est également possible pour les administrateurs de censurer une zone de la toile, afin de ne pas perdre l'entièreté des oeuvres. Il suffit de passer en paramètre de l'appel HTTP les coordonnées des coins supérieur gauche et inférieur droit de la zone à censurer ainsi qu'une potentielle couleur à utiliser pour remplir la zone. Si aucune couleur n'est passée en paramètre, la zone est remplie de blanc. En attendant l'implémentation du dashboard pour faciliter cette tâche, l'administrateur peut récupérer les coordonnées directement depuis le frontend de l'application.
+
+Le backend va ensuite générer tous les pixels se trouvant dans la zone et les insérer dans le Bitfield Redis ainsi que dans la base de données avant d'en informer tous les utilisateurs via WebSocket. Il aurait été possible d'appeler la méthode utilisée précédemment pour stocker un pixel pour tous les pixels de la zone. Cependant, cette approche n'aurait pas été très efficace. Il est préférable de réaliser ces tâches en parallèle afin d'accélérer le processus comme le montre le listing \ref{listing:admin-reset-area}.
+
+\begin{listing}[h]
+  \begin{minted}[breaklines, linenos]{ts}
+  private async storePixelInBitfield(pixel: Pixel) {
+    const { x, y, color } = pixel;
+    const offset = y * this.configService.get(BOARD_SIZE) + x;
+    return this.redisClient.bitfield(
+      BOARD_KEY,
+      'SET',
+      UINT_8,
+      `#${offset}`,
+      color,
+    );
+  }
+
+  async resetArea(pixels: Pixel[]) {
+    // Store in Redis
+    const promises = pixels.map((pixel) => this.storePixelInBitfield(pixel));
+    await Promise.all(promises);
+
+    // Store in Database
+    const colors = this.configService.get(COLORS);
+    await this.prisma.pixel.createMany({
+      data: pixels.map((pixel) => ({
+        x: pixel.x,
+        y: pixel.y,
+        color: colors[pixel.color],
+        userId: 'ADMIN',
+      })),
+    });
+  }
+\end{minted}
+  \caption{Réinitialisation d'une zone de la toile}
+  \label{listing:admin-reset-area}
+\end{listing}
+
+De plus, utiliser la méthode \texttt{createMany} de Prisma permet d'effectuer un seul appel à la base de données pour insérer tous les pixels de la zone. Cela permet d'éviter de surcharger la base de données avec de nombreux appels.
+
+\subsubsection{Mode lecture seule}
+
+La dernière action disponible pour les administrateurs est la possibilité de passer la toile en mode lecture seule. Cette option peut être intéressante si le comportement des utilisateurs devient trop problématique en fin de soirée par exemple. Cela permet de ne pas perdre les oeuvres déjà réalisées.
+
+L'implémentation côté backend est simple. Il s'agit d'un attribut booléen stocké dans l'instance de la classe \texttt{BoardGateway}. Lorsque celui-ci est à \texttt{true}, la méthode \texttt{addPixel} ne fait rien. A chaque fois que ce booléen est modifié, sa nouvelle valeur est envoyé à tous les utilisateurs via WebSocket.
+
+L'interface de l'utilisateur se met à jour directement à la réception de la nouvelle valeur. Si la toile est en lecture seule, l'application affiche la version de la toile normalement utilisée dans le mode affichage discuté dans la section TODO: ajouter ici ref mode display. Cela permet d'empêcher facilement aux utilisateurs de modifier la toile en enlever simplement l'interface de pose de pixel.
+
+De plus, un message indiquant aux utilisateurs que la toile se trouve en lecture seule est affiché afin de les informer de la situation. Cela permet d'éviter de la frustration s'ils pensent que l'application ne fonctionne pas correctement.
 
 \section{Package}
 
