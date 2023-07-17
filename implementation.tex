@@ -111,7 +111,7 @@ C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustan
 
 \subsection{Mode affichage}
 
-Comme discuté rapidement dans le chapitre "Proof of concept" \ref{poc}, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir être projetée sur les tours de l'école. Ce mode est implémenté en deux parties:
+Comme discuté rapidement dans le chapitre \ref{poc}, Proof of concept, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir être projetée sur les tours de l'école. Ce mode est implémenté en deux parties:
 
 \begin{itemize}
   \item Une page permettant de configurer les détails du mode affichage;
@@ -180,9 +180,7 @@ Cette technique consiste à récupérer des informations sur le navigateur de l'
 
 Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS~\cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
 
-La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs potables étaient du même modèle. De plus certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable.
-
-% , comme annoncé lors de la réalisation du POC \ref{poc-ameliorations},
+La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs potables étaient du même modèle. De plus, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable
 
 \subsubsection{FingerprintJS}
 Le choix se tourne donc finalement vers FingerprintJS~\cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\%~\cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
