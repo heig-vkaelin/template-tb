@@ -76,7 +76,72 @@ Ces étapes sont exécutée à chaque nouveau commit sur une branche. De plus, l
 \subsection{Déploiement}
 \label{sec:deploiement}
 
-TODO: déploiement
+Aucun service tiers n'est utilisé pour le déploiement des applications. En effet, le déploiement se fait directement sur une machine virtuelle fournie par l'HEIG. Comme expliqué précédemment, le déploiement se fait à l'aide de \gls{docker} et \gls{docker-compose}. Chaque application possède son propre fichier \texttt{docker-compose.yml} dans le dossier \texttt{deployment}.
+
+\subsubsection{Docker}
+
+Chaque application contient dispose d'un fichier \texttt{Dockerfile} permettant de créer l'image \gls{docker} de l'application à sa racine. Afin de rendre la création de l'image plus rapide et plus légère, le \texttt{Dockerfile} ne build pas l'application et n'a donc pas besoin d'installer les dépendances. La pipeline build l'application et le dossier \texttt{.bundle} contenant le source code compilé est copié dans l'image \gls{docker} comme le montre le listing \ref{listing:dockerfile-beeplace-frontend}.
+
+\begin{listing}[H]
+  \begin{minted}[linenos]{sh}
+    # Base image
+    FROM node:20-alpine
+
+    # Work directory
+    WORKDIR /app
+
+    # Copy the files of the working directory
+    COPY .bundle .
+
+    # Exposed ports
+    EXPOSE 4000
+
+    # Command to run on start
+    CMD ["npm", "start"]
+\end{minted}
+  \caption{Dockerfile d'exemple d'une application \gls{javascript} \gls{beescreens}}
+  \label{listing:dockerfile-beeplace-frontend}
+\end{listing}
+
+Une fois l'image \gls{docker} créée, elle est publiée lors de l'étape \textbf{deliver} de la pipeline \gls{gitlab} sur le "Container registry"~\cite{beescreens-container-registry} du dépôt BeeScreens. Cela permet de mettre à disposition publiquement l'image pour qu'elle soit utilisée par la suite dans le fichier \texttt{docker-compose.yml}. Chaque image est publiée avec le tag \texttt{latest} si aucun nom de commit n'est spécifié.
+
+\subsubsection{Docker-compose}
+
+Le fichier \texttt{docker-compose.yml} de chaque application est très similaire. Il définit les différents services de l'application, comme son frontend, son backend et ses éventuelles bases de données. Des fichiers d'environnements sont importés afin de pouvoir configurer facilement les services. La ligne 11 du listing \ref{listing:docker-compose-pmw} montre que l'image \gls{docker} est bien importée du "Container registry" discutl précédemment. Dans le cas du frontend, la version \texttt{latest} est utilisée sauf si une variable d'environnement \texttt{FRONTEND\_IMAGE\_VERSION} est définie.
+
+\begin{listing}[H]
+  \begin{minted}[breaklines, linenos, tabsize=2, highlightlines={11,17}]{yaml}
+networks:
+  traefik_network:
+    name: traefik_network
+    driver_opts:
+      com.docker.network.bridge.name: traefik_network
+
+services:
+  frontend:
+    container_name: pimp-my-wall-frontend
+    # {...} is replacing "beescreens/beescreens" to make URL shorter
+    image: registry.gitlab.com/{...}/pimp-my-wall-frontend:${FRONTEND_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - common.env
+      - frontend.env
+    networks:
+      - traefik_network
+    expose:
+      - 8181
+    labels:
+      # Traefik configuration here
+
+  backend:
+    container_name: pimp-my-wall-backend
+    # ...
+\end{minted}
+  \caption{Fichier \texttt{docker-compose.yaml} de l'application Pimp My Wall}
+  \label{listing:docker-compose-pmw}
+\end{listing}
+
+La configuration de Traefik~\cite{traefik} a volontairement été omise dans le listing \ref{listing:docker-compose-pmw} afin de ne pas surcharger le code. Traefik est un reverse proxy qui permet de rediriger les requêtes HTTP vers les bons services. Il est utilisé dans le cadre de ce projet afin de pouvoir accéder aux applications depuis l'extérieur de la machine virtuelle. Pour ce faire, tous les services sont ajoutés au réseau Traefik comme le montre la ligne 17. Pour avoir un exemple concret, les requêtes vers \texttt{pmw.beescreens.ch} sont redirigées vers le port 8181 de l'application Pimp My Wall. Traefik s'occupe également des certificats afin de pouvoir utiliser le protocole HTTPS pour sécuriser les applications.
 
 \subsection{Lien avec le projet BeePlace}
 \label{sec:lien-avec-le-projet-beeplace}
