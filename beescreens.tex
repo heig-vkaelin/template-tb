@@ -80,7 +80,7 @@ Aucun service tiers n'est utilisé pour le déploiement des applications. En eff
 
 \subsubsection{Docker}
 
-Chaque application contient dispose d'un fichier \texttt{Dockerfile} permettant de créer l'image \gls{docker} de l'application à sa racine. Afin de rendre la création de l'image plus rapide et plus légère, le \texttt{Dockerfile} ne build pas l'application et n'a donc pas besoin d'installer les dépendances. La pipeline build l'application et le dossier \texttt{.bundle} contenant le source code compilé est copié dans l'image \gls{docker} comme le montre le listing \ref{listing:dockerfile-beeplace-frontend}.
+Chaque application contient dispose d'un fichier \texttt{Dockerfile} permettant de créer l'image \gls{docker} de l'application à sa racine. Afin de rendre la création de l'image plus rapide et plus légère, le \texttt{Dockerfile} ne build pas l'application et n'a donc pas besoin d'installer les dépendances. La pipeline build l'application et le dossier \texttt{.bundle} contenant le source code compilé est copié dans l'image \gls{docker} comme le montre le listing \ref{listing:dockerfile-beeplace-frontend}. Finalement, l'application est démarrée avec la commande \texttt{npm start} grâce au fait que \gls{docker} utilise une image de base contenant \gls{nodejs}.
 
 \begin{listing}[H]
   \begin{minted}[linenos]{sh}
