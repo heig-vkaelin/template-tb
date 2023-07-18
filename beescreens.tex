@@ -41,13 +41,42 @@ Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la doc
 
 Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
 
-% \subsection{CI/CD}
+\subsection{CI/CD}
 
-% TODO: CI/CD GitLab, déploiement
+L'intégration continue est présente à deux niveaux: en local sur l'ordinateur du développeur avec Husky~\cite{husky} et en ligne, sur \gls{gitlab} avec les différentes pipelines.
 
-% \subsection{Tests}
+\subsubsection{Husky}
 
-% TODO: tests, husky
+Husky permet d'exécuter certaines tâches automatiquement avant de valider l'envoi du code sur le dépôt \gls{gitlab}. Avant chaque "push", ces différentes étapes sont testées pour chaque application dont le code a été modifié:
+
+\begin{itemize}
+  \item \textbf{spellcheck}: vérifie l'orthographe du code et des commentaires avec l'outil CSpell~\cite{cspell}.
+  \item \textbf{review}: valide que le code est bien formaté et que l'analyse de code statique avec des outils comme ESLint~\cite{eslint} et correcte.
+  \item \textbf{build}: valide que le code compile sans erreur.
+  \item \textbf{test}: valide que les tests unitaires et d'intégration passent sans erreur.
+\end{itemize}
+
+Lancer toutes ces vérifications en local avant de passer sur la pipeline \gls{gitlab} permet de gagner du temps et de ne pas avoir à attendre que la pipeline se termine pour se rendre compte qu'il y a une erreur dans le code.
+
+\subsubsection{Pipeline \gls{gitlab}}
+
+La pipeline est organisée en diverses étapes, appelées "stages". Celles-ci ressemblent aux étapes Husky présentée ci-dessus. Il y a cependant deux étapes supplémentaires:
+
+\begin{itemize}
+  \item \textbf{init}: configure l'environnement de la pipeline avant toutes les autres étapes;
+  \item \textbf{deliver}: permet de créer l'image \gls{docker} de l'application et de la publier dans le répertoire \gls{gitlab}.
+\end{itemize}
+
+Cette dernière étape sera abordée plus en profondeur dans la prochaine section \ref{sec:deploiement} concernant le déploiement.
+
+Chaque application a son propre fichier de pipeline qui est exécuté uniquement si le code de l'application est modifié. Ces fichiers définissent plusieurs actions appartenant chacune à une des étapes évoquées précédemment. Chaque action se base sur un fichier de "template", afin de limiter le doublon de code entre les différentes applications.
+
+Ces étapes sont exécutée à chaque nouveau commit sur une branche. De plus, lorsque la branche est terminée et que le code est fusionné avec la branche principale, la pipeline est exécutée une dernière fois pour toutes les applications du dépôt, afin de vérifier que rien n'a été cassé par la fusion.
+
+\subsection{Déploiement}
+\label{sec:deploiement}
+
+TODO: déploiement
 
 \subsection{Lien avec le projet BeePlace}
 \label{sec:lien-avec-le-projet-beeplace}
