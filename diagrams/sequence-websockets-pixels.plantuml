@@ -19,6 +19,8 @@ note right Backend
   and the database
 end note
 
+...//max 100ms later//...
+
 Backend --> User1 & User2: Emit ""UPDATE_BOARD"" event
 
 note over User1, User2
