@@ -9,21 +9,21 @@ Voici tout d'abord quelques figures présentant l'interface sur ordinateur ainsi
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{./assets/figures/screenshot-app-1.jpeg}
+  \includegraphics[width=1\textwidth]{./assets/figures/screenshot-app-v2-1.png}
   \caption{Interface de BeePlace sur ordinateur à l'arrivée sur la page}
   \label{fig:screenshot-app-1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{./assets/figures/screenshot-app-2.png}
+  \includegraphics[width=1\textwidth]{./assets/figures/screenshot-app-v2-2.png}
   \caption{Interface de BeePlace sur ordinateur lorsque l'utilisateur clique sur un pixel}
   \label{fig:screenshot-app-2}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{./assets/figures/screenshot-app-3.jpeg}
+  \includegraphics[width=0.5\textwidth]{./assets/figures/screenshot-app-v2-3.png}
   \caption{Interface de BeePlace sur mobile}
   \label{fig:screenshot-app-3}
 \end{figure}
@@ -567,6 +567,7 @@ Des énumérations sont utilisées pour représenter les événements WebSockets
       READ_ONLY = 'readOnly',
       RESET_BOARD = 'resetBoard',
       UPDATE_BOARD = 'u', // shortest possible name to reduce bandwidth usage for end users
+      USER_COUNT = 'userCount',
     }
 
     export enum ClientEvent {
@@ -586,6 +587,7 @@ Par la suite, ces énumérations sont utilisées dans le code des deux applicati
       [ServerEvent.READ_ONLY]: (readOnly: boolean) => void;
       [ServerEvent.RESET_BOARD]: () => void;
       [ServerEvent.UPDATE_BOARD]: (data: string) => void;
+      [ServerEvent.USER_COUNT]: (count: number) => void;
     }
 
     interface ClientToServerEvents {
