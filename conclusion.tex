@@ -1,41 +1,84 @@
-\section{Avancement du projet}
+\section{Conclusion technique}
 
-Ce rapport intermédiaire signe la fin de la troisième Milestone et l'avancée du Travail de Bachelor est conforme au planning prévu. Voici les tâches du cahier des charges qui étaient à réaliser ainsi que leur état d'avancement :
+% Etat final du projet, ce qui est fait / pas fait
 
-\begin{itemize}
-  \item Milestone 1 - semaine du 20 au 26 mars
-        \begin{todolist}
-          \item[\done] Rédaction du cahier des charges
-          \item[\done] Rédaction de la partie du rapport concernant l'intégration dans l'environnement \gls{beescreens}
-        \end{todolist}
-  \item Milestone 2 - semaine du 17 au 23 avril
-        \begin{todolist}
-          \item[\done] Intégration à l'environnement \gls{beescreens} de l'application \gls{beeplace}
-          \item[\done] Réalisation d'une première version de l'application afin d'être potentiellement utilisée lors du festival Baleinev de cette année
-        \end{todolist}
-  \item Milestone 3 - semaine du 22 au 28 mai
-        \begin{todolist}
-          \item[\done] Rédaction du rapport intermédiaire
-          \item Utilisation d'outils de tests de montées en charges afin d'identifier les problèmes du code actuel
-        \end{todolist}
-\end{itemize}
+% - Évaluation des choix faits, choses apprises, adaptation des solutions (critique positive/négative de l’implémentation)
 
-Un seul élément qui était planifié n'a pas encore été réalisé, il s'agit des tests de montées en charges. Cette tache sera donc déplacée à la prochaine Milestone. Cependant, la première version développée de \gls{beeplace} pour le Baleinev Festival se trouve être plus qu'un simple prototype. En effet, quasiment la totalité des fonctionnalités \guillemotleft{} required \guillemotright{} du cahier des charges ont été implémentées. Cela permettra d'avoir le temps de se concentrer sur les différents problèmes évoqués dans la dernière section \ref{poc-ameliorations} ainsi que sur les nombreuses fonctionnalités permettant d'améliorer l'expérience utilisateur.
+\subsection{État final du projet}
 
-\section{Défis rencontrés et futurs}
+Pour commencer, les diverses fonctionnalités listée dans le cahier des charges initial \ref{sec:cdc} sont répertoriées à nouveau ci-dessous. Pour chacune d'entre elles, il est indiqué si elle a été implémentée ou non.
 
-Les principales difficultés rencontrées lors de cette première partie de projet concernent le frontend. Elles sont les suivantes :
+\subsubsection{Fonctionnalités \guillemotleft required\guillemotright}
 
-\begin{itemize}
-  \item Créer un PinchZoom qui prend en compte les différents types d'appareils, que ce soit un ordinateur, un mobile ou le pavé tactile.
-  \item Synchroniser le state côté frontend avant d'avoir utilisé une librairie de gestion de state global (Zustand).
-\end{itemize}
+\begin{todolist}
+  \item[\done] L'utilisateur arrive sur une page affichant la toile virtuelle au complet.
+  \item[\done] La toile s'actualise avec les modifications réalisées par les autres utilisateurs.
+  \item[\done] L'utilisateur peut zoomer ou dé-zoomer sur la toile afin de voir les moindres détails.
+  \item[\done] L'utilisateur voit facilement le nombre de pixels qu'il a actuellement la possibilité de placer sur la toile.
+  \item[\done] L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et le colorier.
+  \item[\done] Les dimensions de la toile doivent être configurables par un administrateur.
+  \item[\done] L'utilisateur dispose d'un moyen de recharger ses pixels à placer une fois ceux-ci écoulés. Il peut par exemple recevoir un nombre de pixels définis après un temps d'attente également choisi.
+\end{todolist}
 
-Heureusement, aucun gros blocage n'a été rencontré et les difficultés ont pu être surmontées en y consacrant le temps nécessaire. Pour la suite du projet, le point proposant le plus gros défi est le fait de réussir à tester correctement la montée en charge de l'application. En effet, il ne faut pas que l'ordinateur lançant les tests soit l'élément limitant la montée en charge à la place de l'application. Ce point sera donc à prendre en compte et des solutions comme utiliser plusieurs ordinateurs/serveurs pourront être envisagées.
+\subsubsection{Fonctionnalités \guillemotleft essential\guillemotright}
 
-\vfil
-\hspace{8cm}\makeatletter\@author\makeatother\par
-\hspace{8cm}\begin{minipage}{5cm}
-  % Place pour signature numérique
-  \printsignature
-\end{minipage}
+\begin{todolist}
+  \item[\done] Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
+  \item[\done] Créer des tests de montée en charge de l'application afin d'assurer un bon fonctionnement lors des festivals notamment.
+  \item[\done] Afin d'éviter que les utilisateurs puissent recharger la page pour recevoir à nouveau des pixels, trouver un moyen de les identifier.
+  \item[\done] Les coordonnées du pixel sélectionné par l'utilisateur lui sont affichées ainsi que son niveau de zoom.
+  \item Créer des tests unitaires ainsi que des tests d'intégration pour s'assurer de la qualité de l'application.
+  \item[\done] Un administrateur peut choisir une zone à censurer (recouvrir/suppression de pixels d'une couleur) à partir d'un call API en cas de comportement non désiré.
+\end{todolist}
+
+\subsubsection{Fonctionnalités \guillemotleft nice-to-have\guillemotright}
+
+\begin{todolist}
+  \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
+  \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
+  \item[\done] Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customizables par l'administrateur (ex: via le dashboard).
+  \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
+  \item[\done] Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
+  \item[\done] Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
+  \item[\done] Un mode “affichage”, permettant d'afficher régulièrement un QRCode pour rejoindre la toile virtuelle. En plus de ce QRCode, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'élèverait automatiquement dès qu'un utilisateur est actif sur l'application.
+  \item Ajouter la possibilité de sauvegarder le dessin.
+  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
+\end{todolist}
+
+\subsubsection{Synthèse}
+
+Comme la liste ci-dessus l'indique, quasiment toutes les fonctionnalité "required" et "essential" ont été implémentées. En effet, seul les tests unitaires ainsi que les tests d'intégration n'ont pas été réalisés lors de ce travail de Bachelor. L'utilité de ce type de tests est indéniable mais il a été décidé de ne pas les implémenter pour le moment afin de se concentrer sur les fonctionnalités principales de l'application. De plus, les différentes pipelines de déploiement continu permettent de s'assurer que l'application restait dans un état sans erreur après chaque modification.
+
+Concernant les fonctionnalités "nice-to-have", environ la moitié ont été implémentées. La majorité du travail restant concerne le dashboard d'administration. Ces fonctionnalités sont pour la plupart implémentées mais dans une version initiale sous la forme d'appels HTTP. Il est clair qu'avoir un dashboard dédié dans le futur facilitera la tâche des administrateurs.
+
+Pour finir, le concept intéressant des CRDTs n'a pas été abordé dans ce travail de Bachelor. Ce point sera abordé plus en profondeur dans le chapitre \ref{perspectives}.
+
+\subsubsection{Fonctionnalités supplémentaires}
+
+% Choses pas prévues faites en plus
+% - nombre users
+% - package code commun
+
+TODO
+
+\section{Conclusion personnelle}
+
+% - Comment le projet a été vécu
+
+TODO
+
+
+
+
+
+
+% \section{Défis rencontrés et futurs}
+
+% Les principales difficultés rencontrées lors de cette première partie de projet concernent le frontend. Elles sont les suivantes :
+
+% \begin{itemize}
+%   \item Créer un PinchZoom qui prend en compte les différents types d'appareils, que ce soit un ordinateur, un mobile ou le pavé tactile.
+%   \item Synchroniser le state côté frontend avant d'avoir utilisé une librairie de gestion de state global (Zustand).
+% \end{itemize}
+
+% Heureusement, aucun gros blocage n'a été rencontré et les difficultés ont pu être surmontées en y consacrant le temps nécessaire. Pour la suite du projet, le point proposant le plus gros défi est le fait de réussir à tester correctement la montée en charge de l'application. En effet, il ne faut pas que l'ordinateur lançant les tests soit l'élément limitant la montée en charge à la place de l'application. Ce point sera donc à prendre en compte et des solutions comme utiliser plusieurs ordinateurs/serveurs pourront être envisagées.

@@ -34,6 +34,7 @@ En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions
 Les codes sources de ces deux événements ne sont malheureusement pas disponibles. Cependant, les ingénieurs du r/place ont publié des articles détaillant leur architecture et leur implémentation. Ces articles sont disponibles sur le site de \gls{reddit}~\cite{rplace2017, rplace2022}. Ces articles seront utilisés comme référence pour ce travail de Bachelor mais l'architecture ainsi que l'implémentation seront complètement différentes. En effet, le but est de créer seul une version open source de r/place. L'envergure du projet ainsi que la taille du public visé sont évidents bien moindres que ceux du r/place original.
 
 \section{Cahier des charges}
+\label{sec:cdc}
 
 \subsection{Objectifs}
 
@@ -76,7 +77,7 @@ Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonc
   \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
   \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customizables par l'administrateur (ex: via le dashboard).
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
-  \item Les administrateurs peuvent changer la taille de la toile dynamiquement dans le dashboard.
+  \item Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
   \item Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
   \item Un mode “affichage”, permettant d'afficher régulièrement un QRCode pour rejoindre la toile virtuelle. En plus de ce QRCode, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'élèverait automatiquement dès qu'un utilisateur est actif sur l'application.
   \item Ajouter la possibilité de sauvegarder le dessin.
