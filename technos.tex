@@ -28,6 +28,22 @@ De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pi
 
 De nombreux frameworks \gls{javascript} sont disponibles actuellement pour réaliser la partie frontend des applications web mais les trois principaux concurrents en terme de popularité sont React~\cite{react}, Vue.js~\cite{vue} et Angular~\cite{angular}. De plus en plus de possibilités voient le jour chaque année mais ces trois frameworks sont les plus populaires, les plus utilisés et les plus stables. Il est donc pertinent de se focaliser sur ces trois options pour le développement de \gls{beeplace}.
 
+Le tableau \ref{tab:frameworks-frontend-js} présente les trois frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou librairie qui permet de créer une application réactive mais qui ne propose pas de réelle structure.
+
+\begin{table}[h]
+  \begin{center}
+    \caption{Frameworks frontend JavaScript}
+    \label{tab:frameworks-frontend-js}
+    \begin{tabular}{c|l|r}
+      Framework & Stars GitHub       & Type      \\ \hline
+      Angular   & 89.3k              & Framework \\
+      Vue.js    & 38.9k\footnotemark & Librairie \\
+      React     & 211k               & Librairie \\
+    \end{tabular}
+  \end{center}
+\end{table}
+\footnotetext[1]{L'équipe Vue.js a changé de dépôt GitHub lors du passage de la version 2 à 3. L'ancien dépôt comptabilise 204.5k stars.}
+
 \subsubsection{Angular}
 
 Angular est le plus ancien des trois et est développé et maintenu par Google. Le problème principal d'Angular est la taille du code généré. En effet, comme l'indique cette comparaison~\cite{comparison-js-frameworks}, une application vierge en Angular pèse environ 560KB contre les 100KB des frameworks concurrents. Cette différence pèse d'autant plus lorsque l'application à réaliser n'est pas très conséquente, ce qui est le cas avec \gls{beeplace}. Cet écart de taille s'explique car Angular propose plus de fonctionnalités déjà intégrées que les autres frameworks. Angular est donc plus adapté pour des projets de plus grande envergure avec des équipes de développement plus importantes.
@@ -56,7 +72,11 @@ Comme expliqué précédemment, React n'est pas vraiment un framework mais plus 
   \item Utilisation des variables d'environnement pour la configuration.
 \end{itemize}
 
-Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de ce projet, surtout la dernière est venue influencer le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique. Le choix final s'est donc porté sur Next.js.
+Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de ce projet, surtout la dernière est venue influencer le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique.
+
+\subsubsection{Choix final}
+
+Le frontend de \gls{beeplace} sera donc développé à l'aide du framework \textbf{Next.js}, pour les raisons évoquées précédemment.
 
 \subsection{Design de l'interface}
 
@@ -69,7 +89,9 @@ Il existe principalement deux catégories de librairie afin de styliser des appl
 
 La première catégorie est très adaptée pour créer une application rapidement mais la personnalisation devient plus compliquée par la suite. De plus, ces librairies sont souvent plus utiles dans le design d'applications plus classiques comme des panels d'administration qui nécessitent de nombreux composants. Dans le cas de \gls{beeplace}, l'interface utilisateur ne contient que très peu d'éléments et est donc plus adaptée à la deuxième catégorie de librairies, plus souple et personnalisable.
 
-Le choix s'est tourné vers Tailwind qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
+\subsubsection{Choix final}
+
+Le choix s'est tourné vers \textbf{Tailwind} qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
 
 \section{Backend}
 
@@ -83,7 +105,7 @@ Pour finir, grâce à l'utilisation de \gls{typescript} dans les deux applicatio
 
 Il existe de nombreux frameworks dans l'écosystème \gls{nodejs}. La comparaison s'accentue sur les quatre frameworks les plus populaires et les plus maintenus, à savoir Express.js~\cite{expressjs}, AdonisJS~\cite{adonisjs}, Fastify~\cite{fastify} et NestJS~\cite{nestjs}.
 
-Le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou une simple librairie permettant surtout de gérer les routes et les middlewares.
+Comme pour les frameworks frontend, le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur \gls{github}. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou une simple librairie permettant surtout de gérer les routes et les middlewares.
 
 \begin{table}[h]
   \begin{center}
@@ -115,7 +137,7 @@ La dernière option est NestJS, qui est un framework de plus en plus populaire e
 
 Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nestjs-vs-adonisjs} résume les avantages et les inconvénients principaux de chacun.
 
-\begin{table}
+\begin{table}[H]
   \caption{Comparaison NestJS et AdonisJS}
   \label{tab:nestjs-vs-adonisjs}
   \makegapedcells
@@ -145,6 +167,10 @@ Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nest
   \end{tabularx}
 \end{table}
 
+\subsubsection{Choix final}
+
+Le backend de l'application sera donc réalisé avec \textbf{NestJS} grâce aux avantages évoqués précédemment.
+
 \section{Communication temps réel}
 
 Pour la communication en temps réel sur le web, il existe principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
@@ -156,15 +182,19 @@ Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettr
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre connaissances afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. De plus, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. Les WebSockets utilisent un protocole de communication bas niveau ce qui les rendent très efficaces en utilisation de ressources. Cependant, les WebSockets ont quelques désavantages comme le fait qu'ils ne sont pas supportés par tous les navigateurs ou qu'il soit nécessaire de gérer manuellement les reconnexions.
+
+Heureusement, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
   \item Auto reconnexion: Socket.IO gère automatiquement les reconnexions en cas de perte de connexion.
   \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité dans le futur d'avoir plusieurs toiles simultanément sur l'application.
-  \item Intégration avec Redis~\cite{redis}: Il est possible d'utiliser Redis afin de stocker les salons et les utilisateurs connectés. Cela permet de faciliter le scaling horizontal en multipliant le nombre d'instances de l'application.
+  \item Long polling: Socket.IO utilise le HTTP long polling afin de gérer les communications si le navigateur ne supporte pas les WebSockets. Il s'agit de requêtes HTTP qui restent ouvertes jusqu'à ce que le serveur ait une réponse à envoyer.
 \end{itemize}
 
-Le choix s'est donc porté sur les WebSockets et plus spécifiquement sur la librairie Socket.IO pour la communication temps réel.
+\subsection{Choix final}
+
+Le choix s'est donc porté sur les \textbf{WebSockets} et plus spécifiquement sur l'implémentation de la librairie \textbf{Socket.IO} pour la communication temps réel.
 
 \section{Stockage}
 
@@ -186,3 +216,7 @@ D'autres alternatives sont possibles comme utiliser un autre service de cache co
 \subsection{Stockage durable}
 
 Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL~\cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins n'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite~\cite{sqlite} ou MySQL~\cite{mysql}. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
+
+\subsection{Choix finaux}
+
+La toile sera donc stockée dans un cache \textbf{Redis} pour y accéder rapidement et l'historique des pixels placés dans une base de données \textbf{PostgreSQL}.
