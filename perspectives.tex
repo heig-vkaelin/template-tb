@@ -1,4 +1,38 @@
-TODO
+% imaginer encore +
+
+\section{Améliorations prévues}
+
+\subsubsection{Administration}
+
+Le dashboard d'administration est clairement la prochaine étape du projet. Il permettra, entre autre, de réaliser les tâches de modération actuellement disponibles en appels HTTP plus simplement. Cette fonctionnalité demande un travail assez conséquent car il est nécessaire de créer une authentification plus poussée que la simple clé API réalisée actuellement.
+
+\subsubsection{CRDTs}
+
+Les CRDTs (Conflict-free Replicated Data Type)~\cite{crdt} sont des structures de données qui permettent de gérer des données répliquées sur plusieurs machines. Ils sont utilisés dans les systèmes distribués pour gérer des données qui peuvent être modifiées par plusieurs utilisateurs en même temps. Ils permettent de gérer les conflits de manière automatique et déterministe. Ce concept pourrait être utile dans le cas où plusieurs utilisateurs placent un pixel au même endroit dans un laps de temps très court. Selon l'ordre d'arrivée des requêtes, le pixel pourrait être placé pour un utilisateur et pas pour l'autre. Les CRDTs permettent de gérer ce genre de cas.
+
+Une solution plus facile à mettre en place pour gérer ce problème serait d'envoyer de temps en temps l'état global de la toile à tous les utilisateurs, pour que ceux-ci se synchronisent. Cela permettrait de gérer les conflits de manière plus simple et de ne pas avoir à implémenter des CRDTs.
+
+\section{Aller plus loin}
+
+\subsubsection{Monde physique}
+
+Lier le monde physique au monde virtuel est une idée qui a été évoquée à plusieurs reprises. Il serait possible de mettre en place un système de banque de pixels pour forcer les interactions sociales entre les personnes présentes au festival. En effet, le concept serait de pouvoir récupérer des pixels à placer en échange d'une action dans le monde réel. Par exemple, il serait possible de récupérer des pixels en amenant un ami à scanner notre identifiant à la banque. Cependant, imaginer une solution fonctionnelle dans plusieurs milieux et pas uniquement dans le cadre du Baleinev festival est un travail qui demande beaucoup de réflexion et de temps. Il est donc difficile de proposer actuellement une solution concrète à ce problème.
+
+\subsection{Statistiques}
+
+Pour le moment, l'historique des pixels dans la base de données PostgreSQL n'est pas utilisé. Il serait intéressant de pouvoir analyser ces données pour en tirer des statistiques. Ces statistiques pourraient être affichées sur le dashboard d'administration par exemple. Voici diverses idées de statistiques qui pourraient être intéressantes:
+
+\begin{itemize}
+  \item Nombre de pixels placés par jour, heure, minute avec des graphiques de l'évolution;
+  \item Nombre de pixels placés par utilisateur;
+  \item Nombre de pixels placés en fonction de sa couleur;
+  \item Nombre de pixels placés par zone, en réalisant une sorte d'"heat map" de la toile;
+  \item Analyse des actions de modération, afficher par exemple les oeuvres qui ont du être supprimées.
+\end{itemize}
+
+\subsubsection{Autres améliorations}
+
+Plusieurs autres petites améliorations sont également envisageables. Pouvoir créer une toile rectangulaire à la place de carrée serait une fonctionnalité très utile, notamment pour le système d'affichage utilisé au Baleinev Festival. De plus, il pourrait être intéressant d'essayer de pouvoir lancer plusieurs instances de l'application sur le même serveur. Cela permettrait de répartir la charge sur plusieurs processus et donc de pouvoir gérer plus de connexions simultanées. Pour finir, rendre l'expérience utilisateur plus agréable en ajoutant des animations lors du placement d'un pixel ou lors du zoom sur la toile serait également un plus. Le r/place original de Reddit utilisait par exemple des sons lors des diverses actions réalisées pour de rendre l'expérience plus immersive.
 
 \vfil
 \hspace{8cm}\makeatletter\@author\makeatother\par

@@ -1,10 +1,8 @@
 \section{Conclusion technique}
 
-% Etat final du projet, ce qui est fait / pas fait
-
-% - Évaluation des choix faits, choses apprises, adaptation des solutions (critique positive/négative de l’implémentation)
-
 \subsection{État final du projet}
+
+% État final du projet, ce qui est fait / pas fait
 
 Pour commencer, les diverses fonctionnalités listée dans le cahier des charges initial \ref{sec:cdc} sont répertoriées à nouveau ci-dessous. Pour chacune d'entre elles, il est indiqué si elle a été implémentée ou non.
 
@@ -40,8 +38,8 @@ Pour commencer, les diverses fonctionnalités listée dans le cahier des charges
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
   \item[\done] Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
   \item[\done] Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
-  \item[\done] Un mode “affichage”, permettant d'afficher régulièrement un QRCode pour rejoindre la toile virtuelle. En plus de ce QRCode, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'élèverait automatiquement dès qu'un utilisateur est actif sur l'application.
-  \item Ajouter la possibilité de sauvegarder le dessin.
+  \item[\done] Un mode “affichage”, permettant d'afficher régulièrement un QRCode pour rejoindre la toile virtuelle. En plus de ce QRCode, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'enlèverait automatiquement dès qu'un utilisateur est actif sur l'application.
+  \item[\done] Ajouter la possibilité de sauvegarder le dessin.
   \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
 \end{todolist}
 
@@ -49,36 +47,53 @@ Pour commencer, les diverses fonctionnalités listée dans le cahier des charges
 
 Comme la liste ci-dessus l'indique, quasiment toutes les fonctionnalité "required" et "essential" ont été implémentées. En effet, seul les tests unitaires ainsi que les tests d'intégration n'ont pas été réalisés lors de ce travail de Bachelor. L'utilité de ce type de tests est indéniable mais il a été décidé de ne pas les implémenter pour le moment afin de se concentrer sur les fonctionnalités principales de l'application. De plus, les différentes pipelines de déploiement continu permettent de s'assurer que l'application restait dans un état sans erreur après chaque modification.
 
-Concernant les fonctionnalités "nice-to-have", environ la moitié ont été implémentées. La majorité du travail restant concerne le dashboard d'administration. Ces fonctionnalités sont pour la plupart implémentées mais dans une version initiale sous la forme d'appels HTTP. Il est clair qu'avoir un dashboard dédié dans le futur facilitera la tâche des administrateurs.
+Concernant les fonctionnalités "nice-to-have", plus de la moitié ont été implémentées. La majorité du travail restant concerne le dashboard d'administration. Ces fonctionnalités sont pour la plupart implémentées mais dans une version initiale sous la forme d'appels HTTP. Il est clair qu'avoir un dashboard dédié dans le futur facilitera la tâche des administrateurs.
 
 Pour finir, le concept intéressant des CRDTs n'a pas été abordé dans ce travail de Bachelor. Ce point sera abordé plus en profondeur dans le chapitre \ref{perspectives}.
 
 \subsubsection{Fonctionnalités supplémentaires}
 
-% Choses pas prévues faites en plus
-% - nombre users
-% - package code commun
+Des fonctionnalités non explicitées dans le cahier des charges initiales ont été implémentées au cours de ce travail de Bachelor. Elles sont les suivantes :
 
-TODO
+% Choses pas prévues faites en plus
+% - déploiement
+% - package code commun
+% - config mode affichage
+
+\begin{itemize}
+  \item Déploiement de l'application sur un serveur de production afin de pouvoir être utilisée par toutes et tous;
+  \item Création d'un package contenant le code commun entre le frontend et le backend afin de faciliter la maintenance et l'évolution de l'application;
+  \item Configuration plus poussée que prévue pour le mode affichage, en pouvant notamment tout configurer depuis l'application directement sans devoir modifier les variables d'environnement;
+  \item Stockage de tout l'historique des pixels placés dans une base de données SQL.
+\end{itemize}
+
+\subsection{Évaluation}
+
+% - Évaluation des choix faits, choses apprises, adaptation des solutions (critique positive/négative de l’implémentation)
+
+\subsubsection{Critique de l'implémentation}
+
+Les technologies choisies pour la réalisation de l'application ont été globalement satisfaisantes. En effet, aucun réel blocage n'a été rencontré et les technologies ont permis de réaliser l'application dans les temps. Un point qui aurait pu être amélioré est le choix de la librairie de gestion de state global avec React. En effet, la librairie Zustand a été choisie trop tardivement après avoir rencontrés de nombreux problèmes avec les providers natifs à React. Utiliser cette librairie plus tôt dans l'implémentation aurait permis de gagner du temps et d'éviter de nombreux problèmes.
+
+Concernant le backend de l'application, le choix de NestJS pour sa compatibilité avec les WebSockets s'est révélé être un bon choix. Aucun contretemps n'a été rencontré et l'implémentation s'est faite sans accroc. Le stockage de la toile à plusieurs niveaux (en mémoire, dans Redis et finalement dans une base de données PostgreSQL) a permis d'assurer une bonne montée en charge de l'application.
+
+Une remarque pourrait être faite concernant le choix d'utiliser k6 pour tester la montée en charge de l'application. Comme Socket.IO n'était pas supporté, il a fallu implémenté une solution maison qui a pris plus de temps que prévu. Malheureusement, comme discuté précédemment, aucune autre solution plus viable n'a été trouvée pour tester \gls{beeplace}. Il s'agit donc d'un des nombreux contretemps qui peuvent survenir lors d'un projet informatique.
+
+\subsubsection{Apprentissages réalisés}
+
+Réaliser cette application a été extrêmement bénéfique et de nombreuses nouvelles connaissance ont été acquises. Il s'agit d'un projet très différent des applications web plus traditionnelles en mêlant de la communication en temps réel avec de la gestion assez pointue d'un canvas.
+
+Avoir toujours en tête les performances de l'application tout en pouvant tester le résultat des optimisations sur les tests de montée en charge a été très enrichissant. Il s'agit d'un sujet quasiment pas abordé dans les cours de la \gls{heig-vd} et qui est pourtant vital dans certains cas réels. Dans le même registre, profiler une application avec différents graphiques pour trouver les aspects à optimiser devrait également être plus abordé dans les cours. Dans de nombreuses cas, les problèmes réels diffèrent de ceux anticipés lors de l'écriture du code, d'où l'importance cruciale de pouvoir les identifier rapidement.
 
 \section{Conclusion personnelle}
 
+\subsubsection{Vécu du travail de Bachelor}
+
 % - Comment le projet a été vécu
+Réaliser un projet de cette envergure, sur une période aussi longue, a été une première pour moi. J'ai trouvé qu'il s'agissait d'une expérience plus enrichissante et satisfaisante que les nombreux projets plus courts réalisés au cours de mon Bachelor. Pouvoir aller en profondeur dans un sujet et pouvoir le réaliser de A à Z est très gratifiant. De plus, être témoin que des personnes utilisent son application avec plaisir a toujours été un sentiment que j'apprécie particulièrement. C'est pourquoi je suis très satisfait d'avoir réalisé ce travail de Bachelor très concret qui pourra être utilisé par de nombreuses personnes dans le futur.
 
-TODO
+L'organisation au sein de l'équipe \gls{beescreens} m'a été très bénéfique tout au long de ce travail de Bachelor. Réaliser une courte séance journalière chaque matin lors de la période à temps plein m'a permis de garder un rythme de travail. Ce qui n'est pas toujours évident lorsqu'on travaille longtemps seul sur un projet depuis la maison. De plus, chaque semaine nous faisions une réunion de planification pour définir les objectifs de la semaine ainsi que de rétrospective sur ce qui avait été accompli la semaine précédente. Ces réunions ont permis de garder une bonne communication au sein de l'équipe et de pouvoir s'entraider en cas de besoin, en ayant une bonne vision d'ensemble des projets. Utiliser ces bonnes pratiques que sont le "daily meeting" et le "sprint review" dans un projet réel a été très enrichissant et m'a permis de mieux comprendre leur utilité. J'espère retrouver ces concepts, bien utilisés, dans ma future carrière professionnelle.
 
+\subsubsection{Remerciements}
 
-
-
-
-
-% \section{Défis rencontrés et futurs}
-
-% Les principales difficultés rencontrées lors de cette première partie de projet concernent le frontend. Elles sont les suivantes :
-
-% \begin{itemize}
-%   \item Créer un PinchZoom qui prend en compte les différents types d'appareils, que ce soit un ordinateur, un mobile ou le pavé tactile.
-%   \item Synchroniser le state côté frontend avant d'avoir utilisé une librairie de gestion de state global (Zustand).
-% \end{itemize}
-
-% Heureusement, aucun gros blocage n'a été rencontré et les difficultés ont pu être surmontées en y consacrant le temps nécessaire. Pour la suite du projet, le point proposant le plus gros défi est le fait de réussir à tester correctement la montée en charge de l'application. En effet, il ne faut pas que l'ordinateur lançant les tests soit l'élément limitant la montée en charge à la place de l'application. Ce point sera donc à prendre en compte et des solutions comme utiliser plusieurs ordinateurs/serveurs pourront être envisagées.
+J'aimerais remercier les personnes suivantes pour leur aide directe ou indirecte dans le cadre de ce travail de Bachelor (sans ordre particulier) : Ludovic et Guidoux pour leur suivi sans faille et leurs conseils avisés, Maxime pour son aide sur des problèmes toujours plus obscures avec React, Hadrien pour son soutien avec mes innombrables problèmes sur LaTeX, Nastaran pour sa confiance et sa supervision assidue, mes parents pour avoir relu ce document malgré leur incompréhension totale du sujet, et finalement toutes les personnes qui ont testé l'application et qui m'ont donné leur retour.

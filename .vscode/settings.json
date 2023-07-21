@@ -15,6 +15,7 @@
     "dotenv",
     "Fastify",
     "Fatemi",
+    "Guidoux",
     "HEIG",
     "Laravel",
     "Nastaran",
