@@ -338,7 +338,7 @@ La fonction \mintinline[breaklines]{javascript}{addPixel}, appelée à chaque fo
 
 \subsection{Mise en place}
 
-Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créés avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \mintinline{bash}{.env}.
+Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créés avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env}.
 
 Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ce qui permet de limiter les différences de résultats entre les tests dues à des facteurs externes.
 
@@ -358,7 +358,7 @@ Toute la logique est implémentée dans la classe \mintinline[breaklines]{javasc
   \label{listing:opti-interval}
 \end{listing}
 
-Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \mintinline[breaklines]{bash}{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \mintinline{bash}{BOARD_REFRESH_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
+Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \mintinline[breaklines]{bash}{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \texttt{BOARD\_REFRESH\_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
 
 Une Map est utilisée pour stocker les différents pixels dessinés au cours de l'intervalle. Chaque clé de la Map correspond à sa position sur le canvas. Cette implémentation permet de garder uniquement le dernier pixel dessiné à une position donnée. Ainsi, si plusieurs utilisateurs dessinent un pixel à la même position pendant le court intervalle, seul le dernier pixel dessiné sera envoyé aux autres utilisateurs.
 

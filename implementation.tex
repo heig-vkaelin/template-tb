@@ -341,11 +341,11 @@ async reset() {
   \label{listing:admin-methods-auth}
 \end{listing}
 
-La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité et de censurer rapidement les oeuvres inappropriées.
+La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité et de censurer rapidement les \oe{}uvres inappropriées.
 
 \subsubsection{Censurer une partie de la toile}
 
-Il est également possible pour les administrateurs de censurer une zone de la toile, afin de ne pas perdre l'entièreté des oeuvres. Il suffit de passer en paramètre de l'appel HTTP les coordonnées des coins supérieur gauche et inférieur droit de la zone à censurer ainsi qu'une potentielle couleur à utiliser pour remplir la zone. Si aucune couleur n'est passée en paramètre, la zone est remplie de blanc. En attendant l'implémentation du dashboard pour faciliter cette tâche, l'administrateur peut récupérer les coordonnées directement depuis le frontend de l'application.
+Il est également possible pour les administrateurs de censurer une zone de la toile, afin de ne pas perdre l'entièreté des \oe{}uvres. Il suffit de passer en paramètre de l'appel HTTP les coordonnées des coins supérieur gauche et inférieur droit de la zone à censurer ainsi qu'une potentielle couleur à utiliser pour remplir la zone. Si aucune couleur n'est passée en paramètre, la zone est remplie de blanc. En attendant l'implémentation du dashboard pour faciliter cette tâche, l'administrateur peut récupérer les coordonnées directement depuis le frontend de l'application.
 
 Le backend va ensuite générer tous les pixels se trouvant dans la zone et les insérer dans le Bitfield Redis ainsi que dans la base de données avant d'en informer tous les utilisateurs via WebSocket. Il aurait été possible d'appeler la méthode utilisée précédemment pour stocker un pixel pour tous les pixels de la zone. Cependant, cette approche n'aurait pas été très efficace. Il est préférable de réaliser ces tâches en parallèle afin d'accélérer le processus comme le montre le listing \ref{listing:admin-reset-area}.
 
@@ -388,7 +388,7 @@ De plus, utiliser la méthode \texttt{createMany} de Prisma permet d'effectuer u
 
 \subsubsection{Mode lecture seule}
 
-La dernière action disponible pour les administrateurs est la possibilité de passer la toile en mode lecture seule. Cette option peut être intéressante si le comportement des utilisateurs devient trop problématique en fin de soirée par exemple. Cela permet de ne pas perdre les oeuvres déjà réalisées.
+La dernière action disponible pour les administrateurs est la possibilité de passer la toile en mode lecture seule. Cette option peut être intéressante si le comportement des utilisateurs devient trop problématique en fin de soirée par exemple. Cela permet de ne pas perdre les \oe{}uvres déjà réalisées.
 
 L'implémentation côté backend est simple. Il s'agit d'un attribut booléen stocké dans l'instance de la classe \texttt{BoardGateway}. Lorsque celui-ci est à \texttt{true}, la méthode \texttt{addPixel} ne fait rien. A chaque fois que ce booléen est modifié, sa nouvelle valeur est envoyé à tous les utilisateurs via WebSocket.
 
