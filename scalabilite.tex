@@ -16,7 +16,7 @@ Afin de tester les limites de l'application sans affecter la version en producti
 
 Ces spécifications sont quasiment identiques à celles de la machine virtuelle utilisée pour la version en production. La version en production dispose juste de 8 Go de RAM au lieu de 4 Go. Grâce à cela, il est possible de tester l'application dans des conditions similaires à la version en production.
 
-\gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \mintinline[breaklines]{bash}{deployement/beeplace} du répertoire Git.
+\gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \texttt{deployment/beeplace} du répertoire Git.
 
 \subsection{Choix de l'outil}
 
@@ -39,14 +39,14 @@ Artillery propose différents moteurs utilisables pour tester une application. I
   \label{listing:artillery}
 \end{listing}
 
-Le test d'exemple \ref{listing:artillery} génère 1000 utilisateurs en une minute (soit environ 16 à 17 utilisateurs par seconde). Chaque utilisateur va dessiner trois pixels aléatoirement sur le canvas et attendre ensuite 30 secondes. Cette attente est importante car le client va recevoir les pixels des autres utilisateurs pendant cette période, ce qui simule un comportement plus réaliste. La logique pour générer un pixel aléatoire ainsi que la fingerprint sont définis dans le fichier JavaScript importé \mintinline[breaklines]{bash}{functions.js}.
+Le test d'exemple \ref{listing:artillery} génère 1000 utilisateurs en une minute (soit environ 16 à 17 utilisateurs par seconde). Chaque utilisateur va dessiner trois pixels aléatoirement sur le canvas et attendre ensuite 30 secondes. Cette attente est importante car le client va recevoir les pixels des autres utilisateurs pendant cette période, ce qui simule un comportement plus réaliste. La logique pour générer un pixel aléatoire ainsi que la fingerprint sont définis dans le fichier JavaScript importé \texttt{functions.js}.
 
 Cette solution très simple à mettre en place semble idéale. Cependant, un nombre important de problèmes est survenu:
 
 \begin{itemize}
-  \item Le script lance parfois une erreur \mintinline[breaklines]{bash}{Error: Callback was already called.} qui stope l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
+  \item Le script lance parfois une erreur \texttt{Error: Callback was already called.} qui stope l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
   \item Artillery ne permet pas de tester facilement la communication du serveur vers les clients. En effet, l'outil est plus adapté à la communication client-serveur. Ce qui est problématique afin de récupérer par exemple la configuration du canvas ou encore les pixels des autres utilisateurs.
-  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \mintinline[breaklines]{bash}{socketio.response_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les quatre millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
+  \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \texttt{socketio.response\_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les quatre millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
 \end{itemize}
 
 Ces raisons ont poussé à abandonner Artillery et à chercher une autre solution. Le code source des recherches effectuées avec Artillery n'est plus disponible dans le répertoire \gls{beescreens} mais reste accessible via un commit spécifique \footnote{Voir commit no. \href{https://gitlab.com/beescreens/beescreens/-/merge_requests/255/diffs?commit_id=98e5e73eae3f9ed77026245cc727aa42728cac3b}{98e5e73eae3f9ed77026245cc727aa42728cac3b}}.
@@ -55,9 +55,9 @@ Ces raisons ont poussé à abandonner Artillery et à chercher une autre solutio
 
 k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 stars sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
 
-k6 gère les WebSockets grâce au module expérimental \mintinline[breaklines]{bash}{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6~\cite{k6-socket-io-issue}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \mintinline[breaklines]{bash}{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
+k6 gère les WebSockets grâce au module expérimental \texttt{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6~\cite{k6-socket-io-issue}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \texttt{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
 
-Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \mintinline[breaklines]{bash}{ws_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration présentée dans le listing \ref{listing:k6-thresholds}.
+Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \texttt{ws\_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration présentée dans le listing \ref{listing:k6-thresholds}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{js}
@@ -112,7 +112,7 @@ Dans le futur, afin de vérifier après les optimisations réalisées que le sys
 
 \subsubsection{Architecture}
 
-Le code est séparé en deux parties: le code générique permettant de rendre compatible k6 avec Socket.IO et le test en lui-même. Le code générique est placé dans un package nommé \mintinline[breaklines]{bash}{@beescreens/benchmarks} et est importé dans le test \mintinline[breaklines]{bash}{apps/beeplace/tests/load-tests}. Ce code pourrait, dans le futur, être utilisé pour tester d'autres applications du projet \gls{beescreens} implémentant également Socket.IO, comme Pimp My Wall par exemple.
+Le code est séparé en deux parties: le code générique permettant de rendre compatible k6 avec Socket.IO et le test en lui-même. Le code générique est placé dans un package nommé \texttt{@beescreens/benchmarks} et est importé dans le test \texttt{apps/beeplace/tests/load-tests}. Ce code pourrait, dans le futur, être utilisé pour tester d'autres applications du projet \gls{beescreens} implémentant également Socket.IO, comme Pimp My Wall par exemple.
 
 \begin{listing}[H]
   \begin{tcolorbox}[arc=0mm,colback=white!5!white]
@@ -224,7 +224,7 @@ Pour trouver plus facilement les optimisations à effectuer, il est nécessaire 
 
 \subsubsection{Solution native à Node.js}
 
-Node.js propose un outil de profiling natif qu'il est possible d'appeler en utilisant simplement l'argument \mintinline[breaklines]{bash}{node --prof}. Cet outil permet de générer un fichier de profiling illisible en lui-même. Heureusement, l'argument \mintinline[breaklines]{bash}{node --prof-process} permet d'analyser ce fichier de log et de générer un fichier textuel plus compréhensible.
+Node.js propose un outil de profiling natif qu'il est possible d'appeler en utilisant simplement l'argument \texttt{node -{}-prof}. Cet outil permet de générer un fichier de profiling illisible en lui-même. Heureusement, l'argument \texttt{node -{}-prof-process} permet d'analyser ce fichier de log et de générer un fichier textuel plus compréhensible.
 
 L'inconvénient de cette approche réside dans le fait que le fichier texte des résultats reste peu pratique à utiliser. Il est difficile de voir quelles fonctions sont les plus gourmandes en ressources sans une interface graphique avec un système de filtre.
 
@@ -260,7 +260,7 @@ L'utilisation de Clinic.js est plus pensée pour le local. En effet, le rapport 
 Le choix final s'est donc tourné vers un profiling en local à l'aide de Clinic.js afin d'avoir un retour rapide sur l'efficacité des optimisations réalisées. Pour récapituler, le processus est le suivant:
 
 \begin{enumerate}
-  \item Lancer l'application Node.js en local avec Clinic.js: \mintinline[breaklines]{bash}{clinic flame -- node app.js}
+  \item Lancer l'application Node.js en local avec Clinic.js: \texttt{clinic flame -{}- node app.js}
   \item Démarrer le test de montée en charge en local avec k6
   \item Arrêter l'application Node.js une fois le test terminé
   \item Analyser le rapport de Clinic.js
@@ -283,7 +283,7 @@ Une fois les optimisations effectuées et testées en local, il est possible de 
   \label{fig:flame1-overview}
 \end{figure}
 
-A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interpretable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \mintinline[breaklines]{javascript}{writevGeneric}, \mintinline[breaklines]{javascript}{onwrite} ou \mintinline[breaklines]{javascript}{flush}.
+A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interpretable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \texttt{writevGeneric}, \texttt{onwrite} ou \texttt{flush}.
 
 En filtrant pour garder uniquement le code du projet, car il s'agit du code qu'il est possible d'optimiser, le graphique devient plus lisible comme le montre la figure \ref{fig:flame1-filtered}.
 
@@ -296,7 +296,7 @@ En filtrant pour garder uniquement le code du projet, car il s'agit du code qu'i
   \label{fig:flame1-filtered}
 \end{figure}
 
-Plus de 34\% du temps d'exécution est passé dans la fonction \mintinline[breaklines]{javascript}{addPixel}. Celle-ci est appelée à chaque fois qu'un utilisateur envoie un nouveau pixel au serveur. Elle contient la logique suivante:
+Plus de 34\% du temps d'exécution est passé dans la fonction \texttt{addPixel}. Celle-ci est appelée à chaque fois qu'un utilisateur envoie un nouveau pixel au serveur. Elle contient la logique suivante:
 
 \begin{enumerate}
   \item Récupérer le nombre de pixels posés par l'utilisateur
@@ -305,33 +305,33 @@ Plus de 34\% du temps d'exécution est passé dans la fonction \mintinline[break
   \item Partager le pixel avec les autres utilisateurs connectés (broadcast WebSockets)
 \end{enumerate}
 
-La deuxième fonction la plus utilisée est \mintinline[breaklines]{javascript}{placePixel} avec 0.7\% du temps d'exécution. Celle-ci s'occupe du point numéro 2. de la fonction \mintinline[breaklines]{javascript}{addPixel}. Elle est donc fortement liée à la fonction \mintinline[breaklines]{javascript}{addPixel}.
+La deuxième fonction la plus utilisée est \texttt{placePixel} avec 0.7\% du temps d'exécution. Celle-ci s'occupe du point numéro 2. de la fonction \texttt{addPixel}. Elle est donc fortement liée à la fonction \texttt{addPixel}.
 
 Les fonctions suivantes ne dépassent pas les 0.6\% du temps d'exécution, il s'agit notamment de la récupération de l'état actuel du BitField Redis ainsi que de l'initialisation de la connexion WebSockets.
 
-Il faudra donc dans un premier temps se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel}. Pour commencer, il est possible de regrouper les tâches de la fonction en deux catégories à optimiser:
+Il faudra donc dans un premier temps se concentrer sur la fonction \texttt{addPixel}. Pour commencer, il est possible de regrouper les tâches de la fonction en deux catégories à optimiser:
 
 \begin{enumerate}
   \item Sauvegarde du pixel
   \item Broadcast du pixel
 \end{enumerate}
 
-Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \mintinline[breaklines]{javascript}{addPixel} et d'afficher à nouveau les fonctions des dépendances comme montre la figure \ref{fig:flame1-addPixel}.
+Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \texttt{addPixel} et d'afficher à nouveau les fonctions des dépendances comme montre la figure \ref{fig:flame1-addPixel}.
 
 \subsubsection{Fonction addPixel}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{./assets/figures/flame/flame1-addPixel.png}
-  \caption{Zoom sur la fonction \mintinline[breaklines]{javascript}{addPixel} du rapport initial de Clinic.js}
+  \caption{Zoom sur la fonction \texttt{addPixel} du rapport initial de Clinic.js}
   \label{fig:flame1-addPixel}
 \end{figure}
 
-Cette figure \ref{fig:flame1-addPixel} qui se concentre sur la fonction \mintinline[breaklines]{javascript}{addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \mintinline[breaklines]{javascript}{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \mintinline[breaklines]{javascript}{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \mintinline[breaklines]{javascript}{addPixel}.
+Cette figure \ref{fig:flame1-addPixel} qui se concentre sur la fonction \texttt{addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \texttt{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \texttt{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \texttt{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \texttt{addPixel}.
 
 \subsubsection{Conclusion initiale}
 
-La fonction \mintinline[breaklines]{javascript}{addPixel}, appelée à chaque fois qu'un utilisateur pose un pixel, est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
+La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un pixel, est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
 
 \section{Optimisations}
 \label{sec:optimisations}
@@ -344,13 +344,13 @@ Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécuti
 
 \subsection{Optimisation du broadcast}
 
-Afin d'optimiser la fonction \mintinline[breaklines]{javascript}{addPixel} vue précédemment, il est possible de revoir la manière d'envoyer le pixel aux autres utilisateurs connectés.
+Afin d'optimiser la fonction \texttt{addPixel} vue précédemment, il est possible de revoir la manière d'envoyer le pixel aux autres utilisateurs connectés.
 
 Pour l'instant, le pixel dessiné par l'utilisateur est transmis immédiatement à tous les autres utilisateurs connectés par le serveur. Ce qui résulte en un nombre de messages WebSockets envoyés très important. L'idée d'optimisation est de regrouper les pixels dessinés par l'utilisateur dans un intervalle de temps donné et de les envoyer en un seul message WebSockets.
 
 \subsubsection{Implémentation}
 
-Toute la logique est implémentée dans la classe \mintinline[breaklines]{javascript}{BoardGateway}, qui s'occupe de la communication WebSocket.
+Toute la logique est implémentée dans la classe \texttt{BoardGateway}, qui s'occupe de la communication WebSocket.
 
 \begin{listing}[H]
   \inputminted[highlightlines={3,12,18,19,29},linenos]{ts}{assets/figures/opti-interval.ts}
@@ -358,7 +358,7 @@ Toute la logique est implémentée dans la classe \mintinline[breaklines]{javasc
   \label{listing:opti-interval}
 \end{listing}
 
-Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \mintinline[breaklines]{bash}{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \mintinline[breaklines]{javascript}{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \texttt{BOARD\_REFRESH\_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
+Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \texttt{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \texttt{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \texttt{BOARD\_REFRESH\_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
 
 Une Map est utilisée pour stocker les différents pixels dessinés au cours de l'intervalle. Chaque clé de la Map correspond à sa position sur le canvas. Cette implémentation permet de garder uniquement le dernier pixel dessiné à une position donnée. Ainsi, si plusieurs utilisateurs dessinent un pixel à la même position pendant le court intervalle, seul le dernier pixel dessiné sera envoyé aux autres utilisateurs.
 
@@ -517,7 +517,7 @@ Cependant, il est intéressant de vérifier si d'autres optimisations ne pourrai
   \label{fig:flame2-filtered}
 \end{figure}
 
-En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant uniquement de broadcast les pixels aux utilisateurs, à savoir \mintinline{javascript}{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
+En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant uniquement de broadcast les pixels aux utilisateurs, à savoir \texttt{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
 
 \subsection{Format des données}
 
@@ -537,7 +537,7 @@ Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'ob
 
 \subsubsection{Format binaire}
 
-La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \mintinline{javascript}{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
+La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \texttt{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
 
 \begin{listing}[H]
   \inputminted[highlightlines={9}, linenos]{ts}{assets/figures/opti-binary.ts}
@@ -579,7 +579,7 @@ Malheureusement, ces résultats ne sont pas très concluants. En effet, la versi
 
 \subsubsection{Format string}
 
-Pour ne pas avoir ce soucis de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \mintinline{javascript}{toString} comme le montre le listing \ref{listing:opti-string}.
+Pour ne pas avoir ce soucis de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \texttt{toString} comme le montre le listing \ref{listing:opti-string}.
 
 \begin{listing}[H]
   \inputminted[highlightlines={5,6}, linenos]{ts}{assets/figures/opti-string.ts}
@@ -649,7 +649,7 @@ Les résultats sont clairs, les performances chutent d'environ \textbf{32\%} pou
   \label{fig:flame3-filtered}
 \end{figure}
 
-Étonnamment, la figure \ref{fig:flame3-filtered} montre que la fonction \mintinline[breaklines]{javascript}{getBoard} est maintenant la plus coûteuse à 27.3\%, devant \mintinline[breaklines]{javascript}{broadcastBoardUpdates} à seulement 18.8\%  qui était la fonction la plus coûteuse dans les tests précédents. Il est nécessaire de se concentrer sur cette fonction afin de trouver de potentielles optimisations. Tout d'abord, le code de cette fonction est présenté dans le listing \ref{listing:getBoard}.
+Étonnamment, la figure \ref{fig:flame3-filtered} montre que la fonction \texttt{getBoard} est maintenant la plus coûteuse à 27.3\%, devant \texttt{broadcastBoardUpdates} à seulement 18.8\%  qui était la fonction la plus coûteuse dans les tests précédents. Il est nécessaire de se concentrer sur cette fonction afin de trouver de potentielles optimisations. Tout d'abord, le code de cette fonction est présenté dans le listing \ref{listing:getBoard}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{ts}
@@ -659,7 +659,7 @@ Les résultats sont clairs, les performances chutent d'environ \textbf{32\%} pou
     return Array.from(buffer);
   }
 \end{minted}
-  \caption{Méthode \mintinline[breaklines]{javascript}{getBoard} initiale}
+  \caption{Méthode \texttt{getBoard} initiale}
   \label{listing:getBoard}
 \end{listing}
 
@@ -668,11 +668,11 @@ Cette méthode se contente de récupérer le Bitfield dans Redis contenant les c
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{./assets/figures/flame/flame3-getBoard.png}
-  \caption{Zoom sur la fonction \mintinline[breaklines]{javascript}{getBoard} du rapport Clinic.js}
+  \caption{Zoom sur la fonction \texttt{getBoard} du rapport Clinic.js}
   \label{fig:flame3-getBoard}
 \end{figure}
 
-En mettant l'accent sur cette fonction \mintinline[breaklines]{javascript}{getBoard} dans la figure \ref{fig:flame3-getBoard}, il est possible de voir que la majorité du temps se passe dans la création du tableau JavaScript à l'aide de la fonction \mintinline[breaklines]{javascript}{Array.from} vue précédemment. Il semble donc être intéressant de mettre en cache, dans la mémoire de l'application, le tableau des couleurs de la toile.
+En mettant l'accent sur cette fonction \texttt{getBoard} dans la figure \ref{fig:flame3-getBoard}, il est possible de voir que la majorité du temps se passe dans la création du tableau JavaScript à l'aide de la fonction \texttt{Array.from} vue précédemment. Il semble donc être intéressant de mettre en cache, dans la mémoire de l'application, le tableau des couleurs de la toile.
 
 \subsubsection{Version optimisée}
 

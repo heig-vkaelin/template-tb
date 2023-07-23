@@ -4,7 +4,7 @@ Le code de tous les projets existants réalisés par l'équipe \gls{beescreens} 
 
 Le répertoire est organisé grâce à une workspace \gls{pnpm}~\cite{pnpmworkspace} afin de gérer le fait qu'il s'agisse d'un monorepo. Un fichier de configuration est créé à la racine du répertoire en spécifiant la liste et le chemin vers tous les projets contenus dans le répertoire. Cela permettant notamment d'installer les dépendances de tous les projets en une seule commande.
 
-\gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec \gls{nodejs}~\cite{nodejs} \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \mintinline[breaklines]{bash}{node_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} permet une gestion des monorepos plus efficace grâce à la notion de workspace.
+\gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec \gls{nodejs}~\cite{nodejs} \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \texttt{node\_modules} de chaque projet. Cela permet de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} permet une gestion des monorepos plus efficace grâce à la notion de workspace.
 
 \subsection{Structure du répertoire}
 
@@ -15,7 +15,7 @@ Le répertoire est organisé grâce à une workspace \gls{pnpm}~\cite{pnpmworksp
       .2 apps.
       .3 media-player.
       .3 pimp-my-wall.
-      .2 deployement.
+      .2 deployment.
       .3 media-player.
       .3 pimp-my-wall.
       .3 ....
@@ -28,18 +28,18 @@ Le répertoire est organisé grâce à une workspace \gls{pnpm}~\cite{pnpmworksp
   \label{listing:beescreeens-repo-structure}
 \end{listing}
 
-Le dossier \mintinline[breaklines]{bash}{apps} contient les applications déjà développées qui sont pour l'instant:
+Le dossier \texttt{apps} contient les applications déjà développées qui sont pour l'instant:
 
 \begin{enumerate}
   \item Media Player : une application permettant de lire des images ainsi que des vidéos afin d'afficher entre autre les sponsors et diverses informations lors du festival sous forme de diaporama.
   \item Pimp My Wall : l'application majeure du projet permettant aux utilisateurs de collaborer en temps réel en dessinant sur la même toile virtuelle. Cette application pourra servir de point de repère lors du développement de l'application \gls{beeplace} comme ces deux applications ont des fonctionnalités similaires (ex: temps réel, canvas partagé entre les utilisateurs, etc.).
 \end{enumerate}
 
-Le dossier \mintinline[breaklines]{bash}{deployement} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de \gls{docker}~\cite{docker} ainsi que de \gls{docker-compose}~\cite{docker-compose}. Chaque application possède son propre dossier contenant le fichier  \mintinline[breaklines]{bash}{docker-compose.yml} configurant les différents services ainsi que les fichiers de configuration des variables d'environnement utilisées en production.
+Le dossier \texttt{deployment} contient les fichiers nécessaires au déploiement des diverses applications à l'aide de \gls{docker}~\cite{docker} ainsi que de \gls{docker-compose}~\cite{docker-compose}. Chaque application possède son propre dossier contenant le fichier  \texttt{docker-compose.yml} configurant les différents services ainsi que les fichiers de configuration des variables d'environnement utilisées en production.
 
-Le dossier \mintinline[breaklines]{bash}{docs} contient le code source de la documentation en ligne du projet~\cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe \gls{beescreens}. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
+Le dossier \texttt{docs} contient le code source de la documentation en ligne du projet~\cite{beescreensdocs}. Celle-ci contient notamment divers tutoriels afin de créer de zéro des versions simplifiées des applications développées par l'équipe \gls{beescreens}. De plus, divers guides ont également été créés afin de faciliter la prise en main des technologies utilisées dans le répertoire.
 
-Pour finir, dossier \mintinline[breaklines]{bash}{packages} contient les différents paquets \gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
+Pour finir, dossier \texttt{packages} contient les différents paquets \gls{npm} utilisés pour partager du code entre différentes applications (ex: entre la partie client et serveur d'une application).
 
 \subsection{CI/CD}
 
@@ -158,7 +158,7 @@ Pour réaliser l'intégration de façon optimale, un guide~\cite{addapptobeescre
 
 \subsection{Création d'une nouvelle application}
 
-La première étape consiste à créer le dossier de l'application dans le dossier \mintinline[breaklines]{bash}{apps} décrit précédemment. Dans celui-ci, deux dossiers sont également créés, un par service de l'application: \mintinline[breaklines]{bash}{frontend} et \mintinline[breaklines]{bash}{backend}. Le premier contient le code source de l'application côté client tandis que le second contient le code source de l'application côté serveur. D'éventuels autres dossiers seront peut être nécessaires en fonction des besoins de l'application. Ceux-ci seront créés après l'analyse préliminaire permettant de choisir les technologies utilisées.
+La première étape consiste à créer le dossier de l'application dans le dossier \texttt{apps} décrit précédemment. Dans celui-ci, deux dossiers sont également créés, un par service de l'application: \texttt{frontend} et \texttt{backend}. Le premier contient le code source de l'application côté client tandis que le second contient le code source de l'application côté serveur. D'éventuels autres dossiers seront peut être nécessaires en fonction des besoins de l'application. Ceux-ci seront créés après l'analyse préliminaire permettant de choisir les technologies utilisées.
 
 L'arborescence est donc actuellement illustrée par le listing~\ref{listing:beeplace-repo-structure}.
 
@@ -178,9 +178,9 @@ L'arborescence est donc actuellement illustrée par le listing~\ref{listing:beep
   \label{listing:beeplace-repo-structure}
 \end{listing}
 
-Par la suite, un fichier \mintinline[breaklines]{bash}{package.json} est nécessaire par dossier. Ces fichiers sont normalement utilisés dans les projets \gls{javascript} et \gls{nodejs} afin de préciser notamment les scripts, les dépendances et diverses métadonnées du projet. Dans ce cas-ci, ils sont utilisés peu importe les technologies qui seront choisies pour ce projet. En effet, cela permet d'unifier beaucoup d'aspects sur l'entièreté du code \gls{beescreens}. Par exemple, il est possible de lancer les tests unitaires de toutes les applications. Si la future application n'est pas développée en \gls{javascript}, les scripts du \mintinline[breaklines]{bash}{package.json} lancerons les commandes nécessaires dans le langage souhaité afin d'abstraire le plus possible les technologies utilisées.
+Par la suite, un fichier \texttt{package.json} est nécessaire par dossier. Ces fichiers sont normalement utilisés dans les projets \gls{javascript} et \gls{nodejs} afin de préciser notamment les scripts, les dépendances et diverses métadonnées du projet. Dans ce cas-ci, ils sont utilisés peu importe les technologies qui seront choisies pour ce projet. En effet, cela permet d'unifier beaucoup d'aspects sur l'entièreté du code \gls{beescreens}. Par exemple, il est possible de lancer les tests unitaires de toutes les applications. Si la future application n'est pas développée en \gls{javascript}, les scripts du \texttt{package.json} lancerons les commandes nécessaires dans le langage souhaité afin d'abstraire le plus possible les technologies utilisées.
 
-La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens}~\cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est visible dans le listing~\ref{listing:beeplace-backend-package-json}.
+La structure des fichiers \texttt{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens}~\cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est visible dans le listing~\ref{listing:beeplace-backend-package-json}.
 
 \begin{listing}[h]
   \inputminted[tabsize=4, linenos]{json}{assets/figures/package.json}
@@ -190,11 +190,11 @@ La structure des fichiers \mintinline[breaklines]{bash}{package.json} est basée
 
 Celui du frontend suit la même structure. Un script de test a été ajouté afin de vérifier que l'intégration est réussie par la suite.
 
-Un dossier ainsi qu'un fichier \mintinline[breaklines]{bash}{package.json} peuvent être créés dans le dossier \mintinline[breaklines]{bash}{packages} si du code doit être partagé entre les diverses parties de l'application. Ce besoin n'a pas encore été identifié donc aucun package n'a pour le moment été créé.
+Un dossier ainsi qu'un fichier \texttt{package.json} peuvent être créés dans le dossier \texttt{packages} si du code doit être partagé entre les diverses parties de l'application. Ce besoin n'a pas encore été identifié donc aucun package n'a pour le moment été créé.
 
 \subsection{Ajouter l'application au monorepo}
 
-Afin de prévenir \gls{pnpm} qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \mintinline[breaklines]{bash}{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
+Afin de prévenir \gls{pnpm} qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \texttt{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
 
 
 Grâce à cela, il est possible de lancer les tests précédemment créés en filtrant sur les applications souhaitées afin d'observer les résultats affichés dans le terminal.
@@ -219,11 +219,11 @@ Grâce à cela, il est possible de lancer les tests précédemment créés en fi
   \label{listing:beeplace-tests}
 \end{listing}
 
-Afin d'être sûr que l'\gls{ide} Visual Studio Code ait connaissance de la nouvelle application, il est également nécessaire d'ajouter les chemins dans le fichier de configuration \mintinline[breaklines]{bash}{.vscode/settings.json} présent à la racine du répertoire.
+Afin d'être sûr que l'\gls{ide} Visual Studio Code ait connaissance de la nouvelle application, il est également nécessaire d'ajouter les chemins dans le fichier de configuration \texttt{.vscode/settings.json} présent à la racine du répertoire.
 
 \subsection{CI/CD}
 
-L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline en ligne de \gls{gitlab}. Pour la première, il faut ajouter au fichier \mintinline[breaklines]{bash}{.husky/pre-push} le code visible sur le listing \ref{listing:husky-tests} afin de lancer les tests avant chaque push.
+L'application doit être intégrées à deux pipelines: la locale gérée via Husky et la pipeline en ligne de \gls{gitlab}. Pour la première, il faut ajouter au fichier \texttt{.husky/pre-push} le code visible sur le listing \ref{listing:husky-tests} afin de lancer les tests avant chaque push.
 
 \begin{listing}[H]
   \begin{minted}[linenos]{bash}
@@ -242,9 +242,9 @@ fi
   \label{listing:husky-tests}
 \end{listing}
 
-Grâce à la fonction \mintinline[breaklines]{bash}{did_files_change_in_directory}, les tests ne seront lancés que si des fichiers ont été modifiés dans le dossier de l'application.
+Grâce à la fonction \texttt{did\_files\_change\_in\_directory}, les tests ne seront lancés que si des fichiers ont été modifiés dans le dossier de l'application.
 
-Pour la pipeline \gls{gitlab}, il faut tout d'abord créer un nouveau fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/beeplace.yml} visible dans le listing \ref{listing:gitlab-beeplace-tests}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
+Pour la pipeline \gls{gitlab}, il faut tout d'abord créer un nouveau fichier \texttt{.gitlab/ci\_cd/\\beeplace.yml} visible dans le listing \ref{listing:gitlab-beeplace-tests}. Celui-ci contient les différentes étapes de la pipeline. Pour l'instant, il n'y a que la première étape qui est nécessaire: le lancement des "tests".
 
 \begin{listing}[H]
   \begin{minted}[linenos]{yaml}
@@ -278,6 +278,6 @@ beeplace::app::frontend::test:
   \label{listing:gitlab-beeplace-tests}
 \end{listing}
 
-Ce fichier doit être inclus dans le fichier \mintinline[breaklines]{bash}{.gitlab/ci_cd/main.yml} afin d'être ajouté à la pipeline globale.
+Ce fichier doit être inclus dans le fichier \texttt{.gitlab/ci\_cd/main.yml} afin d'être ajouté à la pipeline globale.
 
 L'application est maintenant prête à être développée. Le code peut être push afin de lancer les "tests" en local avec Husky et sur la pipeline \gls{gitlab}.
