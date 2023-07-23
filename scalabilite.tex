@@ -14,6 +14,8 @@ Afin de tester les limites de l'application sans affecter la version en producti
   \item 50 Go de disque
 \end{itemize}
 
+Ces spécifications sont quasiment identiques à celles de la machine virtuelle utilisée pour la version en production. La version en production dispose juste de 8 Go de RAM au lieu de 4 Go. Grâce à cela, il est possible de tester l'application dans des conditions similaires à la version en production.
+
 \gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \mintinline[breaklines]{bash}{deployement/beeplace} du répertoire Git.
 
 \subsection{Choix de l'outil}
@@ -165,11 +167,11 @@ Concernant la valeur choisie pour la latence de la connexion WebSocket, elle se 
 
 Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel en ajoutant une charge sur le frontend. Il se connecte ensuite à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
 
-Poser des pixels de position et de couleur aléatoires permet d'obtenir de jolis résultats visuels comme affiché sur la figure \ref{fig:load-test-result}.
+Poser des pixels de position et de couleur aléatoires permet d'obtenir de jolis résultats visuellement comme affiché sur la figure \ref{fig:load-test-result}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{assets/figures/load-test-result.png}
+  \includegraphics[width=0.6\textwidth]{assets/figures/load-test-result.png}
   \caption{Résultat visuel des tests de montée en charge}
   \label{fig:load-test-result}
 \end{figure}
@@ -707,6 +709,8 @@ Il est maintenant possible de relancer les tests de montées en charge pour s'as
 \end{table}
 
 Comme le montre la table \ref{table:canvas-size-results-optimized}, les performances entre les deux versions sont quasiment équivalentes lorsque la taille de la toile est de 64x64 pixels. Ce qui était attendu car les soucis de performances apparaissaient avec une taille plus élevée. Pour la toile de 256x256 pixels, soit 16 fois plus grande, les performances sont bien meilleures avec la nouvelle version optimisée. Ils sont environ 37\% plus rapides que la version précédente et seulement 7\% plus lents que les résultats avec la petite toile de 64x64. Les conclusions de cette optimisation sont donc positives et celle-ci est conservée.
+
+Il aurait également pu être possible d'envoyer directement la chaîne de caractères du Bitfield Redis aux utilisateurs et de laisser le client la convertir en tableau. Cependant, cela aurait demandé au frontend de connaître l'encodage utilisé du côté du backend, ce qui impacte l'évolutivité de la solution.
 
 \subsection{Autres optimisations}
 

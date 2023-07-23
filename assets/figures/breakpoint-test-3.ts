@@ -6,8 +6,7 @@ export async function drawMaxRandomPixels(
 ) {
   socket.setEventMessageHandle(ServerEvent.UPDATE_BOARD, () => { });
 
-  const protocol = __ENV.PROD === 'true' ? 'https' : 'http';
-  http.get(`${protocol}://${__ENV.FRONTEND}`);
+  http.get(__ENV.FRONTEND);
 
   const { initialState } = await joinRoom(socket);
   const { canvasSize, colors, maxPixels } = initialState;

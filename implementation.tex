@@ -1,6 +1,6 @@
 \section{Frontend}
 
-L'application en l'état est disponible et jouable par toutes et tous à l'adresse suivante \href{https://place.beescreens.ch}{place.beescreens.ch}. Il s'agit de la version en production déployée sur la machine virtuelle \gls{beescreens}.
+L'application en l'état est disponible et jouable par toutes et tous à l'adresse suivante: \\ \href{https://place.beescreens.ch}{place.beescreens.ch}. Il s'agit de la version en production déployée sur la machine virtuelle \gls{beescreens} comme le reste des applications.
 
 \subsection{Présentation de l'interface}
 
@@ -192,7 +192,7 @@ Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, un ex
   \item Les polices installées, leurs préférences;
   \item Les réglages du navigateur comme sa langue, ses fonctionnalités activées ou pas etc;
   \item Les réglages de l'ordinateur comme le son, les couleurs, etc;
-  \item Les informations sur la machine physique comme la résolution d'écran, le nombre de coeurs, la mémoire vive, etc.
+  \item Les informations sur la machine physique comme la résolution d'écran, le nombre de c\oe{}urs, la mémoire vive, etc.
 \end{itemize}
 
 En plus de toutes ces caractérisées, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
@@ -263,7 +263,7 @@ La subtilité se trouve dans le fait que le client qui a placé le pixel va en r
 
 Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un ID à chaque couleur afin de ne pas stocker un nombre incalculable de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un ID à chaque couleur afin de ne pas stocker un nombre important de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
 Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
 \begin{equation}

@@ -12,6 +12,7 @@
     "Bubbleprof",
     "COOLDOWN",
     "CRDTs",
+    "customisables",
     "dotenv",
     "Fastify",
     "Fatemi",
