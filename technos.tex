@@ -1,21 +1,21 @@
-Ce chapitre présente les technologies choisies pour le développement de l'application. Les technologies sont sélectionnées afin de répondre au mieux aux besoins du projet. Des comparaisons entre différentes technologies ayant la même mission sont également effectuées afin de justifier les choix finaux.
+Ce chapitre présente les technologies choisies pour le développement de l'application. Elles sont sélectionnées afin de répondre au mieux aux besoins du projet. Des comparaisons entre différentes technologies ayant la même mission sont également effectuées afin de justifier les choix finaux.
 
 \section{Language de programmation}
 
-Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre conséquent de languages différents. Cependant, concernant partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
+Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre conséquent de languages différents. Cependant, concernant la partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
 
-Utiliser \gls{javascript} pour réaliser des applications web est donc une évidence. Cependant, \gls{javascript} est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible et de plus en plus courant d'utiliser \gls{typescript}~\cite{typescript}.
+Utiliser \gls{javascript} pour réaliser des applications web paraît donc une évidence. Cependant, ce dernier est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible, et de plus en plus courant, d'utiliser \gls{typescript}~\cite{typescript}.
 
 \subsection{TypeScript}
 
 \gls{typescript} est un langage de programmation créé par Microsoft qui est un sur-ensemble de \gls{javascript}. Il est donc possible de compiler du code \gls{typescript} en \gls{javascript}, ce qui permet de l'utiliser dans n'importe quel environnement. Comme expliqué précédemment, \gls{javascript} peut être utilisé pour développer l'application entière, notamment grâce à \gls{nodejs} pour le backend. C'est bien entendu également le cas pour \gls{typescript}.
 
-\gls{typescript} ajoute de nombreuses fonctionnalités à \gls{javascript}, comme la possibilité de créer des types, des interfaces, des énumérations et bien d'autres. Les avantages à utiliser \gls{typescript} sont donc nombreux:
+\gls{typescript} ajoute de nombreuses fonctionnalités à \gls{javascript}, comme la possibilité de créer des types, des interfaces, des énumérations et bien plus. Les avantages à utiliser \gls{typescript} sont donc nombreux:
 
 \begin{itemize}
   \item Meilleure complétion dans les \gls{ide}, comme Visual Studio Code;
   \item Gestion automatique des imports dans les \gls{ide};
-  \item Évite de découvrir de nombreuses erreurs au moment de l'exécution, car elles sont détectées au moment de la compilation;
+  \item Éviter de découvrir de nombreuses erreurs au moment de l'exécution, car elles sont détectées au moment de la compilation;
   \item Refactoriser le code de façon plus sûre en voyant directement les erreurs de types dans l'\gls{ide};
   \item Lecture et compréhension du code plus facile, car les types sont explicitement définis.
 \end{itemize}
@@ -28,7 +28,7 @@ De plus, les deux applications existantes de l'écosystème \gls{beescreens}, Pi
 
 De nombreux frameworks \gls{javascript} sont disponibles actuellement pour réaliser la partie frontend des applications web mais les trois principaux concurrents en terme de popularité sont React~\cite{react}, Vue.js~\cite{vue} et Angular~\cite{angular}. De plus en plus de possibilités voient le jour chaque année mais ces trois frameworks sont les plus populaires, les plus utilisés et les plus stables. Il est donc pertinent de se focaliser sur ces trois options pour le développement de \gls{beeplace}.
 
-Le tableau \ref{tab:frameworks-frontend-js} présente les trois frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou librairie qui permet de créer une application réactive mais qui ne propose pas de réelle structure.
+Le tableau \ref{tab:frameworks-frontend-js} présente les trois frameworks avec leur nombre de stars sur \gls{github}. Cette statistique permet d'avoir une idée de la popularité des frameworks. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou une librairie qui permet de créer une application réactive mais qui ne propose pas de réelle structure.
 
 \begin{table}[h]
   \begin{center}
@@ -46,11 +46,11 @@ Le tableau \ref{tab:frameworks-frontend-js} présente les trois frameworks avec 
 
 \subsubsection{Angular}
 
-Angular est le plus ancien des trois et est développé et maintenu par Google. Le problème principal d'Angular est la taille du code généré. En effet, comme l'indique cette comparaison~\cite{comparison-js-frameworks}, une application vierge en Angular pèse environ 560KB contre les 100KB des frameworks concurrents. Cette différence pèse d'autant plus lorsque l'application à réaliser n'est pas très conséquente, ce qui est le cas avec \gls{beeplace}. Cet écart de taille s'explique car Angular propose plus de fonctionnalités déjà intégrées que les autres frameworks. Angular est donc plus adapté pour des projets de plus grande envergure avec des équipes de développement plus importantes.
+Angular est le plus ancien des trois. Il est développé et maintenu par Google. Le problème principal d'Angular est la taille du code généré. En effet, comme l'indique cette comparaison~\cite{comparison-js-frameworks}, une application vierge en Angular pèse environ 560KB contre les 100KB des frameworks concurrents. Cette différence pèse d'autant plus lorsque l'application à réaliser n'est pas très conséquente, ce qui est le cas avec \gls{beeplace}. Cet écart de taille s'explique car Angular propose plus de fonctionnalités déjà intégrées que les autres frameworks. Angular est donc plus adapté pour des projets de plus grande envergure avec des équipes de développement plus importantes.
 
 \subsubsection{React vs Vue}
 
-Les deux options restantes sont donc React et Vue. Les différences entre les deux frameworks sont moindres. Les deux sont plus de légères librairies pour créer des applications réactives que des frameworks complets. Elles sont facilement extensibles afin d'ajouter les briques nécessaires au projet. Cependant, React a tout de mêmes quelques avantages sur Vue:
+Les deux options restantes sont donc React et Vue. Les différences entre ces frameworks sont moindres. Les deux s'apparentent plus à de légères librairies pour créer des applications réactives que des frameworks complets. Elles sont facilement extensibles afin d'ajouter les briques nécessaires au projet. Cependant, React a tout de mêmes quelques avantages sur Vue:
 
 \begin{itemize}
   \item React reste plus populaire comme l'indique Google Trends~\cite{google-trends-js-frameworks} et dispose donc de librairies pour répondre à tous les besoins qui pourraient survenir.
@@ -59,7 +59,7 @@ Les deux options restantes sont donc React et Vue. Les différences entre les de
   \item L'application Pimp My Wall existante est elle-même écrite en React, ce qui permet d'uniformiser les technologies.
 \end{itemize}
 
-Pour conclure, les deux frameworks étant très similaires et performants, la popularité de React a été le facteur principal dans le choix du framework afin de ne pas rencontrer de problèmes de ressources ou de documentation.
+Pour conclure, les deux frameworks étant très similaires et performants, la popularité de React a été l'élément déterminant dans le choix du framework afin de ne pas rencontrer de problèmes de ressources ou de documentation.
 
 \subsubsection{React vs Next.js}
 
@@ -72,7 +72,7 @@ Comme expliqué précédemment, React n'est pas vraiment un framework mais plus 
   \item Utilisation des variables d'environnement pour la configuration.
 \end{itemize}
 
-Les fonctionnalités évoquées sont toutes intéressantes mais dans le cas de ce projet, surtout la dernière est venue influencer le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique.
+Les fonctionnalités évoquées sont toutes intéressantes, mais dans le cas de ce projet, c'est surtout la dernière qui a influencé le choix. En effet, Next.js permet de définir et d'utiliser des variables d'environnement qui sont injectées dans le code au lancement de l'application. Cela évite de devoir build toute l'application à nouveau à chaque fois qu'un changement de configuration est effectué comme il est nécessaire avec une application React classique.
 
 \subsubsection{Choix final}
 
@@ -99,11 +99,11 @@ Le choix s'est tourné vers \textbf{Tailwind} qui est une librairie de plus en p
 
 Comme expliqué précédemment, le choix s'est tourné vers \gls{nodejs}~\cite{nodejs} afin d'utiliser un seul et même langage pour l'entièreté de l'application: \gls{typescript}. \gls{nodejs} permet d'utiliser les connaissances acquises en \gls{javascript} côté client également pour le côté serveur. De plus, \gls{nodejs} est un environnement très populaire, ce qui permet, en combinaison avec \gls{npm}, de trouver des librairies pour presque toutes les problématiques possibles. En outre, les performances de \gls{nodejs} sont très bonnes et il est possible de réaliser un scaling horizontal facilement en multipliant le nombre d'instances de l'application.
 
-Pour finir, grâce à l'utilisation de \gls{typescript} dans les deux applications, il est possible de partager du code, notamment les types entre les deux applications en créant un package. Cela permet d'éviter la duplication de code ainsi qu'être sûr de la cohérence des données.
+Pour finir, grâce à l'utilisation de \gls{typescript} dans les deux applications, il est possible de partager du code, notamment les types entre les deux applications en créant un package. Cela permet d'éviter la duplication de code ainsi que d'être sûr de la cohérence des données.
 
 \subsection{Framework}
 
-Il existe de nombreux frameworks dans l'écosystème \gls{nodejs}. La comparaison s'accentue sur les quatre frameworks les plus populaires et les plus maintenus, à savoir Express.js~\cite{expressjs}, AdonisJS~\cite{adonisjs}, Fastify~\cite{fastify} et NestJS~\cite{nestjs}.
+Il existe de nombreux frameworks dans l'écosystème \gls{nodejs}. La comparaison se centre sur les quatre frameworks les plus populaires et les plus maintenus, à savoir Express.js~\cite{expressjs}, AdonisJS~\cite{adonisjs}, Fastify~\cite{fastify} et NestJS~\cite{nestjs}.
 
 Comme pour les frameworks frontend, le tableau \ref{tab:frameworks-backend-nodejs} présente les quatre frameworks avec leur nombre de stars sur \gls{github}. Le tableau démontre également le type de framework, soit un vrai framework avec une architecture complète à disposition ou une simple librairie permettant surtout de gérer les routes et les middlewares.
 
@@ -123,19 +123,19 @@ Comme pour les frameworks frontend, le tableau \ref{tab:frameworks-backend-nodej
 
 \subsubsection{Express.js et Fastify}
 
-Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les middlewares, la validation, les sessions et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les briques ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet.
+Bien que le plus populaire, Express n'est pas à proprement parler un framework, mais plutôt une librairie. Il est donc nécessaire d'utiliser une multitude d'autres librairies pour gérer les middlewares, la validation, les sessions et autre. Pour des applications web complexes, cela revient à essayer d'assembler un puzzle en essayant de faire fonctionner toutes les pièces ensemble. C'est pourquoi il est souvent préférable d'utiliser un framework plus dogmatique et plus complet.
 
 De plus, aucune convention n'est imposée par Express, ce qui peut rendre les applications plus difficiles à maintenir. Lorsque l'on revient sur un projet après plusieurs mois, il est souvent difficile de se remettre dans le contexte et de comprendre la logique de l'application. C'est pourquoi il est préférable d'utiliser un framework qui impose des conventions et une architecture.
 
-De son côté, Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Le problème est donc le même que pour Express et trouver une alternative est nécessaire.
+De son côté, Fastify, bien que plus rapide et plus moderne que son concurrent Express, se trouve dans la même catégorie des frameworks très minimalistes. Le problème est donc le même que pour Express et trouver une alternative se révèle nécessaire.
 
 \subsubsection{AdonisJS et NestJS}
 
-Il reste donc les deux frameworks plus complets, à savoir AdonisJS et NestJS. AdonisJS promet d'inclure tout ce dont le développeur a besoin afin d'être le plus productif possible. Le framework est souvent comparé au framework PHP Laravel~\cite{laravel} sur cet aspect-là. Le soucis principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisation spécifiques.
+Il reste donc les deux frameworks plus complets, à savoir AdonisJS et NestJS. AdonisJS promet d'inclure tout ce dont le développeur a besoin afin d'être le plus productif possible. Le framework est souvent comparé au framework PHP Laravel~\cite{laravel} sur cet aspect-là. Le souci principal d'AdonisJS est sa popularité. Malheureusement, il s'agit du framework le moins connu de la liste et cela se fait ressentir dans l'écosystème. Il est plus compliqué de trouver des librairies pour des cas d'utilisations spécifiques.
 
-La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS. NestJS utilise un système de Gateway~\cite{nestjs-gateway} permettant d'abstraire le concept de WebSockets facilement.  Ce dernier aspect est un point très important pour la réalisation de cette application qui contient majoritairement des communications temps réel. Ce qui a fait pencher la balance en faveur de NestJS en plus de sa popularité.
+La dernière option est NestJS, qui est un framework de plus en plus populaire et très complet. Son architecture fait qu'il est très facilement extensible, notamment grâce à l'utilisation de modules et d'injection de dépendances. De plus, son implémentation des WebSockets est très complète et mise en avant contrairement à AdonisJS. NestJS utilise un système de Gateway~\cite{nestjs-gateway} permettant d'abstraire le concept de WebSockets facilement.  Ce dernier aspect est un point très important pour la réalisation de cette application qui contient majoritairement des communications en temps réel. Cet élément a fait pencher la balance en faveur de NestJS, en plus de sa popularité.
 
-Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nestjs-vs-adonisjs} résume les avantages et les inconvénients principaux de chacun.
+Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nestjs-vs-adonisjs} présente les avantages et les inconvénients principaux de chacun.
 
 \begin{table}[H]
   \caption{Comparaison NestJS et AdonisJS}
@@ -169,32 +169,32 @@ Pour résumer la comparaison entre les deux frameworks, le tableau \ref{tab:nest
 
 \subsubsection{Choix final}
 
-Le backend de l'application sera donc réalisé avec \textbf{NestJS} grâce aux avantages évoqués précédemment.
+Le backend de l'application sera donc réalisé avec \textbf{NestJS} pour les raisons évoquées précédemment.
 
-\section{Communication temps réel}
+\section{Communication en temps réel}
 
 Pour la communication en temps réel sur le web, il existe principalement trois options. Les Server-Sent Events (SSE), les WebSockets et WebRTC.
 
 \subsection{Server-Sent Events (SSE)}
-Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuels, il n'est pas possible de transférer des données binaires, ce qui peut être limitant.
+Utiliser des Server-Sent Events (SSE) est une option possible et facile à mettre en place. Cependant, cette technologie est assez limitée et ne permet pas de faire de la communication bidirectionnelle. En effet, pour réaliser une communication du client au serveur, il faudrait utiliser en addition des appels HTTP classiques. Il est donc préférable d'utiliser une autre technologie afin d'uniformiser les communications. De plus, SSE supporte uniquement les communications textuelles. Il n'est donc pas possible de transférer des données binaires, ce qui peut être limitant.
 
 \subsection{WebRTC}
 WebRTC permet de réaliser une communication bidirectionnelle entre deux clients sans passer par un serveur une fois la connexion établie. Ce concept, appelé pair-à-pair ou peer to peer en anglais, est intéressant pour des projets dans lesquels les utilisateurs créent des salons privés entre connaissances afin de ne pas surcharger le serveur. Cependant dans le cas de \gls{beeplace}, il est nécessaire de passer par le serveur afin de pouvoir synchroniser l'état de la toile entre tous les utilisateurs. WebRTC n'est donc pas une option viable pour ce projet.
 
 \subsection{WebSockets}
-Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. Les WebSockets utilisent un protocole de communication bas niveau ce qui les rendent très efficaces en utilisation de ressources. Cependant, les WebSockets ont quelques désavantages comme le fait qu'ils ne sont pas supportés par tous les navigateurs ou qu'il soit nécessaire de gérer manuellement les reconnexions.
+Pour finir, les WebSockets mettent à disposition tout ce qui est nécessaire pour réaliser une communication bidirectionnelle entre le client et le serveur. Les WebSockets utilisent un protocole de communication bas niveau, ce qui les rend très efficaces en utilisation de ressources. Cependant, ils ont quelques désavantages, comme le fait qu'ils ne sont pas supportés par tous les navigateurs ou qu'il soit nécessaire de gérer manuellement les reconnexions.
 
-Heureusement, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation le plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
+Heureusement, de nombreuses librairies sont disponibles dans l'écosystème \gls{javascript} et \gls{typescript} afin de rendre son utilisation la plus simple possible. La plus connue est Socket.IO~\cite{socket-io} et les trois fonctionnalités les plus intéressantes qu'elle offre sont les suivantes:
 
 \begin{itemize}
   \item Auto reconnexion: Socket.IO gère automatiquement les reconnexions en cas de perte de connexion.
-  \item Création de salons: Il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité dans le futur d'avoir plusieurs toiles simultanément sur l'application.
+  \item Création de salons: il est possible de créer des salons afin de limiter les communications à un groupe d'utilisateurs. Cette fonctionnalité peut être utile s'il est souhaité dans le futur d'avoir plusieurs toiles simultanément sur l'application.
   \item Long polling: Socket.IO utilise le HTTP long polling afin de gérer les communications si le navigateur ne supporte pas les WebSockets. Il s'agit de requêtes HTTP qui restent ouvertes jusqu'à ce que le serveur ait une réponse à envoyer.
 \end{itemize}
 
 \subsection{Choix final}
 
-Le choix s'est donc porté sur les \textbf{WebSockets} et plus spécifiquement sur l'implémentation de la librairie \textbf{Socket.IO} pour la communication temps réel.
+Le choix s'est donc porté sur les \textbf{WebSockets} et plus spécifiquement sur l'implémentation de la librairie \textbf{Socket.IO} pour la communication en temps réel.
 
 \section{Stockage}
 
@@ -209,13 +209,13 @@ L'idée de séparer le stockage de l'état de la toile entre plusieurs méthodes
 
 \subsection{Stockage de l'état actuel de la toile}
 
-Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis~\cite{redis} ou simplement stocker une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en place car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est indépendant de l'application.
+Afin de garantir un accès rapide à l'état actuel de la toile, un cache doit être mis en place. Les deux options les plus fréquentes sont Redis~\cite{redis} ou simplement stocker une structure de données dans la mémoire de l'application. La deuxième option est plus simple à mettre en \oe{}uvre car elle ne demande aucun service tiers mais le cache devrait être recréé depuis le stockage durable à chaque redémarrage de l'application. Ce qui n'est pas le cas avec Redis qui est indépendant de l'application.
 
-D'autres alternatives sont possibles comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et est très adapté au projet. Il a donc été choisi comme solution de stockage à accès rapide.
+D'autres alternatives sont possibles, comme utiliser un autre service de cache comme Memcached~\cite{memcached}. Cependant, Redis reste le choix le plus populaire et le plus adapté au projet. Il a donc été choisi comme solution de stockage à accès rapide.
 
 \subsection{Stockage durable}
 
-Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL~\cite{postgresql}, un système de gestion de base base de données SQL open source très populaire. Les besoins n'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite~\cite{sqlite} ou MySQL~\cite{mysql}. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
+Pour stocker l'historique de la pose des pixels, une base de données plus conventionnelle est nécessaire en supplément à Redis. Le choix s'est tourné sur PostgreSQL~\cite{postgresql}, un système de gestion de base de données SQL open source très populaire. Les besoins n'étant pas très complexes, de nombreuses autres possibilités auraient pu être utilisées comme SQLite~\cite{sqlite} ou MySQL~\cite{mysql}. La familiarité avec PostgreSQL a été le facteur déterminant dans le choix de cette base de données.
 
 \subsection{Choix finaux}
 

@@ -61,11 +61,11 @@ Le librairie la plus connue se nomme React-zoom-pan-pinch~\cite{react-zoom-pan-p
 
 \subsubsection{React-quick-pinch-zoom}
 
-Cette seconde librairie, react-quick-pinch-zoom~\cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie \gls{javascript} plus connue nommée simplement PinchZoom.js~\cite{pinchzoomjs}. Le soucis de cette libraire survient lorsque l'élément à l'intérieur du PinchZoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour \gls{beeplace}: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
+Cette seconde librairie, react-quick-pinch-zoom~\cite{react-quick-pinch-zoom} est une adaptation pour React d'une librairie \gls{javascript} plus connue nommée simplement PinchZoom.js~\cite{pinchzoomjs}. Le souci de cette librairie survient lorsque l'élément à l'intérieur du PinchZoom doit prendre toute la taille de la fenêtre, ce qui est le cas pour \gls{beeplace}: le canvas est l'élément unique de l'application et prend donc l'intégralité de la page. Lorsque c'est le cas, le comportement de la librairie est étrange et très aléatoire en fonction des événements utilisateurs. Cette seconde librairie n'a donc également pas été retenue.
 
 \subsubsection{React-fast-pinch-zoom}
 
-Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome~\cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre libraire de la même équipe Google Chrome, PointerTracker~\cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events~\cite{pointer-events} qui, contrairement aux anciens événements d'interaction, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
+Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome~\cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre librairie de la même équipe Google Chrome, PointerTracker~\cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events~\cite{pointer-events} qui, contrairement aux anciens événements d'interaction, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
 
 Malheureusement la librairie, react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}, est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes "We recommend defining components as functions instead of classes."~\cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
 
@@ -99,7 +99,7 @@ Les avantages de Zustand sur Redux sont les suivants:
 
 \subsubsection{Contexte React}
 
-Au lieu d'installer une libraire externe, il est possible d'utiliser le Contexte React~\cite{react-context}. Celui-ci permet de stocker des données ainsi que des fonctions utilitaires dans un endroit centralisé et de les rendre accessibles à tous les composants enfants. Cependant, les contextes amènent plusieurs problèmes:
+Au lieu d'installer une librairie externe, il est possible d'utiliser le Contexte React~\cite{react-context}. Celui-ci permet de stocker des données ainsi que des fonctions utilitaires dans un endroit centralisé et de les rendre accessibles à tous les composants enfants. Cependant, les contextes amènent plusieurs problèmes:
 
 \begin{itemize}
   \item Un contexte React n'est pas fait pour stocker des données qui changent souvent. En effet, à chaque changement de state, tous les composants enfants sont re-rendus, ce qui peut être problématique au niveau des performances.

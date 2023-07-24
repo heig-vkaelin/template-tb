@@ -21,6 +21,7 @@ Ce référentiel contient un modèle de document LaTeX pour la production d'un r
   - [Outils utiles](#outils-utiles)
   - [Conventions typographiques](#conventions-typographiques)
   - [Locutions](#locutions)
+- [Release](#release)
 - [Technologies utilisées](#technologies-utilisées)
 - [Standards](#standards)
 - [Références](#références)
@@ -43,7 +44,7 @@ Une fois ces logiciels installés et démarrés, vous devez configurer une exten
 
 - [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-Il est suggéré d'utiliser WSL2 avec la distribution Ubuntu par soucis de facilité d'utilisation.
+Il est suggéré d'utiliser WSL2 avec la distribution Ubuntu par souci de facilité d'utilisation.
 
 ## Utilisation
 
