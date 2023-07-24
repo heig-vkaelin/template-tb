@@ -283,9 +283,9 @@ Une fois les optimisations effectuées et testées en local, il est possible de 
   \label{fig:flame1-overview}
 \end{figure}
 
-A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interprétable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \texttt{writevGeneric}, \texttt{onwrite} ou \texttt{flush}.
+A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interprétable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonctions affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \texttt{writevGeneric}, \texttt{onwrite} ou \texttt{flush}.
 
-En filtrant pour garder uniquement le code du projet, car il s'agit du code qu'il est possible d'optimiser, le graphique devient plus lisible comme le montre la figure \ref{fig:flame1-filtered}.
+En filtrant pour garder uniquement le code du projet, car c'est celui-ci qu'il est possible d'optimiser, le graphique devient plus lisible comme le montre la figure \ref{fig:flame1-filtered}.
 
 \subsubsection{Rapport filtré}
 
@@ -327,11 +327,11 @@ Afin de vérifier quelle partie doit être optimisée en priorité, il est possi
   \label{fig:flame1-addPixel}
 \end{figure}
 
-Cette figure \ref{fig:flame1-addPixel} qui se concentre sur la fonction \texttt{addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \texttt{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \texttt{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la la fonction \texttt{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \texttt{addPixel}.
+Cette figure \ref{fig:flame1-addPixel} qui se concentre sur la fonction \texttt{addPixel} montre rapidement qu'une grande majorité du temps d'exécution de la fonction concerne le broadcast du pixel avec Socket.IO. En effet, la fonction \texttt{send} de Socket.IO représente 26.5\% du temps d'exécution de la fonction \texttt{addPixel} (20.1\% + 6.4\%). Concernant la sauvegarde du pixel, le temps d'exécution de la fonction \texttt{placePixel} est si faible qu'il est affiché comme valant 0\% du temps d'exécution de la fonction \texttt{addPixel}.
 
 \subsubsection{Conclusion initiale}
 
-La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un pixel, est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe du broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
+La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un pixel, est clairement la fonction à optimiser en priorité. Plus précisément, la partie de la fonction qui s'occupe de broadcast le pixel avec Socket.IO à tous les autres utilisateurs connectés.
 
 \section{Optimisations}
 \label{sec:optimisations}
@@ -340,7 +340,7 @@ La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un
 
 Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créées avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env}.
 
-Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ceci permet de limiter les différences de résultats entre les tests dues à des facteurs externes.
+Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ceci permet de limiter l'incidence de facteurs externes sur les résultats obtenus.
 
 \subsection{Optimisation du broadcast}
 
@@ -537,7 +537,7 @@ Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'ob
 
 \subsubsection{Format binaire}
 
-La solution la plus optimale de réduire la taille des messages envoyés consiste à transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnées plus grandes que les 255 autorisées sur 1 octet). Un tableau \texttt{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
+La solution la plus optimale pour réduire la taille des messages envoyés consiste à transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnées plus grandes que les 255 autorisées sur 1 octet). Un tableau \texttt{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
 
 \begin{listing}[H]
   \inputminted[highlightlines={9}, linenos]{ts}{assets/figures/opti-binary.ts}
@@ -760,7 +760,7 @@ Pour conclure, il aurait été intéressant de pouvoir tester les différentes v
 
 \begin{itemize}
   \item Il est difficile de créer une charge réaliste, un ordinateur, même puissant, ne pourra pas lancer plus de quelques dizaines, voire centaines de navigateurs en simultané
-  \item La version de k6 permettant d'utiliser un navigateur headless~\cite{k6-browser} est vraiment expérimentale est peu stable. Il n'a d'ailleurs pas été possible de la faire fonctionner.
+  \item La version de k6 permettant d'utiliser un navigateur headless~\cite{k6-browser} est vraiment expérimentale et peu stable. Il n'a d'ailleurs pas été possible de la faire fonctionner.
 \end{itemize}
 
 % FAIT / testé:
