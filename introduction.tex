@@ -1,7 +1,7 @@
 \section{Contexte}
 L'association Baleinev organise, depuis plus de 25 ans, le festival de musique “Baleinev Festival” sur le campus de la HEIG-VD et aime se démarquer par son originalité.
 
-En 2014, le festival proposait pour la première fois “Pimp My Wall”, un concept consistant en l'utilisation des fenêtres orientées sur la cour comme écrans géants, affichant du contenu interactif, des animations visuelles et la possibilité de dessiner à distance.
+En 2014, le festival proposait pour la première fois “Pimp My Wall”, un concept qui consiste à utiliser des fenêtres orientées sur la cour comme écrans géants, affichant du contenu interactif, des animations visuelles et la possibilité de dessiner à distance.
 
 \begin{figure}[H]
   \centering
@@ -13,16 +13,16 @@ En 2014, le festival proposait pour la première fois “Pimp My Wall”, un con
   \label{fig:pmw-baleinev-2023}
 \end{figure}
 
-En 2018, le concept a été repris à partir de zéro et a donné naissance à \gls{beescreens}, la nouvelle version open source aux technologies modernes. L'ambition est de concevoir un système permettant le développement d'applications interactives diffusées en continu sur Internet (applications, jeux, multi-joueurs, multi-écrans, tout est imaginable). L'idée n'est plus de se limiter uniquement au Baleinev festival mais de pouvoir utiliser les applications développées dans d'autres contextes.
+En 2018, le concept a été repris à partir de zéro et a donné naissance à \gls{beescreens}, la nouvelle version open source aux technologies modernes. L'ambition est de concevoir un système permettant le développement d'applications interactives diffusées en continu sur Internet (applications, jeux, multi-joueurs, multi-écrans, tout est imaginable). L'idée n'est plus de se limiter uniquement au Baleinev festival mais de pouvoir utiliser les applications développées dans d'autres situations.
 
-C'est dans ce contexte-ci qu'est né le projet de ce travail de Bachelor. L'idée est de créer une nouvelle application interactive à projeter entre autres sur un sous-ensemble des écrans du festival.
+C'est dans ce contexte qu'est né le projet de ce travail de Bachelor avec la volonté de créer une nouvelle application interactive à projeter entre autres sur un sous-ensemble des écrans du festival.
 
 \section{Présentation r/place}
-\gls{reddit} (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde, a l'habitude de faire des expériences pour le premier avril. En 2017, \gls{reddit} présente pour la première fois leur concept de r/place.
+\gls{reddit} (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde, a l'habitude de faire des expériences pour le premier avril. En 2017, \gls{reddit} présente pour la première fois leur concept r/place.
 
-r/place~\cite{rplace} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque personne doit attendre un certain délai (5 minutes) avant de reposer un nouveau pixel. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'\oe{}uvre.
+r/place~\cite{rplace} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque personne doit attendre un certain temps (5 minutes) avant de reposer un nouveau pixel. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'\oe{}uvre.
 
-En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions de personnes participent à cette édition. La toile est agrandie pour atteindre des dimensions de 2000x2000 pixels est celle-ci se trouve remplie de créations en tout genre réalisées par diverses communautés (voir figure \ref{fig:rplace2022}) pendant plusieurs jours.
+En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions de personnes participent à cette édition. La toile est agrandie pour atteindre des dimensions de 2000x2000 pixels et celle-ci se trouve remplie de créations en tout genre réalisées par diverses communautés (voir figure \ref{fig:rplace2022}) pendant plusieurs jours.
 
 \begin{figure}[H]
   \centering
@@ -31,7 +31,7 @@ En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions
   \label{fig:rplace2022}
 \end{figure}
 
-Les codes sources de ces deux événements ne sont malheureusement pas disponibles. Cependant, les ingénieurs du r/place ont publié des articles détaillant leur architecture et leur implémentation. Ces articles sont disponibles sur le site de \gls{reddit}~\cite{rplace2017, rplace2022}. Ces articles seront utilisés comme référence pour ce travail de Bachelor mais l'architecture ainsi que l'implémentation seront complètement différentes. En effet, le but est de créer seul une version open source de r/place. L'envergure du projet ainsi que la taille du public visé sont évidents bien moindres que ceux du r/place original.
+Les codes sources de ces deux événements ne sont malheureusement pas disponibles. Cependant, les ingénieurs du r/place ont publié des articles présentant leur architecture et leur implémentation. Ces articles sont disponibles sur le site de \gls{reddit}~\cite{rplace2017, rplace2022}. Ces articles seront utilisés comme référence pour ce travail de Bachelor mais l'architecture ainsi que l'implémentation seront complètement différentes. En effet, le but est de créer seul une version open source de r/place. L'envergure du projet ainsi que la taille du public visé sont évidemment bien moindres que ceux du r/place original.
 
 \section{Cahier des charges}
 \label{sec:cdc}
@@ -39,9 +39,9 @@ Les codes sources de ces deux événements ne sont malheureusement pas disponibl
 \subsection{Objectifs}
 
 Le but principal de ce travail de Bachelor consiste à recréer une version open source du fameux r/place de \gls{reddit}. Cette variante sera nommée \gls{beeplace} afin de s'aligner avec le nom de l'écosystème \gls{beescreens}.
-Cette application, comme le r/place original, a comme but de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs, ceux-ci devront attendre un certain délai entre chaque pose de pixel. Ce délai a également pour but de minimiser les dégâts causés par des utilisateurs malveillants qui pourraient vouloir détruire les \oe{}uvres des autres utilisateurs ou dessiner des images inappropriées.
+Cette application, comme le r/place original, a comme objectif de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs, ceux-ci devront attendre un certain délai entre chaque pose de pixel. Ce délai a également pour visée de minimiser les dégâts causés par des utilisateurs malveillants qui pourraient vouloir détruire les \oe{}uvres des autres utilisateurs ou dessiner des images inappropriées.
 
-En plus de l'application en elle-même, des critères non-fonctionnels sont à prendre en compte. Tout d'abord, il est nécessaire d'assurer la montée en charge de l'application afin de supporter des possibles hausses de fréquentation, notamment le soir du festival. Ce critère sera vérifié grâce à des tests prévus pour. De plus, il est important d'assurer l'intégration continue de l'application au sein de l'écosystème \gls{beescreens}. En effet, l'application \gls{beeplace} fera partie intégrante de l'écosystème existant et devra donc être correctement intégrée afin de pouvoir être facilement utilisée dans le futur. Pour finir, l'application doit être agréable d'utilisation sur téléphone car les utilisateurs du festival utiliseront principalement ce moyen pour interagir avec l'application.
+En plus de l'application en elle-même, des critères non-fonctionnels sont à prendre en compte. Tout d'abord, il est nécessaire d'assurer sa montée en charge afin qu'elle puisse supporter des possibles hausses de fréquentation, notamment le soir du festival. Ce critère sera vérifié grâce à des tests prévus à cet effet. De plus, il est important d'assurer l'intégration continue de l'application au sein de l'écosystème \gls{beescreens}. En effet, \gls{beeplace} fera partie intégrante de l'écosystème existant et devra donc être correctement intégrée afin de pouvoir être facilement utilisée dans le futur. Pour finir, l'application doit être agréable d'utilisation sur téléphone car les utilisateurs du festival utiliseront principalement ce moyen d'interaction.
 
 \subsection{Fonctionnalités}
 
@@ -62,7 +62,7 @@ Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonc
 \subsubsection{Fonctionnalités \guillemotleft essential\guillemotright}
 
 \begin{itemize}
-  \item Il doit être possible de passer la toile dans un mode “lecture uniquement” par un administrateur pour tous les utilisateurs.
+  \item Il doit être possible, pour un administrateur, de passer la toile dans un mode “lecture uniquement” pour tous les utilisateurs.
   \item Créer des tests de montée en charge de l'application afin d'assurer un bon fonctionnement lors des festivals notamment.
   \item Afin d'éviter que les utilisateurs puissent recharger la page pour recevoir à nouveau des pixels, trouver un moyen de les identifier.
   \item Les coordonnées du pixel sélectionné par l'utilisateur lui sont affichées ainsi que son niveau de zoom.
@@ -79,14 +79,14 @@ Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonc
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
   \item Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
   \item Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
-  \item Un mode “affichage”, permettant d'afficher régulièrement un code QR pour rejoindre la toile virtuelle. En plus de ce code QR, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'enlèverait automatiquement dès qu'un utilisateur est actif sur l'application.
+  \item Développer un mode “affichage”, permettant d'afficher régulièrement un code QR pour rejoindre la toile virtuelle. En plus de ce code QR, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'enlèverait automatiquement dès qu'un utilisateur est actif sur l'application.
   \item Ajouter la possibilité de sauvegarder le dessin.
   \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
 \end{itemize}
 
 \subsection{Calendrier}
 
-Le projet est séparé en différentes milestones, les dates celles-ci sont adaptées en fonction des événements clés du semestre, comme les délais de rendu ainsi que le festival Baleinev en lui-même.
+Le projet est séparé en différentes milestones, les dates de celles-ci sont adaptées en fonction des événements clés du semestre, comme les délais de rendu ainsi que le festival Baleinev 2023 en lui-même.
 
 \subsubsection{Milestone 1 - semaine du 20 au 26 mars}
 
@@ -107,7 +107,7 @@ Le projet est séparé en différentes milestones, les dates celles-ci sont adap
 
 \begin{enumerate}
   \item Rédaction du rapport intermédiaire
-  \item Utilisation d'outils de tests de montées en charges afin d'identifier les problèmes du code actuel
+  \item Utilisation d'outils de tests de montée en charge afin d'identifier les problèmes du code actuel
 \end{enumerate}
 
 \subsubsection{Milestone 4 - semaine du 12 au 18 juin}
@@ -125,7 +125,7 @@ Le projet est séparé en différentes milestones, les dates celles-ci sont adap
   \item Implémentation de fonctionnalités “nice-to-have”
 \end{enumerate}
 
-Le travail se termine le jeudi 27 juillet avec la remise du rapport et des autres livrables indiqués plus haut. La défense du travail aura lieu dans les semaines qui suivent.
+Le travail se termine le jeudi 27 juillet avec la remise du rapport et des autres livrables indiqués ci-dessous. La défense du travail aura lieu dans les semaines qui suivent.
 
 \subsection{Livrables}
 

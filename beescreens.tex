@@ -182,7 +182,7 @@ Par la suite, un fichier \texttt{package.json} est nécessaire par dossier. Ces 
 
 La structure des fichiers \texttt{package.json} est basée sur celle suggérée par les mainteneurs \gls{beescreens}~\cite{aboutpnpmbeescreens}. De nombreuses clés sont omises pour l'instant comme les technologies ne sont pas encore définies. La structure actuelle est visible dans le listing~\ref{listing:beeplace-backend-package-json}.
 
-\begin{listing}[h]
+\begin{listing}[H]
   \inputminted[tabsize=4, linenos]{json}{assets/figures/package.json}
   \caption{package.json initial du backend l'application BeePlace}
   \label{listing:beeplace-backend-package-json}
@@ -196,10 +196,9 @@ Un dossier ainsi qu'un fichier \texttt{package.json} peuvent être créés dans 
 
 Afin de prévenir \gls{pnpm} qu'une nouvelle application a été ajoutée à la workspace, il faut modifier le fichier \texttt{pnpm-workspace.yaml} présent à la racine du répertoire en ajoutant les chemins vers les deux applications créées précédemment.
 
-
 Grâce à cela, il est possible de lancer les tests précédemment créés en filtrant sur les applications souhaitées afin d'observer les résultats affichés dans le terminal.
 
-\begin{listing}[h]
+\begin{listing}[H]
   \begin{minted}{bash}
   pnpm \
     --filter @beescreens/beeplace-backend \
