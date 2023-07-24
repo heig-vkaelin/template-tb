@@ -2,11 +2,11 @@ Comme expliqué plusieurs fois précédemment, assurer la scalabilité de l'appl
 
 \section{Tests de montée en charge}
 
-Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de simuler de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication WebSocket, qui s'occupe de toute la synchronisation des données entres les utilisateurs. Aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par WebSocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
+Afin de simuler un nombre important de festivaliers, il est nécessaire de mettre en place un outil permettant de reproduire de réels utilisateurs. Dans la plupart des cas, ce type de test se contente de réaliser un nombre conséquent de requêtes HTTP sur l'application afin de vérifier diverses métriques. Dans le cas de \gls{beeplace}, il ne s'agirait pas d'une solution très intéressante. En effet, l'obstacle majeur à la scalabilité de l'application est la communication WebSocket, qui s'occupe de toute la synchronisation des données entre les utilisateurs. Aucun appel HTTP n'est réalisé par le client vers le serveur, toute l'information transite par WebSocket. Aussi bien l'état initial du canvas que la pose d'un pixel ou encore la réception des pixels des autres utilisateurs. Il faut donc avoir cet aspect bien à l'esprit lors du choix de l'outil de test.
 
 \subsection{Déploiement de l'application}
 
-Afin de tester les limites de l'application sans affecter la version en production, l'application est déployée sur une seconde machine virtuelle à l'adresse suivante \href{https://dev-place.beescreens.ch}{dev-place.beescreens.ch}. Les spécifications de cette machine virtuelle sont les suivantes:
+Afin de tester les limites de l'application sans affecter la version en production, elle est déployée sur une seconde machine virtuelle à l'adresse suivante \href{https://dev-place.beescreens.ch}{dev-place.beescreens.ch}. Les spécifications de cette machine virtuelle sont les suivantes:
 
 \begin{itemize}
   \item CPU 4 c\oe{}urs Intel(R) Xeon(R) CPU E5-2697 v4 @ 2.30GHz
@@ -16,7 +16,7 @@ Afin de tester les limites de l'application sans affecter la version en producti
 
 Ces spécifications sont quasiment identiques à celles de la machine virtuelle utilisée pour la version en production. La version en production dispose juste de 8 Go de RAM au lieu de 4 Go. Grâce à cela, il est possible de tester l'application dans des conditions similaires à la version en production.
 
-\gls{beeplace} est déployé sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \texttt{deployment/beeplace} du répertoire Git.
+\gls{beeplace} est déployée sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \texttt{deployment/beeplace} du répertoire Git.
 
 \subsection{Choix de l'outil}
 
@@ -44,8 +44,8 @@ Le test d'exemple \ref{listing:artillery} génère 1000 utilisateurs en une minu
 Cette solution très simple à mettre en place semble idéale. Cependant, un nombre important de problèmes est survenu:
 
 \begin{itemize}
-  \item Le script lance parfois une erreur \texttt{Error: Callback was already called.} qui stope l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
-  \item Artillery ne permet pas de tester facilement la communication du serveur vers les clients. En effet, l'outil est plus adapté à la communication client-serveur. Ce qui est problématique afin de récupérer par exemple la configuration du canvas ou encore les pixels des autres utilisateurs.
+  \item Le script lance parfois une erreur \texttt{Error: Callback was already called.} qui stoppe l'exécution du test. Plusieurs personnes semblent avoir le même problème sur \gls{github}~\cite{artillery-callback-issue} mais aucune solution n'a encore été trouvée. Utiliser un outil qui n'est pas stable n'est pas envisageable.
+  \item Artillery ne permet pas de tester facilement la communication du serveur vers les clients. En effet, l'outil est plus adapté à la communication client-serveur, ce qui est problématique afin de récupérer par exemple la configuration du canvas ou encore les pixels des autres utilisateurs.
   \item Artillery ne met pas à disposition des métriques très utiles dans ses résultats concernant les WebSockets ou Socket.IO. En effet, il n'est pas possible de récupérer la latence de la connexion WebSocket, qui est l'indicateur le plus important dans le cas de \gls{beeplace}. Artillery met à disposition une métrique \texttt{socketio.response\_time} qui pourrait être intéressante mais malheureusement celle-ci ne dépasse pas les quatre millisecondes, même lorsque l'application n'arrive plus à répondre, ce qui est très peu réaliste.
 \end{itemize}
 
@@ -55,7 +55,7 @@ Ces raisons ont poussé à abandonner Artillery et à chercher une autre solutio
 
 k6~\cite{k6} est un outil de test de performance open-source écrit en Go. Il fait partie des outils de test de montée en charge les plus populaires avec plus de 20'000 stars sur \gls{github} et est utilisé par de nombreuses entreprises comme Amazon, Microsoft ou encore \gls{gitlab}. Son avantage principal dans le cas de \gls{beeplace} est que les tests s'écrivent en JavaScript (ou en TypeScript), ce qui permet encore une fois de garder une base de code commune avec le reste des applications.
 
-k6 gère les WebSockets grâce au module expérimental \texttt{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme discuté précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6~\cite{k6-socket-io-issue}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \texttt{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
+k6 gère les WebSockets grâce au module expérimental \texttt{k6/experimental/websockets}~\cite{k6-websockets}. Celui-ci implémente l'API WebSocket du navigateur, ce qui permet d'écrire le même code qu'habituellement. Cependant, comme évoqué précédemment, Socket.IO utilise son propre protocole au-dessus des WebSockets, ce qui n'est pas pris en charge nativement par le module k6~\cite{k6-socket-io-issue}. Heureusement, un développeur a mis à disposition sur \gls{github} une implémentation de Socket.IO pour k6~\cite{k6-socket-io}. Celle-ci propose une classe \texttt{K6SocketIO} permettant d'interagir bien plus facilement avec notre serveur Socket.IO.
 
 Cette implémentation initiale n'est pas la plus aisée mais une fois mise en place, l'écriture des tests est assez concise et k6 met à disposition de nombreuses métriques lors des résultats des tests. La plus intéressante dans le cas de \gls{beeplace} est la latence de la connexion WebSocket comme discuté précédemment. Celle-ci est disponible via la métrique \texttt{ws\_connecting} de k6. Il est possible de vérifier que la valeur de cette métrique ne dépasse pas un certain seuil en utilisant la configuration présentée dans le listing \ref{listing:k6-thresholds}.
 
@@ -155,7 +155,7 @@ Le listing \ref{listing:k6-breakpoint-test-2} présente les options du test. Le 
 
 Le \texttt{threshold} défini permet d'arrêter le test lorsque le temps de chargement est jugé trop conséquent pour une utilisation fluide de l'application. Dans cet exemple, le test s'arrête si le temps de connexion WebSocket dépasse \textbf{1200 millisecondes} pour \textbf{95\%} des utilisateurs virtuels.
 
-Ces nombres sont choisis de la manière suivante: plusieurs valeurs sont mises à disposition par k6 pour les différentes métriques des résultats: \texttt{avg}, \texttt{med}, \texttt{min}, \texttt{max}, \texttt{p(90)} et \texttt{p(95)}. Ces valeurs correspondent respectivement à la moyenne, la médiane, la valeur minimale, la valeur maximale, la valeur du percentile 90 et la valeur du percentile 95. Le percentile 95 indique par exemple la valeur pour laquelle 95\% des utilisateurs virtuels se trouvent trouvent en dessous. Utiliser le percentile 95 permet de ne pas prendre en compte les valeurs extrêmes qui pourraient être dues à des problèmes de réseau par exemple tout en ayant une valeur représentative de la majorité des utilisateurs virtuels.
+Ces nombres sont choisis de la manière suivante: plusieurs valeurs sont mises à disposition par k6 pour les différentes métriques des résultats: \texttt{avg}, \texttt{med}, \texttt{min}, \texttt{max}, \texttt{p(90)} et \texttt{p(95)}. Ces valeurs correspondent respectivement à la moyenne, la médiane, la valeur minimale, la valeur maximale, la valeur du percentile 90 et la valeur du percentile 95. Le percentile 95 indique par exemple la valeur pour laquelle 95\% des utilisateurs virtuels se trouvent en dessous. Utiliser le percentile 95 permet de ne pas prendre en compte les valeurs extrêmes qui pourraient être dues à des problèmes de réseau par exemple, tout en ayant une valeur représentative de la majorité des utilisateurs virtuels.
 
 Concernant la valeur choisie pour la latence de la connexion WebSocket, elle se base sur les bonnes pratiques du web. Un article~\cite{how-fast-should-a-website-load-in-2023} indique que le chargement d'un site, d'autant plus sur mobile, devrait idéalement se faire en une à deux secondes. La valeur de 1200 millisecondes est donc choisie pour être dans la partie basse de cette intervalle afin d'avoir une certaine marge. En effet, il faut également prendre en compte que la latence est calculée uniquement sur la connexion WebSocket avec le backend. Pour un utilisateur réel, il faudrait également ajouter le délai du chargement du frontend de l'application.
 
@@ -165,7 +165,7 @@ Concernant la valeur choisie pour la latence de la connexion WebSocket, elle se 
   \label{listing:k6-breakpoint-test-3}
 \end{listing}
 
-Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel en ajoutant une charge sur le frontend. Il se connecte ensuite à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessiné est comptabilisé afin de l'afficher dans les résultats du test.
+Finalement, le listing \ref{listing:k6-breakpoint-test-3} présente le comportement des utilisateurs virtuels. Chaque utilisateur virtuel fait une requête sur le frontend de l'application afin de simuler plus authentiquement un utilisateur réel en ajoutant une charge sur le frontend. Il se connecte ensuite à l'endpoint WebSocket et récupère le canvas actuel ainsi que les options de configuration. Il pose ensuite le nombre de pixels maximum (3 dans cet exemple) sur le canvas de manière aléatoire. Pour finir, il attend 30 secondes avant de se déconnecter afin de simuler la réception des pixels dessinés par les autres utilisateurs. Le nombre de pixels dessinés est comptabilisé afin de l'afficher dans les résultats du test.
 
 Poser des pixels de position et de couleur aléatoires permet d'obtenir de jolis résultats visuellement comme affiché sur la figure \ref{fig:load-test-result}.
 
@@ -178,7 +178,7 @@ Poser des pixels de position et de couleur aléatoires permet d'obtenir de jolis
 
 \subsection{Résultats initiaux}
 
-Les résultats des tests k6 contiennent de nombreuses métriques intéressantes. Les comparaisons vont se baser sur un échantillon d'entre elles mais un exemple complet est disponible au lien en note de bas de page \footnote{\url{https://github.com/heig-vkaelin/template-tb/blob/main/assets/external/k6-result.txt}}.
+Les résultats des tests k6 contiennent de nombreuses métriques intéressantes. Les comparaisons vont se baser sur un échantillon d'entre elles mais un exemple complet est disponible avec le lien en note de bas de page \footnote{\url{https://github.com/heig-vkaelin/template-tb/blob/main/assets/external/k6-result.txt}}.
 
 Les métriques utilisées pour pouvoir vérifier par la suite si les optimisations sont efficaces sont les suivantes:
 
@@ -212,7 +212,7 @@ Le test a été lancé 10 fois afin de prévenir les éventuelles erreurs de mes
   \label{table:k6-initial-results}
 \end{table}
 
-La médiane sera préférée à la moyenne pour les futurs comparaisons car elle est moins sensible aux valeurs extrêmes. Même si les valeurs des 10 itérations du test sont relativement proches dans ce cas-ci.
+La médiane sera préférée à la moyenne pour les futures comparaisons car elle est moins sensible aux valeurs extrêmes. Même si les valeurs des 10 itérations du test sont relativement proches dans ce cas-ci.
 
 Pour conclure, avec la version initiale de \gls{beeplace}, le test est exécuté pendant environ \textbf{23 secondes} en créant \textbf{702 utilisateurs virtuels} qui dessinent au total \textbf{1374 pixels}.
 
@@ -236,7 +236,7 @@ Le problème de cette technique est qu'elle n'est pas supportée par tous les sy
 
 \subsubsection{Pyroscope}
 
-Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilise facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les dix secondes.
+Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilisable facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les dix secondes.
 
 Malheureusement, le dashboard proposé n'est pas le plus intuitif, il ne met pas à disposition de nombreux filtres et cela rend l'analyse des résultats difficile.
 
@@ -283,7 +283,7 @@ Une fois les optimisations effectuées et testées en local, il est possible de 
   \label{fig:flame1-overview}
 \end{figure}
 
-A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interpretable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \texttt{writevGeneric}, \texttt{onwrite} ou \texttt{flush}.
+A la fin du test de montée en charge, l'analyse réalisée par Clinic.js avec son graphique en flammes visible sur la figure \ref{fig:flame1-overview} n'est pas facilement interprétable. En effet, initialement les fonctions ne sont pas filtrées. Le graphique affiche donc les fonctions venant du code Node.js ainsi que des dépendances en plus du code propre au projet. Il est tout de même possible de voir que la plupart des fonction affichées concernent l'écriture de données dans le cadre des WebSockets avec des fonctions comme \texttt{writevGeneric}, \texttt{onwrite} ou \texttt{flush}.
 
 En filtrant pour garder uniquement le code du projet, car il s'agit du code qu'il est possible d'optimiser, le graphique devient plus lisible comme le montre la figure \ref{fig:flame1-filtered}.
 
@@ -316,7 +316,7 @@ Il faudra donc dans un premier temps se concentrer sur la fonction \texttt{addPi
   \item Broadcast du pixel
 \end{enumerate}
 
-Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \texttt{addPixel} et d'afficher à nouveau les fonctions des dépendances comme montre la figure \ref{fig:flame1-addPixel}.
+Afin de vérifier quelle partie doit être optimisée en priorité, il est possible de se concentrer sur la fonction \texttt{addPixel} et d'afficher à nouveau les fonctions des dépendances comme le montre la figure \ref{fig:flame1-addPixel}.
 
 \subsubsection{Fonction addPixel}
 
@@ -338,15 +338,15 @@ La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un
 
 \subsection{Mise en place}
 
-Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créés avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env}.
+Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créées avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env}.
 
-Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ce qui permet de limiter les différences de résultats entre les tests dues à des facteurs externes.
+Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ceci permet de limiter les différences de résultats entre les tests dues à des facteurs externes.
 
 \subsection{Optimisation du broadcast}
 
 Afin d'optimiser la fonction \texttt{addPixel} vue précédemment, il est possible de revoir la manière d'envoyer le pixel aux autres utilisateurs connectés.
 
-Pour l'instant, le pixel dessiné par l'utilisateur est transmis immédiatement à tous les autres utilisateurs connectés par le serveur. Ce qui résulte en un nombre de messages WebSockets envoyés très important. L'idée d'optimisation est de regrouper les pixels dessinés par l'utilisateur dans un intervalle de temps donné et de les envoyer en un seul message WebSockets.
+Pour l'instant, le pixel dessiné par l'utilisateur est transmis immédiatement à tous les autres utilisateurs connectés par le serveur. Ce qui engendre un nombre de messages WebSockets envoyés très important. L'idée d'optimisation est de regrouper les pixels dessinés par l'utilisateur dans un intervalle de temps donné et de les envoyer en un seul message WebSockets.
 
 \subsubsection{Implémentation}
 
@@ -358,11 +358,11 @@ Toute la logique est implémentée dans la classe \texttt{BoardGateway}, qui s'o
   \label{listing:opti-interval}
 \end{listing}
 
-Au démarrage de l'application, un intervalle JavaScript est créé et est stocké dans le \texttt{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \texttt{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \texttt{BOARD\_REFRESH\_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
+Au démarrage de l'application, un intervalle JavaScript est créé et stocké dans le \texttt{scheduler registry} de Nest afin d'éviter de le stocker directement dans la classe courante. L'intervalle appelle la fonction \texttt{broadcastBoardUpdates} qui s'occupe d'envoyer les pixels dessinés à tous les utilisateurs. Le délai entre chaque rafraîchissement est configurable via la variable d'environnement \texttt{BOARD\_REFRESH\_RATE}. La valeur choisie pour la suite des tests est de 100 millisecondes, comme la version initiale du r/place de \gls{reddit}. Une valeur aussi faible permet d'avoir une expérience utilisateur fluide.
 
 Une Map est utilisée pour stocker les différents pixels dessinés au cours de l'intervalle. Chaque clé de la Map correspond à sa position sur le canvas. Cette implémentation permet de garder uniquement le dernier pixel dessiné à une position donnée. Ainsi, si plusieurs utilisateurs dessinent un pixel à la même position pendant le court intervalle, seul le dernier pixel dessiné sera envoyé aux autres utilisateurs.
 
-Avant d'envoyer la mise-à-jour aux autres utilisateurs, une vérification est effectuée pour savoir si des pixels ont été dessinés pendant l'intervalle. Si ce n'est pas le cas l'envoi du message est annulé. Cela permet d'éviter d'envoyer de nombreux messages inutiles aux utilisateurs. Cette vérification permet de se rapprocher du comportement initial de l'application qui envoyait une mise-à-jour quand un pixel était dessiné. La seule modification potentiellement perceptible est l'ajout des 100 millisecondes de délai.
+Avant d'envoyer la mise à jour aux autres utilisateurs, une vérification est effectuée pour savoir si des pixels ont été dessinés pendant l'intervalle. Si ce n'est pas le cas, l'envoi du message est annulé. Cela permet d'éviter d'envoyer de nombreux messages inutiles aux utilisateurs. Cette vérification permet de se rapprocher du comportement initial de l'application qui envoyait une mise à jour quand un pixel était dessiné. La seule modification potentiellement perceptible est l'ajout des 100 millisecondes de délai.
 
 \subsubsection{Résultats}
 
@@ -504,7 +504,7 @@ Dans la suite des tableaux et des graphiques, la version non optimisée sera not
 
 Pour conclure, l'optimisation avec l'intervalle est très effective. Cette nouvelle version supporte la montée en charge pendant \textbf{54.82\%} de temps en plus. Le nombre d'utilisateurs virtuels supportés est augmenté de \textbf{141.67\%} et le nombre de pixels dessinés est augmenté de \textbf{202.70\%}.
 
-Le nombre d'utilisateurs supportés avant que le temps de réponse devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si toutes les personnes présentes à Baleinev se connectent en même temps.
+Le nombre d'utilisateurs supportés avant que le temps de réponse ne devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si toutes les personnes présentes à Baleinev se connectent en même temps.
 
 Cependant, il est intéressant de vérifier si d'autres optimisations ne pourraient pas être également implémentées et utiles. Un nouveau profiling avec Clinic.js est donc effectué sur cette version.
 
@@ -517,11 +517,11 @@ Cependant, il est intéressant de vérifier si d'autres optimisations ne pourrai
   \label{fig:flame2-filtered}
 \end{figure}
 
-En regardant le graphique en flamme de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant uniquement de broadcast les pixels aux utilisateurs, à savoir \texttt{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
+En regardant le graphique en flammes de la version optimisée, il est possible de voir que la majorité du temps d'exécution est toujours occupé par la fonction s'occupant uniquement de broadcast les pixels aux utilisateurs, à savoir \texttt{broadcastBoardUpdates}. Il est donc intéressant de rester dans le domaine de l'optimisation de la communication WebSocket par la suite.
 
 \subsection{Format des données}
 
-Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'objets JSON transformé automatiquement par Socket.IO en chaîne de caractères. Chaque objet contient les coordonnées du pixel ainsi que sa couleur. Les clés sont répétées pour chaque pixel ce qui augmente la taille du message comme le montre le listing \ref{listing:pixels-initial-json-format}.
+Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'objets JSON transformé automatiquement par Socket.IO en chaîne de caractères. Chaque objet contient les coordonnées du pixel ainsi que sa couleur. Les clés sont répétées pour chaque pixel, ce qui augmente la taille du message comme le montre le listing \ref{listing:pixels-initial-json-format}.
 
 \begin{listing}[H]
   \begin{minted}[linenos]{json}
@@ -537,7 +537,7 @@ Actuellement, les pixels sont envoyés sous la forme classique d'un tableau d'ob
 
 \subsubsection{Format binaire}
 
-La solution la plus optimale de réduire la taille des messages envoyés et de transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnés plus grandes que les 255 autorisés sur 1 octet). Un tableau \texttt{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
+La solution la plus optimale de réduire la taille des messages envoyés consiste à transformer le tableau de pixels dans un format binaire. En effet, chaque pixel est représenté par 3 entiers stockés sur au minimum 2 octets chacun (afin de pouvoir avoir des coordonnées plus grandes que les 255 autorisées sur 1 octet). Un tableau \texttt{Uint16Array} est donc utilisé pour stocker les pixels (16 bits = 2 octets) comme le montre le listing \ref{listing:opti-binary}.
 
 \begin{listing}[H]
   \inputminted[highlightlines={9}, linenos]{ts}{assets/figures/opti-binary.ts}
@@ -545,7 +545,7 @@ La solution la plus optimale de réduire la taille des messages envoyés et de t
   \label{listing:opti-binary}
 \end{listing}
 
-Du côté du client, il suffit simplement de lire le tableau 3 valeurs à la fois pour obtenir les pixels individuellement pour les afficher.
+Du côté du client, il suffit simplement de lire les valeurs trois par trois dans le tableau pour obtenir les pixels individuellement pour les afficher.
 
 Une comparaison rapide de la taille gagnée est réalisable facilement. Les deux pixels précédents sont utilisés comme exemple. Tous les caractères utilisés sont des caractères ASCII, ils utilisent donc 1 octet chacun.
 
@@ -579,7 +579,7 @@ Malheureusement, ces résultats ne sont pas très concluants. En effet, la versi
 
 \subsubsection{Format string}
 
-Pour ne pas avoir ce souci de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractère en utilisant la fonction \texttt{toString} comme le montre le listing \ref{listing:opti-string}.
+Pour ne pas avoir ce souci de deux paquets par message, une seconde tentative d'optimisation est réalisée en utilisant une chaîne de caractère plus optimisée que le format JSON. L'idée est de créer le même tableau que précédemment mais de le transformer en chaîne de caractères en utilisant la fonction \texttt{toString} comme le montre le listing \ref{listing:opti-string}.
 
 \begin{listing}[H]
   \inputminted[highlightlines={5,6}, linenos]{ts}{assets/figures/opti-string.ts}
@@ -614,17 +614,17 @@ La version avec la string optimisée est \textbf{3 fois} plus légère que la ve
   \label{table:third-opti-results}
 \end{table}
 
-Les résultats de cette dernière version sont quasiment équivalents à la meilleure version, celle utilisant simplement le format JSON. Il faut prendre en compte que le test vérifie principalement si le backend de l'application tient toujours la route. Ajouter de la complexité pour transformer le format des pixels résulte donc dans une perte de performance sur le test réalisé. Cependant, cela ne veut pas dire que cette optimisation n'est pas efficace. En effet, le test ne prend pas en compte le temps de transfert des données. L'utilisateur final pourrait donc avoir une meilleure expérience avec cette version ou du moins utiliser moins de bande passante.
+Les résultats de cette dernière version sont quasiment équivalents à la meilleure version, celle utilisant simplement le format JSON. Il faut prendre en compte que le test vérifie principalement si le backend de l'application tient toujours la route. Ajouter de la complexité pour transformer le format des pixels entraîne donc une perte de performance sur le test réalisé. Cependant, cela ne veut pas dire que cette optimisation n'est pas efficace. En effet, le test ne prend pas en compte le temps de transfert des données. L'utilisateur final pourrait donc avoir une meilleure expérience avec cette version ou du moins utiliser moins de bande passante.
 
 La dernière version avec la chaîne de caractères optimisée est donc utilisée pour la suite du projet. Il s'agit d'un bon compromis entre la version initiale très verbeuse en JSON et la version binaire qui est moyennement compatible avec le parseur de base de Socket.IO.
 
 \subsection{Taille de la toile}
 
-Un élément qui n'a pas encore été abordé est la taille de la toile de dessin. En effet, pour les tests précédents celle-ci était fixée à 64x64 pixels, soit la taille choisie pour le Baleinev Festival 2023. Cette taille était bien adaptée car l'application ne disposait pas encore de mode display et l'affichage n'était donc pas partagé entre plusieurs écrans. Lors des prochaines éditions, il faut partir du principe que l'application sera utilisée sur des écrans plus grands où la résolution de la toile pourra être plus importante.
+Un élément qui n'a pas encore été abordé est la taille de la toile de dessin. En effet, pour les tests précédents, celle-ci était fixée à 64x64 pixels, soit la taille choisie pour le Baleinev Festival 2023. Cette taille était bien adaptée car l'application ne disposait pas encore de mode display et l'affichage n'était donc pas partagé entre plusieurs écrans. Lors des prochaines éditions, il faut partir du principe que l'application sera utilisée sur des écrans plus grands où la résolution de la toile pourra être plus importante.
 
 \subsubsection{Version initiale}
 
-Des tests ont donc été réalisés avec une toile de 256x256 pixels, soit 16 fois plus grand que l'initiale. Les résultats sont présentés dans le tableau \ref{table:canvas-size-results}.
+Des tests ont donc été réalisés avec une toile de 256x256 pixels, soit 16 fois plus grande que l'initiale. Les résultats sont présentés dans le tableau \ref{table:canvas-size-results}.
 
 \begin{table}[H]
   \centering
@@ -638,7 +638,7 @@ Des tests ont donc été réalisés avec une toile de 256x256 pixels, soit 16 fo
   \label{table:canvas-size-results}
 \end{table}
 
-Les résultats sont clairs, les performances chutent d'environ \textbf{32\%} pour le nombre d'utilisateurs et de pixels dessinés. Cela est dû au fait que le tableau contenant toutes les couleurs de la toile est envoyé à chaque client lors de la connexion WebSocket. Ce tableau passe de 4096 éléments à 65536 éléments, soit d'environ 4Kb à 64Kb, ce qui n'est pas négligeable. Cependant, la conclusion avait été faites grâce aux tests précédents que la taille des messages WebSocket envoyés n'avait pas ou peu d'impact sur les performances. Un nouveau profiling à l'aide de Clinic.js est donc nécessaire.
+Les résultats sont clairs, les performances chutent d'environ \textbf{32\%} pour le nombre d'utilisateurs et de pixels dessinés. Cela est dû au fait que le tableau contenant toutes les couleurs de la toile est envoyé à chaque client lors de la connexion WebSocket. Ce tableau passe de 4096 éléments à 65536 éléments, soit d'environ 4Kb à 64Kb, ce qui n'est pas négligeable. Cependant, la conclusion avait été faite grâce aux tests précédents que la taille des messages WebSocket envoyés n'avait pas ou peu d'impact sur les performances. Un nouveau profiling à l'aide de Clinic.js est donc nécessaire.
 
 % Source des 2 img: file:///Users/valentin/code/beescreens/apps/beeplace/backend/.clinic/41133.clinic-flame.html
 
@@ -682,7 +682,7 @@ En mettant l'accent sur cette fonction \texttt{getBoard} dans la figure \ref{fig
   \label{listing:opti-storage-1}
 \end{listing}
 
-Le tableau des couleurs de la toile, appelé \texttt{board}, est maintenant stocké en mémoire dans l'application comme attribut de la classe \texttt{BoardGateway} comme le montre le listing \ref{listing:opti-storage-1}. Il est récupéré dans le Bitfield Redis au lancement de l'application dans la méthode \texttt{onModuleInit}. La subtilité a été qu'il est nécessaire d'attendre que le BitField soit bien initialisé par le \texttt{BoardService} avant de le récupérer. Pour ce faire, la méthode \texttt{setupBoard} du service est appelée avant la récupération du tableau.
+Le tableau des couleurs de la toile, appelé \texttt{board}, est maintenant stocké en mémoire dans l'application comme attribut de la classe \texttt{BoardGateway} comme le montre le listing \ref{listing:opti-storage-1}. Il est récupéré dans le Bitfield Redis au lancement de l'application dans la méthode \texttt{onModuleInit}. La subtilité réside dans le fait qu'il est nécessaire d'attendre que le BitField soit bien initialisé par le \texttt{BoardService} avant de le récupérer. Pour ce faire, la méthode \texttt{setupBoard} du service est appelée avant la récupération du tableau.
 
 \begin{listing}[H]
   \inputminted[highlightlines={9,21},linenos]{ts}{assets/figures/opti-storage-2.ts}
@@ -692,7 +692,7 @@ Le tableau des couleurs de la toile, appelé \texttt{board}, est maintenant stoc
 
 Par la suite, le tableau en mémoire, \texttt{board}, est envoyé aux utilisateurs se connectant à l'application dans la méthode \texttt{join} afin de pouvoir être affiché. Pour que le tableau soit toujours à jour, son contenu est actualisé en même temps que le Bitfield Redis dans la méthode \texttt{adPixel} lorsqu'un utilisateur pose un nouveau pixel sur la toile.
 
-Il est maintenant possible de relancer les tests de montées en charge pour s'assurer que les performances sont meilleures.
+Il est maintenant possible de relancer les tests de montée en charge pour s'assurer que les performances sont meilleures.
 
 \begin{table}[H]
   \centering
@@ -708,7 +708,7 @@ Il est maintenant possible de relancer les tests de montées en charge pour s'as
   \label{table:canvas-size-results-optimized}
 \end{table}
 
-Comme le montre la table \ref{table:canvas-size-results-optimized}, les performances entre les deux versions sont quasiment équivalentes lorsque la taille de la toile est de 64x64 pixels. Ce qui était attendu car les soucis de performances apparaissaient avec une taille plus élevée. Pour la toile de 256x256 pixels, soit 16 fois plus grande, les performances sont bien meilleures avec la nouvelle version optimisée. Ils sont environ 37\% plus rapides que la version précédente et seulement 7\% plus lents que les résultats avec la petite toile de 64x64. Les conclusions de cette optimisation sont donc positives et celle-ci est conservée.
+Comme le montre la table \ref{table:canvas-size-results-optimized}, les performances entre les deux versions sont quasiment équivalentes lorsque la taille de la toile est de 64x64 pixels. Ce résultat était attendu car les soucis de performances apparaissaient avec une taille plus élevée. Pour la toile de 256x256 pixels, soit 16 fois plus grande, les performances sont bien meilleures avec la nouvelle version optimisée. Ils sont environ 37\% plus rapides que la version précédente et seulement 7\% plus lents que les résultats avec la petite toile de 64x64. Les conclusions de cette optimisation sont donc positives et celle-ci est conservée.
 
 Il aurait également pu être possible d'envoyer directement la chaîne de caractères du Bitfield Redis aux utilisateurs et de laisser le client la convertir en tableau. Cependant, cela aurait demandé au frontend de connaître l'encodage utilisé du côté du backend, ce qui impacte l'évolutivité de la solution.
 
@@ -752,14 +752,14 @@ Il est donc nécessaire de trouver un bon équilibre entre les deux valeurs suiv
   \item Le délai entre deux rafraîchissements.
 \end{itemize}
 
-Heureusement, grâce à toute la mise en place réalisée pour les tests de montées en charge, il est maintenant aisé et rapide de tester différentes configurations et de trouver le bon compromis pour la situation donnée.
+Heureusement, grâce à toute la mise en place réalisée pour les tests de montée en charge, il est maintenant aisé et rapide de tester différentes configurations et de trouver le bon compromis pour la situation donnée.
 
 \subsubsection{Tests plus réalistes}
 
-Pour conclure, il aurait été intéressant de pouvoir tester les différentes versions avec des tests de montées en charge qui simulent mieux des utilisateurs en utilisant des navigateurs headless (sans interface graphique). En effet, cela aurait permis d'avoir une vision plus réaliste des temps de communication et pas uniquement du point de vue du backend. Malheureusement, les problèmes de ces tests avec navigateur sont les suivants:
+Pour conclure, il aurait été intéressant de pouvoir tester les différentes versions avec des tests de montée en charge qui simulent mieux des utilisateurs en utilisant des navigateurs headless (sans interface graphique). En effet, cela aurait permis d'avoir une vision plus réaliste des temps de communication et pas uniquement du point de vue du backend. Malheureusement, les problèmes de ces tests avec navigateurs sont les suivants:
 
 \begin{itemize}
-  \item Il est difficile de créer une charge réaliste, un ordinateur, même puissant, de pourra pas lancer plus de quelques dizaines voir centaines de navigateurs en simultané
+  \item Il est difficile de créer une charge réaliste, un ordinateur, même puissant, ne pourra pas lancer plus de quelques dizaines, voire centaines de navigateurs en simultané
   \item La version de k6 permettant d'utiliser un navigateur headless~\cite{k6-browser} est vraiment expérimentale est peu stable. Il n'a d'ailleurs pas été possible de la faire fonctionner.
 \end{itemize}
 

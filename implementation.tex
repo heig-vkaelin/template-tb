@@ -16,7 +16,7 @@ Voici tout d'abord quelques figures présentant l'interface sur ordinateur ainsi
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{./assets/figures/screenshot-app-v2-2.png}
+  \includegraphics[width=0.9\textwidth]{./assets/figures/screenshot-app-v2-2.png}
   \caption{Interface de BeePlace sur ordinateur lorsque l'utilisateur clique sur un pixel}
   \label{fig:screenshot-app-2}
 \end{figure}
@@ -41,7 +41,7 @@ Deux choix sont possibles pour dessiner les pixels sur le canvas:
   \item Représenter un pixel comme un carré de plusieurs pixels du canvas.
 \end{enumerate}
 
-La deuxième variante permet d'avoir directement une représentation de meilleure résolution de la toile. En effet, si la toile a par exemple des dimensions de 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affiché à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour connaître les coordonnées réelles du clique de l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété transform en CSS~\cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering~\cite{image-renderingcss} avec comme valeur \texttt{pixelated}. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
+La deuxième variante permet d'avoir directement une représentation de meilleure résolution de la toile. En effet, si la toile a par exemple des dimensions de 64 pixels de largeur, l'utilisateur ne doit pas avoir un canvas de 64 pixels affiché à l'écran, ce qui serait trop petit et illisible. Cependant, représenter un pixel par plusieurs pixels sur le canvas pose problème lorsque l'utilisateur clique sur le canvas pour placer un pixel. En effet, cela demanderait plus de calculs pour connaître les coordonnées réelles du clic de l'utilisateur. La première variante a donc été choisie. Afin de ne pas avoir un canvas trop petit, il est possible de zoomer sur l'élément via la propriété \texttt{transform} en CSS~\cite{transformcss}. De base, cela rendrait l'image floue mais il est possible de changer ce comportement en utilisant l'attribut image-rendering~\cite{image-renderingcss} avec comme valeur \texttt{pixelated}. Comme notre toile est remplie de pixels, cela permet d'avoir un rendu parfaitement net.
 
 \subsection{PinchZoom}
 
@@ -57,7 +57,7 @@ Adapter le code en fonction de la nature de l'événement devient vite compliqu�
 
 \subsubsection{React-zoom-pan-pinch}
 
-Le librairie la plus connue se nomme React-zoom-pan-pinch~\cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en \gls{typescript} et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du PinchZoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clique. C'est pourquoi cette librairie n'a pas été retenue.
+Le librairie la plus connue se nomme React-zoom-pan-pinch~\cite{react-zoom-pan-pinch}. Celle-ci propose un code assez léger, entièrement en \gls{typescript} et sans dépendance externe. Le problème survient lorsque l'utilisateur doit interagir avec l'élément à l'intérieur du PinchZoom, dans ce cas-ci le canvas. En effet, en plus de pouvoir déplacer et zoomer sur le canvas, l'utilisateur doit pouvoir cliquer sur celui-ci pour placer un pixel. Cependant, la librairie ne permet pas de le faire nativement et un comportement très étrange de translation en dehors de l'écran se produit lors d'un clic. C'est pourquoi cette librairie n'a pas été retenue.
 
 \subsubsection{React-quick-pinch-zoom}
 
@@ -65,16 +65,16 @@ Cette seconde librairie, react-quick-pinch-zoom~\cite{react-quick-pinch-zoom} es
 
 \subsubsection{React-fast-pinch-zoom}
 
-Heureusement, le même auteur que la seconde librairie a développé une autre version appelée react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome~\cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre librairie de la même équipe Google Chrome, PointerTracker~\cite{pointer-tracker}. L'avantage de cette librairie est qu'elle utilise la notion de Pointer events~\cite{pointer-events} qui, contrairement aux anciens événements d'interaction, ne partent pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
+Heureusement, l'auteur de la seconde librairie a également développé une autre version appelée react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}. Celle-ci se base cette fois-ci sur une librairie de PinchZoom réalisée par l'équipe de Google Chrome~\cite{pinch-zoom-googlechromelabs}. Celle librairie repose elle-même sur une autre librairie de la même équipe Google Chrome, PointerTracker~\cite{pointer-tracker}. L'avantage est qu'elle utilise la notion de Pointer events~\cite{pointer-events} qui, contrairement aux anciens événements d'interaction, ne part pas du principe que l'utilisateur utilise une souris. En effet, ces Pointer events sont utilisés pour tous les appareils, que ce soit une souris, un écran tactile ou un pavé tactile.
 
-Malheureusement la librairie, react-fast-pinch-zoom~\cite{react-fast-pinch-zoom}, est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes "We recommend defining components as functions instead of classes."~\cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
+Malheureusement, react-fast-pinch-zoom~\cite{react-fast-pinch-zoom} est écrite dans une ancienne manière de faire du React nommée Class component. L'équipe React elle-même recommande d'utiliser des composants en fonction plutôt que des classes: "We recommend defining components as functions instead of classes."~\cite{react-class-component}. C'est pour cette raison que le code de la librairie a été copié dans le projet et adapté pour être utilisé avec des composants en fonction.
 
 \subsection{Gestion du state}
 
 L'application React doit garder en tout temps un état à jour. Cet état comporte plusieurs éléments:
 
 \begin{itemize}
-  \item Les réglages initiaux de la toile comme sa taille, les couleurs disponibles, le temps d'attente entre chaque pixel, etc;
+  \item Les réglages initiaux de la toile, comme sa taille, les couleurs disponibles, le temps d'attente entre chaque pixel, etc;
   \item Le nombre de pixels posés par l'utilisateur dans l'intervalle de temps;
   \item Le moment où l'utilisateur pourra à nouveau placer un pixel.
 \end{itemize}
@@ -112,7 +112,7 @@ C'est pourquoi il est préférable d'utiliser une librairie externe comme Zustan
 \subsection{Mode affichage}
 \label{display-mode}
 
-Comme discuté rapidement dans le chapitre \ref{poc}, Proof of concept, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir être projetée sur les tours de l'école. Ce mode est implémenté en deux parties:
+Comme discuté rapidement dans le chapitre \ref{poc}, Proof of concept, il est nécessaire de pouvoir diviser l'affichage de l'application sur plusieurs écrans afin de pouvoir le projeter sur les tours de l'école. Ce mode est implémenté en deux parties:
 
 \begin{itemize}
   \item Une page permettant de configurer les détails du mode affichage;
@@ -130,7 +130,7 @@ La configuration est disponible à l'adresse \texttt{/displays} comme la figure 
   \item Le nombre d'écrans en hauteur.
 \end{itemize}
 
-Tous ces paramètres ont des valeurs par défaut configurée dans des variables d'environnement. Lorsque l'utilisateur en modifie un, la valeur est stockée dans le local storage du navigateur. Ainsi, la prochaine fois que l'utilisateur accède à la page de configuration, les valeurs sont déjà pré-remplies. L'interface de droite est mise à jour en temps réel afin de montrer à l'utilisateur à quoi ressemblera l'affichage.
+Tous ces paramètres ont des valeurs par défaut configurées dans des variables d'environnement. Lorsque l'utilisateur modifie un paramètre, la valeur est stockée dans le local storage du navigateur. Ainsi, la prochaine fois que l'utilisateur accède à la page de configuration, les valeurs sont déjà pré-remplies. L'interface de droite est mise à jour en temps réel afin de montrer à l'utilisateur à quoi ressemblera l'affichage.
 
 L'utilisateur peut ensuite cliquer sur l'écran qu'il souhaite afficher et il sera redirigé vers la bonne page d'affichage.
 
@@ -153,7 +153,7 @@ Une fois le lien cliqué, l'utilisateur est redirigé vers une page d'affichage 
   \item \texttt{r}: Le nombre d'écrans en hauteur (nombre de lignes).
 \end{itemize}
 
-La page s'occupe d'ensuite calculer la position et la dimensions de la toile afin de maximiser la taille de celle-ci. En effet, comme la toile est forcément carrée mais que les écrans sont souvent rectangulaires, il est nécessaire de calculer la plus grande taille possible pour la toile. La toile est donc centrée sur les écrans comme la figure \ref{fig:display-mode-example} le montre avec un exemple contenant six écrans.
+La page s'occupe ensuite de calculer la position et la dimensions de la toile afin de maximiser la taille de celle-ci. En effet, comme la toile est forcément carrée mais que les écrans sont souvent rectangulaires, il est nécessaire de calculer la plus grande taille possible pour la toile. La toile est donc centrée sur les écrans comme la figure \ref{fig:display-mode-example} le montre avec un exemple contenant six écrans.
 
 Si l'utilisateur accède à la page \texttt{/display} sans paramètre, l'application se contente d'afficher la toile la plus grande possible pour l'écran actuel. Cela permet d'afficher l'application sur un seul écran très facilement, sans avoir à passer par l'étape de configuration.
 
@@ -166,14 +166,14 @@ L'affichage est le même que sur l'application normale, la seule différence ét
   \label{fig:display-mode-example}
 \end{figure}
 
-Dans le futur, il serait intéressant de pouvoir définir une taille de toile rectangulaire afin d'utiliser au mieux l'espace disponible sur les écrans. Comme cela n'était pas prévu dans le cahier des charges initial et qu'il faudrait modifier passablement l'application, cette fonctionnalité a été mise de côté pour après la fin du travail de Bachelor.
+Dans le futur, il serait intéressant de pouvoir définir une taille de toile rectangulaire afin d'utiliser au mieux l'espace disponible sur les écrans. Comme cela n'était pas prévu dans le cahier des charges initial et qu'il faudrait modifier passablement l'application, cette fonctionnalité a été mise de côté et sera développée après la fin du travail de Bachelor.
 
 \subsection{Identification des utilisateurs}
 La bonne identification des utilisateurs est un point crucial de l'application. En effet, il est nécessaire de pouvoir vérifier que les utilisateurs attendent bien le temps nécessaire avant de pouvoir placer un nouveau pixel. Pouvoir contourner cette règle casserait complètement le but principal de l'application qui est de faire collaborer les utilisateurs.
 
-Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas souhaitable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir l'utiliser.
+Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas souhaitable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir s'en servir.
 
-Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées "fingerprint"~\cite{devicefingerprint}. Cela a pour but d'empêcher aux utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur par exemple. Cette méthode d'authentification se déroule quasiment uniquement dans le navigateur de l'utilisateur, du côté frontend. C'est la raison pour laquelle la phase d'identification est traitée dans cette section.
+Identifier les utilisateurs sans véritable authentification n'est pas trivial. L'idée est d'utiliser les empreintes digitales des joueurs, plus souvent appelées "fingerprint"~\cite{devicefingerprint}. Cela a pour but d'empêcher les utilisateurs de contourner la règle du temps d'attente en rafraîchissant la page, en utilisant une navigation privée ou en changeant de navigateur par exemple. Cette méthode d'authentification se déroule quasiment uniquement dans le navigateur de l'utilisateur, du côté frontend. C'est la raison pour laquelle la phase d'identification est traitée dans cette section.
 
 \subsubsection{Fingerprint}
 
@@ -181,7 +181,7 @@ Cette technique consiste à récupérer des informations sur le navigateur de l'
 
 Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS~\cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
 
-La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs potables étaient du même modèle. De plus, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable
+La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs portables étaient du même modèle. De plus, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable
 
 \subsubsection{FingerprintJS}
 Le choix se tourne donc finalement vers FingerprintJS~\cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\%~\cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
@@ -195,13 +195,13 @@ Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, un ex
   \item Les informations sur la machine physique comme la résolution d'écran, le nombre de c\oe{}urs, la mémoire vive, etc.
 \end{itemize}
 
-En plus de toutes ces caractérisées, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
+En plus de toutes ces caractéristiques, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
 
-Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions concerne littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouté la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival. A noter qu'avec la version payante, les appels à l'API de FingerprintJS sont limités à 5 par seconde~\cite{fingerprintjs-limits}, ce qui n'est pas du tout conséquent. La version payante n'est donc pas forcément la meilleure solution pour les événements à grande échelle.
+Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions concerne littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouter la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival. A noter qu'avec la version payante, les appels à l'API de FingerprintJS sont limités à 5 par seconde~\cite{fingerprintjs-limits}, ce qui n'est pas du tout conséquent. La version payante n'est donc pas forcément la meilleure solution pour les événements à grande échelle.
 
 \subsubsection{Conclusion}
 
-L'application actuelle avec la version gratuite de FingerPrintJS est fonctionnelle mais il est compliqué de savoir si les collisions d'identifiants sont fréquentes. Ce qui rend la situation peu idéale. De plus, des utilisateurs mal intentionnés pourraient utiliser des techniques pour envoyer une empreinte différente à chaque requête assez facilement afin de dessiner sans délai. Bloquer ce genre de comportement est difficile car il est impensable de limiter les requêtes par adresse IP. En effet, la majorité des étudiants sur le réseau de l'école partageraient la même adresse IP et ne pourraient donc pas dessiner en même temps. La solution serait d'ajouter une connexion avec un réseau social comme Google pour limiter les abus mais la perte en fluidité d'utilisation est conséquente. Cette question non triviale a été bien réfléchie est pourrait être donnée comme sujet d'un futur travail de Bachelor.
+L'application actuelle avec la version gratuite de FingerPrintJS est fonctionnelle mais il est compliqué de savoir si les collisions d'identifiants sont fréquentes, ce qui rend la situation peu idéale. De plus, des utilisateurs mal intentionnés pourraient utiliser des techniques pour envoyer une empreinte différente à chaque requête assez facilement afin de dessiner sans délai. Bloquer ce genre de comportement est difficile car il est impensable de limiter les requêtes par adresse IP. En effet, la majorité des étudiants sur le réseau de l'école partageraient la même adresse IP et ne pourraient donc pas dessiner en même temps. La solution serait d'ajouter une connexion avec un réseau social comme Google pour limiter les abus mais la perte en fluidité d'utilisation serait conséquente. Cette question non triviale a été bien réfléchie et pourrait être donnée comme sujet d'un futur travail de Bachelor.
 
 \section{Backend}
 
@@ -233,7 +233,7 @@ MAX_PIXELS=3
   \label{listing:env-variables}
 \end{listing}
 
-En plus des variables présentées, d'autres plus classiques sont utilisées pour la connexion avec Redis ou choisir le port sur lequel tourne l'application par exemple.
+En plus des variables présentées, d'autres plus classiques sont utilisées pour la connexion avec Redis ou alors pour choisir le port sur lequel tourne l'application par exemple.
 
 \subsubsection{Validation des variables d'environnement}
 
@@ -246,7 +246,7 @@ Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} 
 
 \fig[H, width=0.9\textwidth]{Diagramme de séquence de la connexion WebSockets}{sequence-websockets-connection.svg}
 
-Comme démontré dans la figure \ref{sequence-websockets-connection.svg}, le frontend initialise la connexion WebSocket avec le backend. Il génère ensuite son identifiant unique, sa fingerprint, et l'envoie à l'aide de l'événement \texttt{JOIN} au backend. Le backend stocke ensuite cet identifiant dans le Socket utilisé pour la connexion avec ce client pour que le client n'ait pas besoin de l'envoyer à chaque nouvelle requête. Le backend répond ensuite au frontend en lui envoyant la configuration de la toile, son état initial, les couleurs disponibles, etc. Il envoie également le potentiel temps d'attente actuel de l'utilisateur avant de pouvoir reposer un pixel.
+Comme démontré dans la figure \ref{sequence-websockets-connection.svg}, le frontend initialise la connexion WebSocket avec le backend. Il génère ensuite son identifiant unique, sa fingerprint, et l'envoie à l'aide de l'événement \texttt{JOIN} au backend. Le backend stocke ensuite cet identifiant dans le Socket utilisé pour la connexion avec ce client pour qu'il n'ait pas besoin de l'envoyer à chaque nouvelle requête. Le backend répond ensuite au frontend en lui envoyant la configuration de la toile, son état initial, les couleurs disponibles, etc. Il envoie également le potentiel temps d'attente actuel de l'utilisateur avant de pouvoir reposer un pixel.
 
 Une fois cet état initial reçu et stocké du côté du frontend, la toile est affichée. Le client peut ensuite envoyer des événements pour poser des pixels et le serveur enverra lui des événements pour notifier le client de changements sur la toile réalisés par d'autres utilisateurs comme démontré dans la figure \ref{sequence-websockets-pixels.svg}.
 
@@ -254,23 +254,23 @@ Une fois cet état initial reçu et stocké du côté du frontend, la toile est 
 
 \fig[H, width=0.8\textwidth]{Diagramme de séquence de la pose d'un pixel}{sequence-websockets-pixels.svg}
 
-Le déroulement de la pose d'un pixel est assez intuitif. Le client qui pose le pixel envoie un événement \texttt{PIXEL\_FROM\_PLAYER} au serveur avec les coordonnées et la couleur du pixel. Le serveur vérifie que l'utilisateur est autorisé à réaliser cette action avant de stocker le nouveau pixel comme la prochaine section \ref{section:stockage} l'explique. Le serveur envoie ensuite s'il y a eu des modifications un événement \texttt{UPDATE\_BOARD} chaque 100 millisecondes à tous les clients connectés pour qu'ils mettent à jour leur toile avec les nouveaux pixels.
+Le déroulement de la pose d'un pixel est assez intuitif. Le client qui pose le pixel envoie un événement \texttt{PIXEL\_FROM\_PLAYER} au serveur avec les coordonnées et la couleur du pixel. Le serveur vérifie que l'utilisateur est autorisé à réaliser cette action avant de stocker le nouveau pixel comme la prochaine section \ref{section:stockage} l'explique. Le serveur envoie ensuite, s'il y a eu des modifications, un événement \texttt{UPDATE\_BOARD} chaque 100 millisecondes à tous les clients connectés pour qu'ils mettent à jour leur toile avec les nouveaux pixels.
 
-La subtilité se trouve dans le fait que le client qui a placé le pixel va en réalité le dessiner deux fois sur le canvas: immédiatement lors de son clique sur le bouton "Place" ainsi qu'à la réception de l'événement \texttt{UPDATE\_BOARD}. Cela permet d'avoir un retour instantané pour l'utilisateur qui a posé le pixel, sans devoir prendre en compte une potentielle latence du serveur.
+La subtilité réside dans le fait que le client qui a placé le pixel va en réalité le dessiner deux fois sur le canvas: immédiatement lors de son clic sur le bouton "Place" ainsi qu'à la réception de l'événement \texttt{UPDATE\_BOARD}. Cela permet d'avoir un retour instantané pour l'utilisateur qui a posé le pixel, sans devoir prendre en compte une potentielle latence du serveur.
 
 \subsection{Stockage de l'état actuel de la toile}
 \label{section:stockage}
 
-Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un paterne à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donnée une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un pattern à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donné une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
-Afin de convertir la toile en une suite de bits, il est nécessaire de donner un ID à chaque couleur afin de ne pas stocker un nombre important de chaîne de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des maximum 16 disponibles avec 4 bits. Le second avantage à utiliser 8 bits et qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
+Afin de convertir la toile en une suite de bits, il est nécessaire de donner un ID à chaque couleur afin de ne pas stocker un nombre important de chaînes de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des 16 disponibles au maximum avec 4 bits. Le second avantage à utiliser 8 bits est qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
 Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
 \begin{equation}
   \mathrm{offset} = (y * width + x)
 \end{equation}
 
-Pour avoir accès l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Il est ainsi possible d'avoir accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
+Pour avoir accès à l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Il est ainsi possible d'avoir accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
 
 \subsection{Stockage de l'historique}
 
@@ -285,9 +285,9 @@ Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états pa
   \item \texttt{user\_id}: identifiant de l'utilisateur ayant posé le pixel;
 \end{itemize}
 
-La valeur hexadécimal de la couleur est stockée à la place de l'identifiant de la couleur car les couleurs peuvent varier au fil du temps. Il est donc nécessaire de stocker sa valeur à la pose du pixel pour avoir un historique correct.
+La valeur hexadécimale de la couleur est stockée à la place de l'identifiant de la couleur car les couleurs peuvent varier au fil du temps. Il est donc nécessaire de stocker sa valeur à la pose du pixel pour avoir un historique correct.
 
-Initialement, un booléen \texttt{is\_admin} permettait de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non. Il a été jugé inutile, en effet il suffit d'utiliser un identifiant comme \texttt{"ADMIN"} dans le champ \texttt{user\_id} pour identifier les actions de modération à la place d'une FingerPrint.
+Initialement, un booléen \texttt{is\_admin} permettait de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non. Il a été jugé inutile. En effet, il suffit d'utiliser un identifiant comme \texttt{"ADMIN"} dans le champ \texttt{user\_id} pour identifier les actions de modération à la place d'une FingerPrint.
 
 \subsection{Gestion de la durée d'attente entre la pose de pixels}
 
@@ -322,7 +322,7 @@ Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en lign
   \label{listing:http-call-reset-board}
 \end{listing}
 
-Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP comme le montre le listing \ref{listing:admin-methods-auth}.
+Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP, comme le montre le listing \ref{listing:admin-methods-auth}.
 
 \begin{listing}[h]
   \begin{minted}[breaklines, highlightlines={2}, linenos]{typescript}
@@ -341,7 +341,7 @@ async reset() {
   \label{listing:admin-methods-auth}
 \end{listing}
 
-La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité et de censurer rapidement les \oe{}uvres inappropriées.
+La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité est de censurer rapidement les \oe{}uvres inappropriées.
 
 \subsubsection{Censurer une partie de la toile}
 
@@ -388,17 +388,17 @@ De plus, utiliser la méthode \texttt{createMany} de Prisma permet d'effectuer u
 
 \subsubsection{Mode lecture seule}
 
-La dernière action disponible pour les administrateurs est la possibilité de passer la toile en mode lecture seule. Cette option peut être intéressante si le comportement des utilisateurs devient trop problématique en fin de soirée par exemple. Cela permet de ne pas perdre les \oe{}uvres déjà réalisées.
+La dernière action disponible pour les administrateurs est la possibilité de passer la toile en mode lecture seule. Cette option peut être intéressante si le comportement des utilisateurs devient trop problématique, en fin de soirée par exemple. Cela permet de ne pas perdre les \oe{}uvres déjà réalisées.
 
-L'implémentation côté backend est simple. Il s'agit d'un attribut booléen stocké dans l'instance de la classe \texttt{BoardGateway}. Lorsque celui-ci est à \texttt{true}, la méthode \texttt{addPixel} ne fait rien. A chaque fois que ce booléen est modifié, sa nouvelle valeur est envoyé à tous les utilisateurs via WebSocket.
+L'implémentation côté backend est simple. Il s'agit d'un attribut booléen stocké dans l'instance de la classe \texttt{BoardGateway}. Lorsque celui-ci est à \texttt{true}, la méthode \texttt{addPixel} ne fait rien. A chaque fois que ce booléen est modifié, sa nouvelle valeur est envoyée à tous les utilisateurs via WebSocket.
 
-L'interface de l'utilisateur se met à jour directement à la réception de la nouvelle valeur. Si la toile est en lecture seule, l'application affiche la version de la toile normalement utilisée dans le mode affichage discuté dans la section \ref{display-mode}. Cela permet d'empêcher facilement aux utilisateurs de modifier la toile en enlever simplement l'interface de pose de pixel.
+L'interface de l'utilisateur se met à jour directement à la réception de la nouvelle valeur. Si la toile est en lecture seule, l'application affiche la version de la toile normalement utilisée dans le mode affichage discuté dans la section \ref{display-mode}. Cela permet d'empêcher facilement les utilisateurs de modifier la toile en enlevant simplement l'interface de pose de pixel.
 
 De plus, un message indiquant aux utilisateurs que la toile se trouve en lecture seule est affiché afin de les informer de la situation. Cela permet d'éviter de la frustration s'ils pensent que l'application ne fonctionne pas correctement.
 
 \section{Package}
 
-Afin d'éviter la duplication de code lorsque celui-ci est utilisé à la fois du côté du frontend ainsi que du backend, il est nécessaire de trouver un moyen de partager du code entre les deux applications. Les deux applications utilisent TypeScript, ce qui rend la tâche plus simple. Cependant, de nombreuses façons de faire sont disponibles et il est nécessaire de choisir la plus adaptée à ce cas d'utilisation.
+Afin d'éviter la duplication de code lorsque celui-ci est utilisé à la fois du côté du frontend ainsi que du backend, il est nécessaire de trouver un moyen de partager du code entre les deux applications. Les deux applications utilisent TypeScript, ce qui rend la tâche plus simple. Cependant, de nombreuses façons de faire sont disponibles et il est nécessaire de choisir la plus adaptée à ce genre d'utilisation.
 
 \subsection{Solutions d'implémentation possibles}
 
@@ -408,7 +408,7 @@ Comme le monorepo utilise \gls{pnpm}, il est possible de créer un package et d'
 
 \subsubsection{Project References}
 
-Les Project References~\cite{project-references} sont une fonctionnalité TypeScript qui correspondent parfaitement aux besoin du projet d'un point de vue théorique. En ajoutant au fichier de configuration TypeScript (\texttt{tsconfig.json}) de l'application une référence vers le package, le compilateur va automatiquement compiler le package avant de compiler l'application. Mais le problème est le suivant: cette fonctionnalité n'est disponible que sur le compilateur officiel de Typescript, tsc~\cite{tsc} en utilisant le flag \texttt{---build}. Malheureusement, aussi bien Next.js que Nest.js utilisent des compilateurs TypeScript personnalisés qui ne supportent pas cette fonctionnalité~\cite{nest-tsc-build-option}. Il n'est donc pas possible d'utiliser cette fonctionnalité sans devoir réaliser des solutions maisons peu maintenables ou élégantes.
+Les Project References~\cite{project-references} consistent en une fonctionnalité TypeScript qui correspond parfaitement aux besoin du projet d'un point de vue théorique. En ajoutant au fichier de configuration TypeScript (\texttt{tsconfig.json}) de l'application une référence vers le package, le compilateur va automatiquement compiler le package avant de compiler l'application. Mais le problème est le suivant: cette fonctionnalité n'est disponible que sur le compilateur officiel de Typescript, tsc~\cite{tsc} en utilisant le flag \texttt{---build}. Malheureusement, aussi bien Next.js que Nest.js utilisent des compilateurs TypeScript personnalisés qui ne supportent pas cette fonctionnalité~\cite{nest-tsc-build-option}. Il n'est donc pas possible d'utiliser cette fonctionnalité sans devoir réaliser des solutions maisons peu maintenables ou élégantes.
 
 \subsubsection{Internal Package}
 
@@ -432,7 +432,7 @@ Le blog de Turbo~\cite{you-might-not-need-typescript-project-references}, un out
   \label{listing:internal-package-json}
 \end{listing}
 
-Cette solution est idéale car très facile à mettre en place. Cependant, il est nécessaire que les applications qui consument le package transpilent le code TypeScript. En effet, le code TypeScript ne peut pas être exécuté directement une fois importé, il doit être transpilé avec le reste de l'application. Next.js permet cette option en ajoutant le package à transpiler dans la configuration du framework comme le montre le listing \ref{listing:next-transpile-package}.
+Cette solution est idéale car très facile à mettre en place. Cependant, il est nécessaire que les applications qui utilisent le package transpilent le code TypeScript. En effet, ce dernier ne peut pas être exécuté directement une fois importé, il doit être transpilé avec le reste de l'application. Next.js permet cette option en ajoutant le package à transpiler dans la configuration du framework comme le montre le listing \ref{listing:next-transpile-package}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{javascript}
@@ -450,7 +450,7 @@ Malheureusement, ce n'est pas le cas de Nest.js. Nest n'a pas de compilateur dé
 
 \subsubsection{Path alias}
 
-Une autre solution est d'importer directement dans l'application souhaitée le code TypeScript du package. Bien entendu, les chemins relatifs seraient assez peu agréables et maintenables. Heureusement, TypeScript propose de créer des Path alias dans le fichier de configuration \texttt{tsconfig.json}.
+Une autre solution consiste à importer directement dans l'application souhaitée le code TypeScript du package. Bien entendu, les chemins relatifs seraient assez peu agréables et maintenables. Heureusement, TypeScript propose de créer des Path alias dans le fichier de configuration \texttt{tsconfig.json}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{json}
@@ -481,7 +481,7 @@ Cependant, une subtilité apparaît pour faire fonctionner cette solution. Il fa
   \label{listing:next-external-dir}
 \end{listing}
 
-Du côté de Nest, le package est automatiquement transpilé et ajouté au dossier de build \texttt{.nest}. Cependant, cela change la hiérarchie des dossiers une fois build et il faut donc préciser à Nest quel fichier exécuter au lancement de l'application. Cette configuration se fait facilement dans le fichier \texttt{nest-cli.json}.
+Du côté de Nest, le package est automatiquement transpilé et ajouté au dossier de build \texttt{.nest}. Toutefois, cela change la hiérarchie des dossiers une fois build et il faut donc préciser à Nest quel fichier exécuter au lancement de l'application. Cette configuration se fait facilement dans le fichier \texttt{nest-cli.json}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{json}
@@ -497,7 +497,7 @@ Du côté de Nest, le package est automatiquement transpilé et ajouté au dossi
 
 \subsubsection{Solution choisie}
 
-Le choix s'est donc finalement tourné vers les path alias. En dehors des quelques subtilités à connaître, cette solution est très simple à mettre en place et à maintenir. De plus, elle permet d'avoir une expérience de développement agréable en évitant d'avoir à build le code à chaque modification.
+Le choix s'est donc finalement porté sur les path alias. En dehors des quelques subtilités à connaître, cette solution est très simple à mettre en place et à maintenir. De plus, elle permet d'avoir une expérience de développement agréable en évitant d'avoir à build le code à chaque modification.
 
 Pour conclure, il ne s'agit plus vraiment d'un package à proprement parler mais plutôt d'un simple dossier partagé entre les deux applications. En effet, il n'est plus build indépendamment ni importé dans les fichiers \texttt{package.json} des applications respectives. Ces raisons ont poussé à renommer le dossier en \texttt{common} et le déplacer à côté des deux applications dans le répertoire beeplace:
 
