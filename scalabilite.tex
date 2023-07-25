@@ -14,7 +14,7 @@ Afin de tester les limites de l'application sans affecter la version en producti
   \item 50 Go de disque
 \end{itemize}
 
-Ces spécifications sont quasiment identiques à celles de la machine virtuelle utilisée pour la version en production. La version en production dispose juste de 8 Go de RAM au lieu de 4 Go. Grâce à cela, il est possible de tester l'application dans des conditions similaires à la version en production.
+Ces spécifications sont quasiment identiques à celles de la machine virtuelle utilisée pour la version en production. La version en production dispose de 8 Go de RAM au lieu de 4 Go. Grâce à cela, il est possible de tester l'application dans des conditions similaires à la version en production.
 
 \gls{beeplace} est déployée sur cette machine virtuelle à l'aide de Docker et de Docker Compose. La configuration utilisée est la même que pour la version en production. Celle-ci est disponible dans le répertoire \texttt{deployment/beeplace} du répertoire Git.
 
@@ -69,7 +69,7 @@ Cette implémentation initiale n'est pas la plus aisée mais une fois mise en pl
   \label{listing:k6-thresholds}
 \end{listing}
 
-Cet exemple de configuration permet de vérifier que 95\% des connexions WebSocket ne dépassent pas 1200 millisecondes. Si ce seuil est dépassé, le test est considéré comme un échec et s'arrête. Cela sera particulièrement utile dans la phase d'optimisation du code \ref{sec:optimisations} afin de vérifier que les changements apportés aient un impact positif sur la latence des connexions.
+Cet exemple de configuration permet de vérifier que 95\% des connexions WebSocket ne dépassent pas 1200 millisecondes. Si ce seuil est dépassé, le test est considéré comme un échec et s'arrête. Ces chiffres seront discutés plus loin lors de la création du test. Cette fonctionnalité de seuil sera particulièrement utile dans la phase d'optimisation du code \ref{sec:optimisations} afin de vérifier que les changements apportés aient un impact positif sur la latence des connexions.
 
 \subsubsection{Solution choisie}
 
@@ -91,7 +91,7 @@ Il est tout d'abord nécessaire de trouver quel type de test convient le mieux �
   \centering
   \includegraphics[width=1\textwidth]{./assets/figures/load-test-types.png}
   \begin{center}
-    \textit{Schéma de la documentation k6~\cite{k6-load-test-types}}
+    \textit{Schéma issu de la documentation k6~\cite{k6-load-test-types}}
   \end{center}
   \caption{Types de tests de montée en charge}
   \label{fig:load-test-types}
@@ -107,8 +107,6 @@ Il est tout d'abord nécessaire de trouver quel type de test convient le mieux �
 \end{itemize}
 
 Le type le plus utile dans l'état actuel de \gls{beeplace} est le \textbf{Breakpoint test}. En effet, ce type de test permet d'observer facilement si les optimisations réalisées sont efficaces. Plus la charge supportée avant que le système ne s'effondre est élevée, plus les optimisations sont utiles.
-
-Dans le futur, afin de vérifier après les optimisations réalisées que le système supporte la charge nécessaire, des \textbf{Spike tests} et des \textbf{Stress tests} seront également réalisés. Ces tests permettent de vérifier que le système ne s'effondre pas sous une charge plus élevée que la moyenne prévue, dans le cas d'un afflux soudain de festivaliers par exemple.
 
 \subsubsection{Architecture}
 
@@ -133,7 +131,7 @@ Le code est séparé en deux parties: le code générique permettant de rendre c
     \label{listing:load-tests-structure}}
 \end{listing}
 
-\subsubsection{Test avec K6}
+\subsubsection{Test avec k6}
 
 Le test utilisé est une Breakpoint test, l'implémentation a été séparée en trois parties afin de pouvoir la commenter plus facilement.
 
@@ -236,13 +234,13 @@ Le problème de cette technique est qu'elle n'est pas supportée par tous les sy
 
 \subsubsection{Pyroscope}
 
-Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même qui est derrière l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilisable facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les dix secondes.
+Pyroscope~\cite{pyroscope} est un outil de profiling également open-source développé par l'équipe Grafana Labs. Il s'agit de la même équipe qui est à l'origine de l'outil de tests de montée en charge k6 que \gls{beeplace} utilise. Pyroscope est utilisable facilement en local avec Docker et propose une intégration avec de nombreux langages de programmation, dont Node.js. Il suffit d'ajouter la dépendance et de lancer le profiling dans le code de l'application. Le code enverra par la suite les données de profiling au serveur Pyroscope toutes les dix secondes.
 
 Malheureusement, le dashboard proposé n'est pas le plus intuitif, il ne met pas à disposition de nombreux filtres et cela rend l'analyse des résultats difficile.
 
 \subsection{Clinic.js}
 
-Clinic.js~\cite{clinicjs} est une suite d'outils de profiling développé par des membres de l'équipe derrière Node.js. Il suffit d'installer le projet comme une dépendance \gls{npm} globale pour avoir accès à 4 outils différents:
+Clinic.js~\cite{clinicjs} est une suite d'outils de profiling développé par des membres de l'équipe derrière Node.js. Il suffit d'installer le projet comme une dépendance \gls{npm} globale pour avoir accès à quatre outils différents:
 
 \begin{itemize}
   \item \textbf{Doctor} permet de diagnostiquer les problèmes de performance d'une applications en identifiant les symptômes tels que des problèmes de lecture/écriture ou des problèmes de mémoire.
@@ -253,7 +251,7 @@ Clinic.js~\cite{clinicjs} est une suite d'outils de profiling développé par de
 
 Le mode le plus intéressant pour le projet \gls{beeplace} est le mode Flame. Il permet de visualiser les chemins d'exécution les plus fréquents et donc de trouver les fonctions qui prennent le plus de temps à s'exécuter. Celles-ci doivent donc être optimisées en priorité.
 
-L'utilisation de Clinic.js est plus pensée pour le local. En effet, le rapport de profiling est généré lorsque l'application Node s'arrête. Ce qui n'est pas envisageable en production. Il est donc nécessaire de tester l'optimisation en local avant de la déployer sur le serveur de production.
+Clinic.js est plus pensée pour être utilisé localement. En effet, le rapport de profiling est généré lorsque l'application Node s'arrête. Ce qui n'est pas envisageable en production. Il est donc nécessaire de tester l'optimisation en local avant de la déployer sur le serveur de production.
 
 \subsection{Solution choisie}
 
@@ -338,7 +336,7 @@ La fonction \texttt{addPixel}, appelée à chaque fois qu'un utilisateur pose un
 
 \subsection{Mise en place}
 
-Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créées avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env}.
+Pour comparer facilement les résultats des diverses optimisations, des images \gls{docker} du frontend ainsi que du backend de \gls{beeplace} sont créées avec un tag associé à l'optimisation souhaitée \footnote{\url{https://gitlab.com/beescreens/beescreens/container_registry/4113549}}. Ceci permet de pouvoir facilement changer la version de l'application qui tourne sur la machine virtuelle de test en modifiant simplement le tag de l'image dans les variables d'environnement du fichier \texttt{.env} utilisé lors du déploiement.
 
 Cette mise en place évite d'avoir un laps de temps conséquent entre l'exécution des tests sur les différentes versions. Ceci permet de limiter l'incidence de facteurs externes sur les résultats obtenus.
 
@@ -504,7 +502,7 @@ Dans la suite des tableaux et des graphiques, la version non optimisée sera not
 
 Pour conclure, l'optimisation avec l'intervalle est très effective. Cette nouvelle version supporte la montée en charge pendant \textbf{54.82\%} de temps en plus. Le nombre d'utilisateurs virtuels supportés est augmenté de \textbf{141.67\%} et le nombre de pixels dessinés est augmenté de \textbf{202.70\%}.
 
-Le nombre d'utilisateurs supportés avant que le temps de réponse ne devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si toutes les personnes présentes à Baleinev se connectent en même temps.
+Le nombre d'utilisateurs supportés avant que le temps de réponse ne devienne trop élevé (plus de 1.2 secondes) est devenu suffisant pour que l'application reste stable même si toutes les personnes présentes lors du Baleinev Festival se connectent en même temps.
 
 Cependant, il est intéressant de vérifier si d'autres optimisations ne pourraient pas être également implémentées et utiles. Un nouveau profiling avec Clinic.js est donc effectué sur cette version.
 
@@ -735,7 +733,17 @@ Le premier point était initialement limité à 1024, il a donc été passé à 
 
 Les résultats finaux sont très satisfaisants en ayant en tête les besoins et le public cible de l'application. Toutes les personnes présentes au festival pourront utiliser l'application en simultané sans problème majeur.
 
-Pour rappel, les résultats de la version finale sont environ les suivants pour une toile de 64x64 pixels:
+Pour rappel, les optimisations finalement réalisées sont les suivantes:
+
+\begin{itemize}
+  \item Optimisation du broadcast des pixels avec un intervalle de temps;
+  \item Utilisation d'un format sous forme de chaîne de caractères plus léger que le JSON pour envoyer les pixels;
+  \item Mise en cache du Bitfield Redis dans la mémoire de l'application;
+  \item Installation de dépendances optionnelles pour Socket.IO permettant d'accélérer certaines opérations;
+  \item Optimisation de la configuration du système d'exploitation Linux (nombre maximal de fichiers ouverts en simultané).
+\end{itemize}
+
+Avec cette version finale optimisée, les résultats sont les suivants pour une toile de 64x64 pixels:
 
 \begin{itemize}
   \item \textbf{Temps d'exécution} (avant d'arriver au seuil des 1.2s de latence): 29291.747 ms

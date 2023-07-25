@@ -2,7 +2,7 @@ Ce chapitre présente les technologies choisies pour le développement de l'appl
 
 \section{Language de programmation}
 
-Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre conséquent de languages différents. Cependant, concernant la partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas très pratique d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
+Il est possible de réaliser une application web comme \gls{beeplace} dans un nombre conséquent de languages différents. Cependant, concernant la partie client de l'application, toutes les possibilités finiront par la même conclusion: le code sera exécuté dans le navigateur et donc dans un environnement \gls{javascript}. En effet, \gls{javascript} est le seul langage de programmation supporté par tous les navigateurs. Il n'est donc pas idéal d'utiliser un autre langage que \gls{javascript} pour le frontend de l'application. Pour avoir une cohérence entre le frontend et le backend, il est donc possible de coder l'entièreté de l'application en ECMAScript~\cite{ecmascript}. ECMAScript est le standard sur lequel se base \gls{javascript} ou encore \gls{nodejs}~\cite{nodejs}. \gls{nodejs} quant à lui permet d'exécuter du \gls{javascript} en dehors du navigateur, ce qui permet de l'utiliser pour le backend de l'application.
 
 Utiliser \gls{javascript} pour réaliser des applications web paraît donc une évidence. Cependant, ce dernier est un langage très permissif sans option de typage. Il est donc possible de faire de nombreuses erreurs qui ne seront détectées qu'au moment de l'exécution du code. Pour éviter ce problème, il est possible, et de plus en plus courant, d'utiliser \gls{typescript}~\cite{typescript}.
 
@@ -84,14 +84,14 @@ Il existe principalement deux catégories de librairie afin de styliser des appl
 
 \begin{itemize}
   \item Les librairies avec des opinions très arrêtées et des composants prêts à être assemblés comme Bootstrap~\cite{bootstrap} ou Material UI~\cite{mui};
-  \item Les librairies facilitant l'écriture de CSS, comme Tailwind~\cite{tailwindcss} ou UnoCSS~\cite{unocss}.
+  \item Les librairies facilitant l'écriture de CSS, comme Tailwind CSS~\cite{tailwindcss} ou UnoCSS~\cite{unocss}.
 \end{itemize}
 
 La première catégorie est très adaptée pour créer une application rapidement mais la personnalisation devient plus compliquée par la suite. De plus, ces librairies sont souvent plus utiles dans le design d'applications plus classiques comme des panels d'administration qui nécessitent de nombreux composants. Dans le cas de \gls{beeplace}, l'interface utilisateur ne contient que très peu d'éléments et est donc plus adaptée à la deuxième catégorie de librairies, plus souple et personnalisable.
 
 \subsubsection{Choix final}
 
-Le choix s'est tourné vers \textbf{Tailwind} qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
+Le choix s'est tourné vers \textbf{Tailwind CSS} qui est une librairie de plus en plus populaire se basant sur le principe des utility classes. La librairie met à disposition de nombreuses classes CSS bien pensées et étudiées afin de styliser avec cohérence les éléments HTML. Cela permet notamment de ne pas découpler l'HTML du CSS afin de limiter les effets de bords et de faciliter la lecture et la modification du code.
 
 \section{Backend}
 

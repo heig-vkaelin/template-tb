@@ -169,6 +169,7 @@ L'affichage est le même que sur l'application normale, la seule différence ét
 Dans le futur, il serait intéressant de pouvoir définir une taille de toile rectangulaire afin d'utiliser au mieux l'espace disponible sur les écrans. Comme cela n'était pas prévu dans le cahier des charges initial et qu'il faudrait modifier passablement l'application, cette fonctionnalité a été mise de côté et sera développée après la fin du travail de Bachelor.
 
 \subsection{Identification des utilisateurs}
+\label{identification-utilisateurs}
 La bonne identification des utilisateurs est un point crucial de l'application. En effet, il est nécessaire de pouvoir vérifier que les utilisateurs attendent bien le temps nécessaire avant de pouvoir placer un nouveau pixel. Pouvoir contourner cette règle casserait complètement le but principal de l'application qui est de faire collaborer les utilisateurs.
 
 Ajouter une authentification classique avec un pseudonyme et un mot de passe ou même via un réseau social n'est pas souhaitable. En effet, cela ajouterait trop d'étapes à l'utilisateur avant de pouvoir placer un pixel. L'application a pour but d'être utilisée dans des milieux festifs, il faut donc que les usagers aient le moins de barrières possibles pour pouvoir s'en servir.
@@ -181,10 +182,10 @@ Cette technique consiste à récupérer des informations sur le navigateur de l'
 
 Ces méthodes demandent des algorithmes complexes et il est donc préférable d'utiliser une librairie existante. Malheureusement, le choix est limité. La librairie FingerprintJS~\cite{fingerprintjs} est la plus populaire mais possède une version propriétaire payante. L'idée de ce travail de Bachelor n'est pas de dépendre de multiples services tiers, que ce soit pour le déploiement ou pour le développement. C'est cette raison qui a poussé à chercher d'autres possibilités.
 
-La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs portables étaient du même modèle. De plus, comme annoncé lors de la réalisation du POC \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable
+La seule vraie alternative open source se nomme Broprint.js~\cite{broprintjs}. Malheureusement, après quelques tests sur un échantillon d'une dizaine de personnes, des collisions d'identifiants ont déjà eu lieu car les ordinateurs portables étaient du même modèle. De plus, comme annoncé lors de la réalisation du Proof of concept \ref{poc-ameliorations}, certains utilisateurs avaient un identifiant différent à chaque chargement de la page, ce qui n'est pas acceptable
 
 \subsubsection{FingerprintJS}
-Le choix se tourne donc finalement vers FingerprintJS~\cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième déjà mentionnée propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJs annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\%~\cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
+Le choix se tourne donc finalement vers FingerprintJS~\cite{fingerprintjs}. Il existe deux versions de la librairie, une gratuite et open source et la deuxième, déjà mentionnée, propriétaire. Ce qui permet de garder un code sans service tiers en utilisant la version open source. FingerprintJS annonce entre 40\% et 60\% de précision pour la version gratuite contrairement à la version payante qui tourne aux alentours de 99.5\%~\cite{fingerprintjsrepo}. Cette différence est due principalement au fait que la version gratuite contient uniquement du code exécuté côté client, sur le navigateur de l'utilisateur.
 
 Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, un exemple de résultat~\cite{fingerprintjs-example} est donné sur leur site. La liste est conséquente, elle contient notamment:
 
@@ -197,11 +198,11 @@ Afin d'avoir une idée des caractéristiques utilisées par FingerprintJS, un ex
 
 En plus de toutes ces caractéristiques, FingerprintJS utilise la notion de Canvas Fingerprint qui consiste à dessiner une image sur un canvas HTML5 (non affiché à l'utilisateur) et de récupérer le résultat sous forme de chaîne de caractères. Des variables comme le temps de rendu graphique sont utilisées afin de différencier chaque utilisateur.
 
-Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions concerne littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouter la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev festival. A noter qu'avec la version payante, les appels à l'API de FingerprintJS sont limités à 5 par seconde~\cite{fingerprintjs-limits}, ce qui n'est pas du tout conséquent. La version payante n'est donc pas forcément la meilleure solution pour les événements à grande échelle.
+Pour finir, l'avantage supplémentaire de FingerprintJS est que la version payante dispose d'un essai gratuit d'un mois et que la migration entre les deux versions concerne littéralement deux lignes~\cite{migratefingerprintjs}. Il suffit de changer le nom du package installé et d'ajouter la clé à notre compte FingerprintJS pour basculer sur la version payante. Il est donc envisageable d'utiliser la version gratuite en règle générale et de basculer sur la version payante lors des événements importants, comme le Baleinev Festival. A noter qu'avec la version payante, les appels à l'API de FingerprintJS sont limités à 5 par seconde~\cite{fingerprintjs-limits}, ce qui n'est pas du tout conséquent. La version payante n'est donc pas forcément la meilleure solution pour les événements à grande échelle.
 
 \subsubsection{Conclusion}
 
-L'application actuelle avec la version gratuite de FingerPrintJS est fonctionnelle mais il est compliqué de savoir si les collisions d'identifiants sont fréquentes, ce qui rend la situation peu idéale. De plus, des utilisateurs mal intentionnés pourraient utiliser des techniques pour envoyer une empreinte différente à chaque requête assez facilement afin de dessiner sans délai. Bloquer ce genre de comportement est difficile car il est impensable de limiter les requêtes par adresse IP. En effet, la majorité des étudiants sur le réseau de l'école partageraient la même adresse IP et ne pourraient donc pas dessiner en même temps. La solution serait d'ajouter une connexion avec un réseau social comme Google pour limiter les abus mais la perte en fluidité d'utilisation serait conséquente. Cette question non triviale a été bien réfléchie et pourrait être donnée comme sujet d'un futur travail de Bachelor.
+L'application actuelle avec la version gratuite de FingerprintJS est fonctionnelle mais il est compliqué de savoir si les collisions d'identifiants sont fréquentes, ce qui rend la situation peu idéale. De plus, des utilisateurs mal intentionnés pourraient utiliser des techniques pour envoyer une empreinte différente à chaque requête assez facilement afin de dessiner sans délai. Bloquer ce genre de comportement est difficile car il est impensable de limiter les requêtes par adresse IP. En effet, la majorité des étudiants sur le réseau de l'école partageraient la même adresse IP et ne pourraient donc pas dessiner en même temps. La solution serait d'ajouter une connexion avec un réseau social comme Google pour limiter les abus mais la perte en fluidité d'utilisation serait conséquente. Cette question non triviale pourrait être donnée comme sujet d'un futur travail de Bachelor.
 
 \section{Backend}
 
@@ -237,7 +238,7 @@ En plus des variables présentées, d'autres plus classiques sont utilisées pou
 
 \subsubsection{Validation des variables d'environnement}
 
-Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le répertoire git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended}~\cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, la pipeline de CI/CD ainsi qu'Husky en local ne passeront pas. Cela permet d'éviter les erreurs inutiles lorsqu'un développeur ajoute ou modifie une variable d'environnement.
+Les variables par défaut sont définies dans un fichier \texttt{.env.defaults} qui sera copié dans un fichier \texttt{.env} lors de l'installation du projet. Ce fichier \texttt{.env} est utilisé et chargé par le backend et n'est pas versionné sur le dépôt Git. En plus de ces deux fichiers, un troisième est défini appelé \texttt{.env.schema}. Ce fichier contient la liste des variables d'environnement ainsi que leur structure sous la forme d'une Regex. Ce fichier est utilisé par le package \texttt{dotenv-extended}~\cite{dotenv-extended} qui permet de valider les variables d'environnement. Si une variable d'environnement est manquante ou si sa valeur ne correspond pas à la Regex définie dans le fichier \texttt{.env.schema}, la pipeline de CI/CD ainsi que Husky en local ne passeront pas. Cela permet d'éviter les erreurs inutiles lorsqu'un développeur ajoute ou modifie une variable d'environnement.
 
 \subsection{Communication WebSockets}
 \label{section:communication-websockets}
@@ -254,23 +255,23 @@ Une fois cet état initial reçu et stocké du côté du frontend, la toile est 
 
 \fig[H, width=0.8\textwidth]{Diagramme de séquence de la pose d'un pixel}{sequence-websockets-pixels.svg}
 
-Le déroulement de la pose d'un pixel est assez intuitif. Le client qui pose le pixel envoie un événement \texttt{PIXEL\_FROM\_PLAYER} au serveur avec les coordonnées et la couleur du pixel. Le serveur vérifie que l'utilisateur est autorisé à réaliser cette action avant de stocker le nouveau pixel comme la prochaine section \ref{section:stockage} l'explique. Le serveur envoie ensuite, s'il y a eu des modifications, un événement \texttt{UPDATE\_BOARD} chaque 100 millisecondes à tous les clients connectés pour qu'ils mettent à jour leur toile avec les nouveaux pixels.
+Le déroulement de la pose d'un pixel est assez intuitif. Le client qui pose le pixel envoie un événement \texttt{PIXEL\_FROM\_PLAYER} au serveur avec les coordonnées et la couleur du pixel. Le serveur vérifie que l'utilisateur est autorisé à réaliser cette action avant de stocker le nouveau pixel comme la prochaine section \ref{section:stockage} l'explique. Le serveur envoie ensuite, s'il y a eu des modifications, un événement \texttt{UPDATE\_BOARD} chaque 100 millisecondes à tous les clients connectés pour qu'ils mettent à jour leur toile avec les nouveaux pixels. Cette manière de faire est issue de l'analyse effectuée lors des tests de montée en charge et des optimisations. Celle-ci sera discutée dans la section \ref{sec:optimisations}.
 
 La subtilité réside dans le fait que le client qui a placé le pixel va en réalité le dessiner deux fois sur le canvas: immédiatement lors de son clic sur le bouton "Place" ainsi qu'à la réception de l'événement \texttt{UPDATE\_BOARD}. Cela permet d'avoir un retour instantané pour l'utilisateur qui a posé le pixel, sans devoir prendre en compte une potentielle latence du serveur.
 
 \subsection{Stockage de l'état actuel de la toile}
 \label{section:stockage}
 
-Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un pattern à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé Redis. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé Redis et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donné une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
+Redis offre de nombreuses manières de stocker des données. La première option est de stocker chaque couleur de pixel dans une clé en utilisant les coordonnées (x, y) comme clé. Cependant, récupérer un nombre important de clés en une fois (lors du chargement initial de la toile) n'est pas efficace. En effet, il faut scanner les différentes clés en spécifiant un pattern à trouver. Il est donc préférable de stocker l'état de la toile dans une seule clé. Pour cela, il est possible d'utiliser le type de données Bitfield~\cite{bitfield} de Redis. Ce type de données permet de stocker des bits dans une clé et toutes les opérations se font en \bigO{1}. Il s'agit de la structure de données utilisée par l'équipe de \gls{reddit} dans leurs applications r/place de 2017 et 2022. Le Senior Software Engineer de \gls{reddit} Daniel Ellis a notamment donné une conférence expliquant leur utilisation de Redis lors de la RedisConf 17~\cite{redisconf}. L'implémentation qui suit est donc basée sur les informations données dans cette conférence.
 
 Afin de convertir la toile en une suite de bits, il est nécessaire de donner un ID à chaque couleur afin de ne pas stocker un nombre important de chaînes de caractères correspondant aux différentes couleurs. Pour avoir une marge concernant le nombre de couleurs disponibles, le type de chaque élément du Bitfield a été spécifié comme un entier non signé sur 8 bits. Cela permet de stocker 256 couleurs à la place des 16 disponibles au maximum avec 4 bits. Le second avantage à utiliser 8 bits est qu'il rend possible l'utilisation d'un Uint8ClampedArray~\cite{uint8clampedarray} du côté du client afin de créer une image du contenu du canvas très simplement sans avoir à faire de conversion.
 
 Pour calculer l'offset du bit à modifier en fonction de la position du pixel (x, y), il est possible d'utiliser la simple formule suivante:
-\begin{equation}
+\begin{equation*}
   \mathrm{offset} = (y * width + x)
-\end{equation}
+\end{equation*}
 
-Pour avoir accès à l'entièreté du canvas, il suffit de récupérer la clé Redis sans préciser d'offset. Il est ainsi possible d'avoir accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
+Pour avoir accès à l'entièreté du canvas, il suffit de récupérer la clé sans préciser d'offset. Il est ainsi possible d'avoir accès à un tableau d'entiers représentant les couleurs de chaque pixel de la toile.
 
 \subsection{Stockage de l'historique}
 
@@ -287,28 +288,26 @@ Comme précisé précédemment, le Bitfield Redis n'a aucune idée des états pa
 
 La valeur hexadécimale de la couleur est stockée à la place de l'identifiant de la couleur car les couleurs peuvent varier au fil du temps. Il est donc nécessaire de stocker sa valeur à la pose du pixel pour avoir un historique correct.
 
-Initialement, un booléen \texttt{is\_admin} permettait de savoir si l'utilisateur qui a posé le pixel est un administrateur ou non. Il a été jugé inutile. En effet, il suffit d'utiliser un identifiant comme \texttt{"ADMIN"} dans le champ \texttt{user\_id} pour identifier les actions de modération à la place d'une FingerPrint.
+Afin de différencier les utilisateurs des administrateurs pour de futurs statistiques, un identifiant spécial \texttt{"ADMIN"} est utilisé pour le champ \texttt{user\_id} au lieu de la fingerprint habituelle de l'utilisateur.
 
 \subsection{Gestion de la durée d'attente entre la pose de pixels}
 
-Redis est également utilisé pour vérifier que le temps d'attente entre chaque pixel est bien respecté pour chaque utilisateur. En effet, il est possible de stocker des données dans Redis avec une durée de vie, qui correspond ici au temps d'attente.
+Redis est également utilisé pour vérifier que le temps d'attente entre chaque pixel est bien respecté pour chaque utilisateur. En effet, il est possible de stocker des données dans Redis en spécifiant leur durée de vie, qui correspond ici au temps d'attente.
 
-Chaque utilisateur est stocké selon le format de clé suivant: \texttt{users:<fingerprint>}. La clé aurait simplement pu être la fingerprint de l'utilisateur mais la préfixer avec \texttt{users:} permet de pouvoir sélectionner rapidement toutes les clés des utilisateurs via un scan. Cela peut être utile pour la remise à zéro des temps d'attente ou simplement pour vider le cache sans risquer de toucher à l'état de la toile. Concernant la valeur associée à la clé, il s'agit simplement du nombre de pixels posés par l'utilisateur durant l'intervalle. S'il s'agit du premier pixel, la clé est créée et le temps d'attente démarre. Pour les pixels suivants, la valeur est incrémentée grâce aux méthodes que Redis nous offre. Si le nombre de pixels stockés est égal au nombre maximal de pixels autorisés, l'opération est simplement refusée.
+Chaque utilisateur est stocké selon le format de clé suivant: \texttt{users:<fingerprint>}. La clé aurait simplement pu être la fingerprint de l'utilisateur mais la préfixer avec \texttt{users:} permet de pouvoir sélectionner rapidement toutes les clés des utilisateurs via un scan. Cela peut être utile pour la remise à zéro des temps d'attente ou simplement pour vider le cache sans risquer de toucher à l'état de la toile. Concernant la valeur associée à la clé, il s'agit simplement du nombre de pixels posés par l'utilisateur durant l'intervalle. S'il s'agit du premier pixel, la clé est créée et le temps d'attente démarre. Pour les pixels suivants, la valeur est incrémentée grâce aux méthodes que Redis nous offre. Si le nombre de pixels stockés est égal au nombre maximal de pixels autorisés, l'opération est simplement refusée. Une fois le temps d'attente écoulé, la clé est automatiquement supprimée par Redis et l'utilisateur peut à nouveau poser un pixel.
 
 \subsection{Administration}
 \label{section:administration}
 
-Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose des centaines de manières de s'authentifier, appelées "stratégies". Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \texttt{API\_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
+Pour protéger les actions réalisables uniquement par des administrateurs, une authentification doit être mise en place. L'implémentation se base sur le module Passport~\cite{passport} qui est le standard en matière d'authentification dans le monde \gls{nodejs}. Passport propose de multiples méthodes d'authentification, appelées "stratégies". Celle choisie se nomme HeaderAPIKey~\cite{passport-headerapikey} et permet de vérifier qu'une clé d'API est présente dans les entêtes de la requête HTTP. Cette clé est ensuite comparée à la valeur stockée comme variable d'environnement \texttt{API\_KEY}. Si la clé est correcte, l'utilisateur est considéré comme authentifié et peut effectuer les actions réservées aux administrateurs.
 
 Cette stratégie d'authentification par clé d'API est choisie pour sa facilité d'implémentation. En effet, aucun stockage de session ou même dans une base de données n'est nécessaire. De plus, les besoins d'administration sont très simples pour l'instant et ne nécessitent pas plus que de simples appels HTTP.
-
-Dans les fonctionnalités "nice-to-have" du cahier du charges, il était question de réaliser un dashboard pour faciliter les tâches d'administration. Malheureusement, le temps a manqué pour implémenter cette tâche lors de ce travail de Bachelor. Ce dashboard sera donc réalisé dans le futur et les administrateurs utiliseront pour l'instant les appels HTTP.
 
 \subsubsection{Remise à zéro de la toile}
 
 Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en ligne de commande sur la route permettant de remettre à zéro la toile pour tous les utilisateurs. Lorsque la clé d'API est incorrecte ou absente, une erreur 401 est retournée nous signifiant que l'utilisateur n'est pas autorisé à effectuer cette action.
 
-\begin{listing}[h]
+\begin{listing}[H]
   \begin{minted}[breaklines]{bash}
   # Version sans clé dans l'entête ou clé incorrecte
   curl -X POST http://localhost:4000/board/reset
@@ -316,7 +315,7 @@ Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en lign
 
   # Version avec clé correcte dans l'entête
   curl -X POST http://localhost:4000/board/reset --header "apiKey: API_KEY"
-  {"status":"ok","message":"Board reset"}%
+  {"statusCode":200,"message":"Board reset"}%
 \end{minted}
   \caption{Appels HTTP pour remettre à zéro la toile}
   \label{listing:http-call-reset-board}
@@ -324,7 +323,7 @@ Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en lign
 
 Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP, comme le montre le listing \ref{listing:admin-methods-auth}.
 
-\begin{listing}[h]
+\begin{listing}[H]
   \begin{minted}[breaklines, highlightlines={2}, linenos]{typescript}
 @Post()
 @ApiKeyAuth()
@@ -341,7 +340,7 @@ async reset() {
   \label{listing:admin-methods-auth}
 \end{listing}
 
-La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSockets et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité est de censurer rapidement les \oe{}uvres inappropriées.
+La méthode \texttt{resetBoard} du BoardGateway supprime simplement la clé Redis contenant l'état complet de la toile. De plus, tous les utilisateurs connectés sur l'application sont notifiés de la remise à zéro de la toile grâce à un événement WebSocket et leur canvas est vidé. Cela permet de ne pas avoir à recharger la page pour voir la toile se vider. Ce qui n'aurait pas été pratique car le but principal de cette fonctionnalité est de censurer rapidement les \oe{}uvres inappropriées.
 
 \subsubsection{Censurer une partie de la toile}
 
@@ -349,7 +348,7 @@ Il est également possible pour les administrateurs de censurer une zone de la t
 
 Le backend va ensuite générer tous les pixels se trouvant dans la zone et les insérer dans le Bitfield Redis ainsi que dans la base de données avant d'en informer tous les utilisateurs via WebSocket. Il aurait été possible d'appeler la méthode utilisée précédemment pour stocker un pixel pour tous les pixels de la zone. Cependant, cette approche n'aurait pas été très efficace. Il est préférable de réaliser ces tâches en parallèle afin d'accélérer le processus comme le montre le listing \ref{listing:admin-reset-area}.
 
-\begin{listing}[h]
+\begin{listing}[H]
   \begin{minted}[breaklines, linenos]{ts}
   private async storePixelInBitfield(pixel: Pixel) {
     const { x, y, color } = pixel;
@@ -404,7 +403,7 @@ Afin d'éviter la duplication de code lorsque celui-ci est utilisé à la fois d
 
 \subsubsection{Vrai package npm}
 
-Comme le monorepo utilise \gls{pnpm}, il est possible de créer un package et d'ensuite le référencer dans les fichiers \texttt{package.json} des deux applications sans devoir le publier sur un registre. C'est d'ailleurs cette solution qui a été choisie pour l'application Pimp My Wall existante. Cependant, cette manière de faire nécessite de réaliser un build du package après chaque modification du code TypeScript, ce qui est loin d'être idéal en terme de productivité.
+Comme le monorepo utilise \gls{pnpm}, il est possible de créer un package et d'ensuite le référencer dans les fichiers \texttt{package.json} des deux applications sans devoir le publier sur un registre. C'est d'ailleurs cette solution qui a été choisie pour l'application Pimp My Wall existante. Cependant, cette manière de faire nécessite de compiler le package après chaque modification du code TypeScript, ce qui est loin d'être idéal en terme de productivité.
 
 \subsubsection{Project References}
 
@@ -499,7 +498,7 @@ Du côté de Nest, le package est automatiquement transpilé et ajouté au dossi
 
 Le choix s'est donc finalement porté sur les path alias. En dehors des quelques subtilités à connaître, cette solution est très simple à mettre en place et à maintenir. De plus, elle permet d'avoir une expérience de développement agréable en évitant d'avoir à build le code à chaque modification.
 
-Pour conclure, il ne s'agit plus vraiment d'un package à proprement parler mais plutôt d'un simple dossier partagé entre les deux applications. En effet, il n'est plus build indépendamment ni importé dans les fichiers \texttt{package.json} des applications respectives. Ces raisons ont poussé à renommer le dossier en \texttt{common} et le déplacer à côté des deux applications dans le répertoire beeplace:
+Pour conclure, il ne s'agit plus vraiment d'un package à proprement parler mais plutôt d'un simple dossier partagé entre les deux applications. En effet, il n'est plus build indépendamment ni importé dans les fichiers \texttt{package.json} des applications respectives. Ces raisons ont poussé à renommer le dossier en \texttt{common} et le déplacer à côté des deux applications dans le répertoire \texttt{beeplace}:
 
 \begin{listing}[H]
   \begin{tcolorbox}[arc=0mm,colback=white!5!white]

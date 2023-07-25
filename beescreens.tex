@@ -2,7 +2,7 @@
 
 Le code de tous les projets existants réalisés par l'équipe \gls{beescreens} se trouve dans un unique dépôt \gls{gitlab}~\cite{beescreens}. En effet, le dépôt est organisé sous la forme d'un monorepo. Ce qui signifie que  tous les projets sont regroupés au lieu d'avoir un dépôt par projet comme il était surtout courant auparavant. Cette pratique a émergé au début des années 2000, notamment grâce aux grands noms de la tech comme Google, Meta ou encore Airbnb. Cela facilite entre autre la collaboration entre les développeurs qui ont directement accès au code complet.
 
-Le répertoire est organisé grâce à une workspace \gls{pnpm}~\cite{pnpmworkspace} afin de gérer le fait qu'il s'agisse d'un monorepo. Un fichier de configuration est créé à la racine du répertoire en spécifiant la liste et le chemin vers tous les projets contenus dans le répertoire. Cela permet notamment d'installer les dépendances de tous les projets en une seule commande.
+Le dépôt est géré grâce à une workspace \gls{pnpm}~\cite{pnpmworkspace} afin de gérer le fait qu'il s'agisse d'un monorepo. Un fichier de configuration est créé à la racine du répertoire en spécifiant la liste et le chemin vers tous les projets contenus dans le répertoire. Cela permet notamment d'installer les dépendances de tous les projets en une seule commande.
 
 \gls{pnpm} est une version améliorée du gestionnaire de paquets par défaut présent avec \gls{nodejs}~\cite{nodejs} \gls{npm}. Il permet notamment de gérer les dépendances de manière plus efficace en utilisant des liens symboliques afin de ne pas avoir à copier les dépendances dans le dossier \texttt{node\_modules} de chaque projet. Cela donne la possibilité de gagner en temps de compilation et en espace disque. De plus, comme évoqué précédemment, \gls{pnpm} offre une gestion des monorepos plus efficace grâce à la notion de workspace.
 
@@ -76,7 +76,7 @@ Ces étapes sont exécutées à chaque nouveau commit sur une branche. De plus, 
 \subsection{Déploiement}
 \label{sec:deploiement}
 
-Aucun service tiers n'est utilisé pour le déploiement des applications. En effet, le déploiement se fait directement sur une machine virtuelle fournie par l'HEIG, à l'aide de \gls{docker} et \gls{docker-compose}. Chaque application possède son propre fichier \texttt{docker-compose.yml} dans le dossier \texttt{deployment}.
+Aucun service tiers n'est utilisé pour le déploiement des applications. En effet, le déploiement se fait directement sur une machine virtuelle fournie par la HEIG-VD, à l'aide de \gls{docker} et \gls{docker-compose}. Chaque application possède son propre fichier \texttt{docker-compose.yml} dans le dossier \texttt{deployment}.
 
 \subsubsection{Docker}
 
@@ -103,11 +103,11 @@ Chaque application dispose d'un fichier \texttt{Dockerfile} permettant de créer
   \label{listing:dockerfile-beeplace-frontend}
 \end{listing}
 
-Une fois l'image \gls{docker} créée, elle est publiée lors de l'étape \textbf{deliver} de la pipeline \gls{gitlab} sur le "Container registry"~\cite{beescreens-container-registry} du dépôt BeeScreens. Cela permet de mettre à disposition publiquement l'image pour qu'elle soit utilisée par la suite dans le fichier \texttt{docker-compose.yml}. Chaque image est publiée avec le tag \texttt{latest} si aucun nom de commit n'est spécifié.
+Une fois l'image \gls{docker} créée, elle est publiée lors de l'étape \textbf{deliver} de la pipeline \gls{gitlab} sur le "Container Registry"~\cite{beescreens-container-registry} du dépôt BeeScreens. Cela permet de mettre à disposition publiquement l'image pour qu'elle soit utilisée par la suite dans le fichier \texttt{docker-compose.yml}. Chaque image est publiée avec le tag \texttt{latest} si aucun nom de commit n'est spécifié.
 
 \subsubsection{Docker-compose}
 
-Le fichier \texttt{docker-compose.yml} de chaque application est très similaire. Il définit les différents services de l'application, comme son frontend, son backend et ses éventuelles bases de données. Des fichiers d'environnements sont importés afin de pouvoir configurer facilement les services. La ligne 11 du listing \ref{listing:docker-compose-pmw} montre que l'image \gls{docker} est bien importée du "Container registry" évoqué précédemment. Dans le cas du frontend, la version \texttt{latest} est utilisée sauf si une variable d'environnement \texttt{FRONTEND\_IMAGE\_VERSION} est définie.
+Le fichier \texttt{docker-compose.yml} de chaque application est très similaire. Il définit les différents services de l'application, comme son frontend, son backend et ses éventuelles bases de données. Des fichiers d'environnements sont importés afin de pouvoir configurer facilement les services. La ligne 11 du listing \ref{listing:docker-compose-example-app} montre que l'image \gls{docker} est bien importée du "Container Registry" évoqué précédemment. Dans le cas du frontend, la version \texttt{latest} est utilisée sauf si une variable d'environnement \texttt{FRONTEND\_IMAGE\_VERSION} est définie.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos, tabsize=2, highlightlines={11,17}]{yaml}
@@ -119,9 +119,9 @@ networks:
 
 services:
   frontend:
-    container_name: pimp-my-wall-frontend
+    container_name: app-frontend
     # {...} is replacing "beescreens/beescreens" to make URL shorter
-    image: registry.gitlab.com/{...}/pimp-my-wall-frontend:${FRONTEND_IMAGE_VERSION:-latest}
+    image: registry.gitlab.com/{...}/app-frontend:${FRONTEND_IMAGE_VERSION:-latest}
     restart: unless-stopped
     env_file:
       - common.env
@@ -129,26 +129,26 @@ services:
     networks:
       - traefik_network
     expose:
-      - 8181
+      - 4000
     labels:
       # Traefik configuration here
 
   backend:
-    container_name: pimp-my-wall-backend
+    container_name: app-backend
     # ...
 \end{minted}
-  \caption{Fichier \texttt{docker-compose.yaml} de l'application Pimp My Wall}
-  \label{listing:docker-compose-pmw}
+  \caption{Fichier \texttt{docker-compose.yaml} d'exemple d'une application \gls{javascript}}
+  \label{listing:docker-compose-example-app}
 \end{listing}
 
-La configuration de Traefik~\cite{traefik} a volontairement été omise dans le listing \ref{listing:docker-compose-pmw} afin de ne pas surcharger le code. Traefik est un reverse proxy qui permet de rediriger les requêtes HTTP vers les bons services. Il est utilisé dans le cadre de ce projet afin de pouvoir accéder aux applications depuis l'extérieur de la machine virtuelle. Pour ce faire, tous les services sont ajoutés au réseau Traefik comme le montre la ligne 17. Pour avoir un exemple concret, les requêtes vers \texttt{pmw.beescreens.ch} sont redirigées vers le port 8181 de l'application Pimp My Wall. Traefik s'occupe également des certificats afin de pouvoir utiliser le protocole HTTPS pour sécuriser les applications.
+La configuration de Traefik~\cite{traefik} a volontairement été omise dans le listing \ref{listing:docker-compose-example-app} afin de ne pas surcharger le code. Traefik est un reverse proxy qui permet de rediriger les requêtes HTTP vers les bons services. Il est utilisé dans le cadre de ce projet afin de pouvoir accéder aux applications depuis l'extérieur de la machine virtuelle. Pour ce faire, tous les services sont ajoutés au réseau Traefik comme le montre la ligne 17. Pour avoir un exemple concret, les requêtes vers \texttt{app.beescreens.ch} sont redirigées vers le port 4000 de l'application. Traefik s'occupe également des certificats afin de pouvoir utiliser le protocole HTTPS pour sécuriser les applications.
 
 \subsection{Lien avec le projet BeePlace}
 \label{sec:lien-avec-le-projet-beeplace}
 
 \gls{beeplace} est une nouvelle application indépendante des applications existantes du projet \gls{beescreens}. Cependant, comme expliqué précédemment, \gls{beescreens} étant un monorepo, l'application \gls{beeplace} doit être ajoutée au même dépôt.
 
-Le concept \gls{beeplace} se base sur les conclusions réalisées à propos de l'application existante, Pimp My Wall. La problématique est la suivante: Pimp My Wall est une application trop permissive. Les utilisateurs peuvent dessiner de manière entièrement libre sur la toile virtuelle et cela engendre des comportements inappropriés. Le public cible, les personnes présentes au Baleinev festival, est relativement jeune et l'ambiance festive de la soirée amène plus facilement à des dérives. Comme les créations des festivaliers sont affichées en temps réel sur les murs de l'école, il est nécessaire de modérer les créations des utilisateurs. Cette modération est fastidieuse, peu gratifiante et demande beaucoup de temps.
+Le concept \gls{beeplace} se base sur les conclusions réalisées à propos de l'application existante, Pimp My Wall. La problématique est la suivante: Pimp My Wall est une application trop permissive. Les utilisateurs peuvent dessiner de manière entièrement libre sur la toile virtuelle et cela engendre des comportements inappropriés. Le public cible, les personnes présentes au Baleinev Festival, est relativement jeune et l'ambiance festive de la soirée amène plus facilement à des dérives. Comme les créations des festivaliers sont affichées en temps réel sur les murs de l'école, il est nécessaire de modérer les créations des utilisateurs. Cette modération est fastidieuse, peu gratifiante et demande beaucoup de temps.
 
 Afin de pallier à ce problème, l'idée de \gls{beeplace} est née. En imposant un délai entre la pose de pixels aux utilisateurs, ceux-ci seront moins enclins à réaliser des créations inadaptées car cela leur demanderait un effort plus conséquent. Dans le cas où des débordements auraient quand même lieu, la modération pourrait remettre à zéro une zone de la toile en quelques clics. Ce qui ferait perdre énormément de temps aux usagers problématiques et les dissuaderait de recommencer.
 

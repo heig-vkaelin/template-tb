@@ -310,9 +310,7 @@
   \end{tikzpicture}
   \vspace{4cm}
   \begin{center}%
-    \reset@font
-    \sffamily
-    {\usefont{T1}{lmss}{bx}{n}\huge\selectfont\@title\\\vspace{0.5em}
+    {\textbf{\huge\selectfont\@title\\\vspace{0.5em}}
       \large{\@subtitle}\par}%
     \ifdefined\@confidential
       \vskip 5em%
@@ -388,7 +386,7 @@
 % Annexes
 \renewcommand\appendixpagename{Annexes}
 
-\renewcommand\listoflistingscaption{Liste des codes sources}
+\renewcommand\listoflistingscaption{Liste des Listings}
 \renewcommand{\nomname}{Liste des Symboles}
 
 % Headers and footers
