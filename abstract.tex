@@ -1,11 +1,14 @@
-L'association Baleinev organise depuis près de 30 ans le festival de musique Baleinev Festival sur le campus de la HEIG-VD. Depuis 2014, le festival propose un concept innovant appelé Pimp My Wall. L'idée consiste à utiliser les fenêtres de l'école comme des écrans géants pour pouvoir notamment dessiner en temps réel depuis un smartphone. Depuis, les ambitions ont été revues à la hausse avec l'idée de proposer aux festivaliers de nombreuses applications interactives différentes.
+% Contexte
+L'association Baleinev organise depuis près de 30 ans le festival de musique Baleinev Festival sur le campus de la HEIG-VD. Depuis 2014, le festival propose un concept innovant nommé Pimp My Wall, une application collaborative de dessins en temps réel sur les tours de l'école.
 
+% Problématique
 Le concept de BeePlace se base sur la conclusion que Pimp My Wall est une application trop permissive. Les utilisateurs peuvent dessiner de manière entièrement libre sur la toile virtuelle et cela engendre des comportements inappropriés.
 
+% Réalisation
 En recréant l'expérience proposée par le r/place de Reddit, l'objectif est de proposer une application web dans laquelle les utilisateurs peuvent créer des œuvres d'art collaboratives. Chaque utilisateur peut dessiner un pixel à la fois sur la toile partagée et doit attendre un certain temps avant de pouvoir dessiner à nouveau. Cela permet de forcer la collaboration et de limiter les débordements.
 
-L'application a été pensée en premier lieu pour une utilisation mobile. En effet, les festivaliers utiliseront principalement leur smartphone pour accéder à l'application lors de la soirée.
+L'application a été pensée en premier lieu pour une utilisation mobile pour les festivaliers en faisant usage de technologies telles que Next.JS, NestJS et Redis, parmi d'autres.
+Un des points principaux de ce travail en plus de la réalisation de l'application était d'assurer la montée en charge afin de garantir la fluidité de l'application en tout temps. Celle-ci a pu être réalisée grâce à k6 et Clinic.js, permettant un gain de 142\% de joueurs par rapport à la version initiale pour un total estimé de 1350 joueurs en parallèle.
 
-Un des points principaux de ce travail en plus de la réalisation de l'application est d'assurer la montée en charge. L'application doit rester fluide dans le cas où de nombreuses personnes présentes au festival la rejoignent. Il est donc nécessaire de mettre en place des tests de montée en charge afin de pouvoir déterminer les limites de l'application et d'optimiser le code afin d'avoir des résultats satisfaisants.
-
-Pour finir, le code de l'application a été pensé pour pouvoir être modifié, amélioré et étendu facilement pour s'adapter aux besoins futurs. Il ne s'agit pas d'un produit fini mais d'une base de travail pour les années à venir.
+% Perspectives
+Pour finir, cette application sera peaufinée et testée lors de la prochaine édition du Baleinev Festival afin de valider la pertinence de celle-ci pour les festivaliers et valider son comportement dans un contexte réel. L'application est d'ores et déjà accessible à l'adresse \href{https://place.beescreens.ch}{place.beescreens.ch}.
