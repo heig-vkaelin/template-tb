@@ -324,14 +324,15 @@ Le listing \ref{listing:http-call-reset-board} démontre des appels HTTP en lign
 Grâce à l'implémentation de l'authentification sous la forme d'un décorateur \gls{typescript}~\cite{typescript-decorators}, il est possible de protéger simplement les méthodes souhaitées. En effet, les décorateurs permettent d'ajouter des fonctionnalités à une méthode sans avoir à la modifier, en s'injectant directement dans le contexte de celle-ci. Par exemple, la méthode permettant de remettre à zéro la toile est protégée par le décorateur \texttt{ApiKeyAuth} qui vérifie que la bonne clé d'API est présente dans les entêtes de la requête HTTP, comme le montre le listing \ref{listing:admin-methods-auth}.
 
 \begin{listing}[H]
-  \begin{minted}[breaklines, highlightlines={2}, linenos]{typescript}
+  \begin{minted}[breaklines, highlightlines={3}, linenos]{typescript}
 @Post()
+@HttpCode(HttpStatus.OK)
 @ApiKeyAuth()
 async reset() {
   await this.boardGateway.resetBoard();
 
   return {
-    status: 'ok',
+    statusCode: HttpStatus.OK,
     message: 'Board reset',
   };
 }
@@ -601,7 +602,7 @@ Par la suite, ces énumérations sont utilisées dans le code des deux applicati
   \label{listing:websockets-events-interfaces}
 \end{listing}
 
-Pour finir, il suffit d'utiliser ces interfaces dans les types fournis par Socket.IO afin d'exposer les versions typées des sockets pour le client et le serveur Socket.IO. Il est également possible de typer le \texttt{SocketData}, un objet de stockage propre à chaque instance de Socket côté serveur. Celui-ci est utilisé pour stocker la Fingerprint associée au client dans le cas de \gls{beeplace}.
+Pour finir, il suffit d'utiliser ces interfaces dans les types fournis par Socket.IO afin d'exposer les versions typées des sockets pour le client et le serveur Socket.IO. Il est également possible de typer le \texttt{SocketData}, un objet de stockage propre à chaque instance de Socket côté serveur comme le listing \ref{listing:typed-socket-io} le montre. Cet objet est utilisé pour stocker la Fingerprint associée au client dans le cas de \gls{beeplace}.
 
 \begin{listing}[H]
   \begin{minted}[breaklines, linenos]{ts}

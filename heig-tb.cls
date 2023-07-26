@@ -575,7 +575,7 @@
 \RequirePackage{tcolorbox}
 
 % Custom - Inclusivité
-\newcommand{\inclusvitename}{Annonce}
+\newcommand{\inclusvitename}{Note de l'auteur}
 \newcommand{\inclusvite}{
   \chapter*{\inclusvitename}
   \addcontentsline{toc}{chapter}{\inclusvitename}
