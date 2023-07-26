@@ -386,7 +386,7 @@
 % Annexes
 \renewcommand\appendixpagename{Annexes}
 
-\renewcommand\listoflistingscaption{Liste des Listings}
+\renewcommand\listoflistingscaption{Listings}
 \renewcommand{\nomname}{Liste des Symboles}
 
 % Headers and footers
@@ -573,3 +573,9 @@
 
 % Custom - pour les listings
 \RequirePackage{tcolorbox}
+
+% Custom - Inclusivité
+\newcommand{\inclusvite}{
+  \chapter*{Annonce}
+  À des fins de clarté et de fluidité, le présent texte utilise la forme masculine, mais il convient de souligner que cette expression englobe de manière inclusive l'ensemble des genres.
+}
