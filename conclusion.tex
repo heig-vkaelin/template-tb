@@ -13,7 +13,7 @@ Pour commencer, les diverses fonctionnalités listées dans le cahier des charge
   \item[\done] La toile s'actualise avec les modifications réalisées par les autres utilisateurs.
   \item[\done] L'utilisateur peut zoomer ou dézoomer sur la toile afin de voir les moindres détails.
   \item[\done] L'utilisateur voit facilement le nombre de pixels qu'il a actuellement la possibilité de placer sur la toile.
-  \item[\done] L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et le colorier.
+  \item[\done] L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et valider son choix.
   \item[\done] Les dimensions de la toile doivent être configurables par un administrateur.
   \item[\done] L'utilisateur dispose d'un moyen de recharger ses pixels à placer une fois ceux-ci écoulés. Il peut par exemple recevoir un nombre de pixels définis après un temps d'attente également choisi.
 \end{todolist}
@@ -34,18 +34,18 @@ Pour commencer, les diverses fonctionnalités listées dans le cahier des charge
 \begin{todolist}
   \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
   \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
-  \item[\done] Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
+  \item[\done] Faire en sorte que les couleurs disponibles pour les utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
   \item[\done] Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
-  \item[\done] Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
+  \item[\done] Afficher chez chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
   \item[\done] Développer un mode “affichage”, permettant d'afficher régulièrement un code QR pour rejoindre la toile virtuelle. En plus de ce code QR, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'enlèverait automatiquement dès qu'un utilisateur est actif sur l'application.
   \item[\done] Ajouter la possibilité de sauvegarder le dessin.
-  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
+  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits, notamment dans les systèmes distribués collaboratifs multi utilisateurs.
 \end{todolist}
 
 \subsubsection{Synthèse}
 
-Comme la liste ci-dessus l'indique, quasiment toutes les fonctionnalité "required" et "essential" ont été implémentées. En effet, seuls les tests unitaires ainsi que les tests d'intégration n'ont pas été réalisés lors de ce travail de Bachelor. L'utilité de ce type de tests est indéniable mais il a été décidé de ne pas les implémenter pour le moment afin de se concentrer sur les fonctionnalités principales de l'application. De plus, les différentes pipelines de déploiement continu permettent de s'assurer que l'application restait dans un état sans erreur après chaque modification.
+Comme la liste ci-dessus l'indique, quasiment toutes les fonctionnalités "required" et "essential" ont été implémentées. En effet, seuls les tests unitaires ainsi que les tests d'intégration n'ont pas été réalisés lors de ce travail de Bachelor. L'utilité de ce type de tests est indéniable mais il a été décidé de ne pas les implémenter pour le moment afin de se concentrer sur les fonctionnalités principales de l'application. De plus, les différentes pipelines de déploiement continu ont permis de s'assurer que l'application restait dans un état sans erreur après chaque modification.
 
 Concernant les fonctionnalités "nice-to-have", plus de la moitié ont été implémentées. La majorité du travail restant concerne le dashboard d'administration. Ces fonctionnalités sont pour la plupart implémentées mais dans une version initiale sous la forme d'appels HTTP. Il est clair qu'avoir dans le futur un dashboard dédié facilitera la tâche des administrateurs.
 
@@ -63,7 +63,7 @@ Des fonctionnalités non explicitées dans le cahier des charges initial ont ét
 \begin{itemize}
   \item Déploiement de l'application sur un serveur de production afin de pouvoir être utilisée par toutes et tous;
   \item Création d'un package contenant le code commun entre le frontend et le backend afin de faciliter la maintenance et l'évolution de l'application;
-  \item Configuration plus poussée que prévue pour le mode affichage, en pouvant notamment tout configurer depuis l'application directement sans devoir modifier les variables d'environnement;
+  \item Configuration plus poussée que prévue pour le mode affichage, en pouvant notamment tout configurer directement depuis l'application sans devoir modifier les variables d'environnement;
   \item Stockage de tout l'historique des pixels placés dans une base de données SQL.
 \end{itemize}
 
@@ -75,15 +75,15 @@ Des fonctionnalités non explicitées dans le cahier des charges initial ont ét
 
 Les technologies choisies pour la réalisation de l'application ont été globalement satisfaisantes. En effet, aucun réel blocage n'a été rencontré et les technologies ont permis de réaliser l'application dans les temps. Un point qui aurait pu être amélioré est le choix de la librairie de gestion de state global avec React. En effet, la librairie Zustand a été choisie trop tardivement, après avoir rencontré de nombreux problèmes avec les providers natifs à React. Utiliser cette librairie plus tôt dans l'implémentation aurait permis de gagner du temps et d'éviter de nombreux problèmes.
 
-Concernant le backend de l'application, le choix de NestJS pour sa compatibilité avec le protocole WebSocket à l'aide de Socket.IO s'est révélé être un bon choix. Aucun contretemps n'a été rencontré et l'implémentation s'est faite sans accroc. Le stockage de la toile à plusieurs niveaux (en mémoire, dans Redis et finalement dans une base de données PostgreSQL) a permis d'assurer une bonne montée en charge de l'application.
+Concernant le backend de l'application, le choix de NestJS s'est révélé être bon, pour sa compatibilité avec le protocole WebSocket à l'aide de Socket.IO. Aucun contretemps n'a été rencontré et l'implémentation s'est faite sans accroc. Le stockage de la toile à plusieurs niveaux (en mémoire, dans Redis et finalement dans une base de données PostgreSQL) a permis d'assurer une bonne montée en charge de l'application.
 
 La planification a donc bien été respectée, toutes les étapes essentielles ont été réalisées et l'application est fonctionnelle. Une remarque pourrait être faite concernant le choix d'utiliser k6 pour tester la montée en charge de l'application. Comme Socket.IO n'était pas supporté, il a fallu implémenter une solution maison qui a pris plus de temps que prévu. Malheureusement, comme évoqué précédemment, aucune autre solution plus viable n'a été trouvée pour tester \gls{beeplace}. Il s'agit donc d'un des nombreux contretemps qui peuvent survenir lors d'un projet informatique.
 
 \subsubsection{Apprentissages réalisés}
 
-Réaliser cette application a été extrêmement bénéfique et de nombreuses nouvelles connaissances ont été acquises. Il s'agit d'un projet très différent des applications web plus traditionnelles qui mêle de la communication en temps réel avec de la gestion assez pointue d'un canvas.
+Réaliser cette application a été extrêmement bénéfique et de nombreuses nouvelles connaissances ont été acquises. Il s'agit d'un projet très différent des applications web plus traditionnelles, qui mêle de la communication en temps réel avec de la gestion assez pointue d'un canvas.
 
-Avoir toujours en tête les performances de l'application tout en pouvant tester le résultat des optimisations sur les tests de montée en charge a été très enrichissant. Il s'agit d'un sujet souvent peu abordé en formation et pourtant essentiel dans certains développements pratiques. Dans le même registre, profiler une application avec différents graphiques pour trouver les aspects à optimiser a également été une découverte. Dans de nombreux cas, les problèmes réels diffèrent de ceux anticipés lors de l'écriture du code, d'où l'importance cruciale de pouvoir les identifier rapidement.
+Avoir toujours en tête les performances de l'application, tout en pouvant tester le résultat des optimisations sur les tests de montée en charge, a été très enrichissant. Il s'agit d'un sujet souvent peu abordé en formation et pourtant essentiel dans certains développements pratiques. Dans le même registre, profiler une application avec différents graphiques pour trouver les aspects à optimiser a également été une découverte. Dans de nombreux cas, les problèmes réels diffèrent de ceux anticipés lors de l'écriture du code, d'où l'importance cruciale de pouvoir les identifier rapidement.
 
 \section{Perspectives}
 \label{perspectives}
@@ -94,11 +94,11 @@ Avoir toujours en tête les performances de l'application tout en pouvant tester
 
 \subsubsection{Administration}
 
-Le dashboard d'administration est clairement la prochaine étape du projet. Il permettra, entre autres, de réaliser plus simplement les tâches de modération actuellement disponibles en appels HTTP. Cette fonctionnalité demande un travail assez conséquent car il est nécessaire de créer une authentification plus poussée que la simple clé API réalisée actuellement.
+Le dashboard d'administration constitue clairement la prochaine étape du projet. Il permettra, entre autres, de réaliser plus simplement les tâches de modération actuellement disponibles en appels HTTP. Cette fonctionnalité demande un travail assez conséquent car il est nécessaire de créer une authentification plus poussée que la simple clé API utilisée actuellement.
 
 \subsubsection{CRDTs}
 
-Les CRDTs (Conflict-free Replicated Data Type)~\cite{crdt} sont des structures de données qui permettent de gérer des données répliquées sur plusieurs machines. Ils sont utilisés dans les systèmes distribués pour gérer des données qui peuvent être modifiées par plusieurs utilisateurs en même temps. Ils permettent de gérer les conflits de manière automatique et déterministe. Ce concept pourrait être utile dans le cas où plusieurs utilisateurs placent un pixel au même endroit dans un laps de temps très court. Selon l'ordre d'arrivée des requêtes, le pixel pourrait être placé pour un utilisateur et pas pour l'autre. Les CRDTs permettent de gérer ce genre de cas.
+Les CRDTs (Conflict-free Replicated Data Type)~\cite{crdt} sont des structures de données qui permettent de gérer des données répliquées sur plusieurs machines. Ils sont utilisés dans les systèmes distribués pour gérer des données qui peuvent être modifiées par plusieurs utilisateurs en même temps. Ils permettent de régler les conflits de manière automatique et déterministe. Ce concept peut être utile dans le cas où plusieurs utilisateurs placent un pixel au même endroit dans un laps de temps très court. Selon l'ordre d'arrivée des requêtes, le pixel pourrait être placé par un utilisateur et pas par l'autre. Les CRDTs permettent de gérer ce genre de cas.
 
 Une solution plus facile à mettre en place pour gérer ce problème serait d'envoyer de temps en temps l'état global de la toile à tous les utilisateurs, pour que ceux-ci se synchronisent. Cela permettrait de gérer les conflits de manière plus simple et de ne pas avoir à implémenter des CRDTs.
 
@@ -106,25 +106,25 @@ Une solution plus facile à mettre en place pour gérer ce problème serait d'en
 
 \subsubsection{Monde physique}
 
-Lier le monde physique au monde virtuel est une idée qui a été évoquée à plusieurs reprises. Il serait possible de mettre en place un système de banque de pixels pour forcer les interactions sociales entre les personnes présentes au festival. En effet, le concept serait de pouvoir récupérer des pixels à placer en échange d'une action dans le monde réel. Par exemple, il serait possible de récupérer des pixels en amenant un ami à scanner notre identifiant à la banque. Cependant, imaginer une solution fonctionnelle dans plusieurs milieux et pas uniquement dans le cadre du Baleinev Festival est un travail qui demande beaucoup de réflexion et de temps. Il est donc difficile de proposer actuellement une solution concrète à ce problème.
+Lier le monde physique au monde virtuel est une idée qui a été évoquée à plusieurs reprises. Il serait possible de mettre en place un système de banque de pixels pour forcer les interactions sociales entre les personnes présentes au festival. En effet, le concept serait de pouvoir récupérer des pixels à placer, en échange d'une action dans le monde réel. Par exemple, il serait possible de récupérer des pixels en amenant un ami à scanner notre identifiant à la banque. Cependant, imaginer une solution fonctionnelle dans plusieurs milieux, et pas uniquement dans le cadre du Baleinev Festival, est un travail qui demande beaucoup de réflexion et de temps. Il est donc difficile de proposer actuellement une solution concrète à ce problème.
 
-Intégrer le monde physique pourrait également permettre de supprimer le problème d'authentification évoqué plusieurs fois lors de ce travail. Afin de pouvoir identifier facilement et sans risque d'erreur les festivaliers, il serait possible d'afficher un identifiant unique sur chaque billet par exemple. L'utilisateur devrait le rentrer sur l'application lors de sa première visite pour pouvoir ensuite placer des pixels. Cette solution serait plus sûre que les fingerprints actuelles car il n'y aurait pas de risque de collision entre deux utilisateurs. Cependant, mettre en place un tel système demande de devoir être en étroite collaboration avec les organisateurs du festival. Ce qui limite la possibilité d'étendre l'utilisation de l'application en dehors du Baleinev Festival.
+Intégrer le monde physique pourrait également permettre de supprimer le problème d'authentification évoqué plusieurs fois lors de ce travail. Afin de pouvoir identifier facilement et sans risque d'erreur les festivaliers, il serait possible d'afficher un identifiant unique sur chaque billet par exemple. L'utilisateur devrait le rentrer sur l'application lors de sa première visite pour pouvoir ensuite placer des pixels. Cette solution serait plus sûre que les fingerprints actuelles car il n'y aurait pas de risque de collision entre deux utilisateurs. Cependant, mettre en place un tel système demande de devoir être en étroite collaboration avec les organisateurs du festival. Cela limite donc la possibilité d'étendre l'utilisation de l'application en dehors du Baleinev Festival.
 
 \subsubsection{Statistiques}
 
-Pour le moment, l'historique des pixels dans la base de données PostgreSQL n'est pas utilisé. Il serait intéressant de pouvoir analyser ces données pour en tirer des statistiques. Ces dernières pourraient par exemple être affichées sur le dashboard d'administration. Voici diverses liées aux statistiques qui pourraient être intéressantes:
+Pour le moment, l'historique des pixels dans la base de données PostgreSQL n'est pas utilisé. Il serait intéressant de pouvoir analyser ces données pour en tirer des statistiques. Ces dernières pourraient par exemple être affichées sur le dashboard d'administration. Voici diverses perspectives liées aux statistiques qui pourraient être intéressantes:
 
 \begin{itemize}
   \item Nombre de pixels placés par jour, heure, minute avec des graphiques de l'évolution;
   \item Nombre de pixels placés par utilisateur;
   \item Nombre de pixels placés en fonction de sa couleur;
   \item Nombre de pixels placés par zone, en réalisant une sorte d'"heat map" de la toile;
-  \item Analyse des actions de modération, afficher par exemple les \oe{}uvres qui ont dû être supprimées.
+  \item Analyse des actions de modération, affichage par exemple des \oe{}uvres qui ont dû être supprimées.
 \end{itemize}
 
 \subsubsection{Autres améliorations}
 
-Plusieurs autres petites améliorations sont également envisageables. Pouvoir créer une toile rectangulaire et non carrée serait une fonctionnalité très utile, notamment pour le système d'affichage utilisé au Baleinev Festival. De plus, il pourrait être intéressant d'essayer de pouvoir lancer plusieurs instances de l'application sur le même serveur. Cela permettrait de répartir la charge sur plusieurs processus et donc de pouvoir gérer plus de connexions simultanées. Toujours dans le cadre de la montée en charge, créer plusieurs autres types de tests serait également intéressant en plus du test actuel permettant de découvrir les limites du système. Créer des tests qui devraient être réussis par le système permettrait de vérifier que l'application reste dans un état satisfaisant malgré les modifications apportées.
+Plusieurs autres petites améliorations sont également envisageables. Pouvoir créer une toile rectangulaire et non carrée serait une fonctionnalité très utile, notamment pour le système d'affichage utilisé au Baleinev Festival. De plus, il pourrait être intéressant d'essayer de pouvoir lancer plusieurs instances de l'application sur le même serveur. Cela permettrait de répartir la charge sur plusieurs processus et donc de pouvoir gérer plus de connexions simultanées. Toujours dans le cadre de la montée en charge, créer plusieurs autres types de tests serait également intéressant, en plus du test actuel permettant de découvrir les limites du système. Créer des tests qui devraient être réussis par le système permettrait de vérifier que l'application reste dans un état satisfaisant malgré les modifications apportées.
 
 Pour finir, rendre l'expérience utilisateur plus agréable en ajoutant des animations lors du placement d'un pixel ou lors du zoom sur la toile serait également un plus. Le r/place original de Reddit utilisait par exemple des sons lors des diverses actions réalisées pour rendre l'expérience plus immersive.
 
@@ -137,13 +137,13 @@ L'étape suivante pour le projet BeePlace est la prochaine édition du Baleinev 
 \subsection{Vécu du travail de Bachelor}
 
 % - Comment le projet a été vécu
-Réaliser un projet de cette envergure, sur une période aussi longue, a été une première pour moi. J'ai trouvé qu'il s'agissait d'une expérience plus enrichissante et satisfaisante que les nombreux projets plus courts réalisés au cours de mon Bachelor. Pouvoir aller en profondeur dans un sujet et pouvoir le réaliser de A à Z est très gratifiant. De plus, être témoin que des personnes utilisent son application avec plaisir a toujours été un sentiment que j'apprécie particulièrement. C'est pourquoi je suis très satisfait d'avoir réalisé ce travail de Bachelor très concret qui pourra être utilisé par de nombreuses personnes dans le futur.
+Réaliser un projet de cette envergure, sur une période aussi longue, a été une première pour moi. J'ai trouvé qu'il s'agissait d'une expérience plus enrichissante et satisfaisante que les nombreux projets plus courts réalisés au cours de mon Bachelor. Pouvoir travailler un sujet en profondeur et le réaliser de A à Z est très gratifiant. De plus, être témoin que des personnes utilisent son application avec plaisir a toujours été un sentiment que j'apprécie particulièrement. C'est pourquoi je suis très satisfait d'avoir réalisé ce travail de Bachelor très concret qui pourra être utilisé par de nombreuses personnes dans le futur.
 
-L'organisation au sein de l'équipe \gls{beescreens} m'a été très bénéfique tout au long de ce travail. Réaliser une courte séance journalière chaque matin lors de la période à temps plein m'a permis de garder un rythme de travail, ce qui n'est pas toujours évident lorsque l'on travaille longtemps seul sur un projet depuis la maison. De plus, chaque semaine nous faisions une réunion de planification pour définir les objectifs hebdomadaires ainsi qu'une rétrospective sur ce qui avait été accompli la semaine précédente. Ces réunions ont permis de garder une bonne communication au sein de l'équipe et de pouvoir s'entraider en cas de besoin, en ayant une bonne vision d'ensemble des projets. Utiliser ces bonnes pratiques que sont le "daily meeting" et le "sprint review" dans un projet réel a été très enrichissant et m'a permis de mieux comprendre leur utilité. J'espère retrouver ces concepts, bien utilisés, dans ma future carrière professionnelle.
+L'organisation au sein de l'équipe \gls{beescreens} m'a été très bénéfique tout au long de ce travail. Réaliser une courte séance journalière chaque matin lors de la période à temps plein m'a permis de garder un rythme de travail, ce qui n'est pas toujours évident lorsque l'on travaille longtemps seul sur un projet depuis la maison. De plus, chaque semaine, nous faisions une réunion de planification pour définir les objectifs hebdomadaires ainsi qu'une rétrospective sur ce qui avait été accompli la semaine précédente. Ces réunions ont permis de garder une bonne communication au sein de l'équipe et de pouvoir s'entraider en cas de besoin, en ayant une bonne vision d'ensemble des projets. Utiliser ces bonnes pratiques que sont le "daily meeting" et le "sprint review" dans un projet réel a été très enrichissant et m'a permis de mieux comprendre leur utilité. J'espère retrouver ces concepts, bien utilisés, dans ma future carrière professionnelle.
 
 \subsection{Remerciements}
 
-J'aimerais remercier les personnes suivantes pour leur aide directe ou indirecte dans le cadre de ce travail de Bachelor (sans ordre particulier) : Ludovic et Guidoux pour leur suivi sans faille et leurs conseils avisés, Maxime pour son aide sur des problèmes toujours plus obscurs avec React, Hadrien et Francesco pour leur soutien lors de mes innombrables problèmes sur LaTeX, Lazar pour ses idées de design, Nastaran pour sa confiance et sa supervision assidue, mes parents pour avoir relu ce document malgré leur méconnaissance du sujet, et finalement toutes les personnes qui ont testé l'application et qui m'ont donné leur retour.
+J'aimerais remercier les personnes suivantes pour leur aide directe ou indirecte dans le cadre de ce travail de Bachelor (sans ordre particulier) : Ludovic et Guidoux pour leur suivi sans faille et leurs conseils avisés, Maxime pour son aide sur des problèmes toujours plus obscurs avec React, Hadrien et Francesco pour leur soutien lors de mes innombrables problèmes sur LaTeX, Lazar pour ses idées de design, Nastaran pour sa confiance et sa supervision assidue, mes parents pour avoir relu ce document malgré leur méconnaissance initiale du sujet, et finalement toutes les personnes qui ont testé l'application et qui m'ont donné leur retour.
 
 \vfil
 \hspace{8cm}\makeatletter\@author\makeatother\par

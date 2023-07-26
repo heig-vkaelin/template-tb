@@ -1,7 +1,7 @@
 \section{Contexte}
 L'association Baleinev organise, depuis plus de 25 ans, le festival de musique “Baleinev Festival” sur le campus de la HEIG-VD et aime se démarquer par son originalité.
 
-En 2014, le festival proposait pour la première fois “Pimp My Wall”, un concept qui consiste à utiliser des fenêtres orientées sur la cour comme écrans géants, affichant du contenu interactif, des animations visuelles et la possibilité de dessiner à distance.
+En 2014, le festival proposait pour la première fois “Pimp My Wall”, un concept qui consiste à utiliser des fenêtres orientées sur la cour comme écrans géants, affichant du contenu interactif, des animations visuelles et permettant de dessiner à distance.
 
 \begin{figure}[H]
   \centering
@@ -13,14 +13,14 @@ En 2014, le festival proposait pour la première fois “Pimp My Wall”, un con
   \label{fig:pmw-baleinev-2023}
 \end{figure}
 
-En 2018, le concept a été repris à partir de zéro et a donné naissance à \gls{beescreens}, la nouvelle version open source aux technologies modernes. L'ambition de cette nouvelle version est de proposer une collection d'applications interactives pouvant sortir du cadre du Baleinev Festival. De plus, l'ajout est la gestion d'une nouvelle application se veut le plus aisé possible, permettant ainsi à de nouveaux développeurs de pouvoir rapidement créer et déployer une nouvelle application.
+En 2018, le concept a été repris à partir de zéro et a donné naissance à \gls{beescreens}, la nouvelle version open source aux technologies modernes. L'ambition de cette nouvelle version est de proposer une collection d'applications interactives, dont Pimp My Wall, pouvant sortir du cadre du Baleinev Festival. De plus, l'ajout et la gestion d'une nouvelle application se veulent les plus aisés possibles, permettant ainsi à de nouveaux développeurs de pouvoir rapidement créer et déployer une nouvelle application.
 
-C'est dans ce contexte qu'est né le projet de ce travail de Bachelor avec la volonté de créer une nouvelle application interactive à projeter entre autres sur un sous-ensemble des écrans du festival.
+C'est dans ce contexte qu'est né le projet de ce travail de Bachelor avec la volonté de créer, sur le modèle du r/place de Reddit, une nouvelle application interactive à projeter entre autres sur un sous-ensemble des écrans du festival.
 
-\section{Présentation r/place}
-\gls{reddit} (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde, a l'habitude de faire des expériences pour le premier avril. En 2017, \gls{reddit} présente pour la première fois leur concept r/place.
+\section{Présentation de r/place}
+\gls{reddit} (\href{https://www.reddit.com}{reddit.com}), sûrement le forum en ligne le plus connu au monde, a l'habitude de faire des expériences pour le premier avril. En 2017, \gls{reddit} présente pour la première fois son concept r/place.
 
-r/place~\cite{rplace} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque personne doit attendre un certain temps (5 minutes) avant de reposer un nouveau pixel. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'\oe{}uvre.
+r/place~\cite{rplace} offre une toile géante virtuelle permettant à tout le monde de placer un pixel d'une couleur choisie parmi une liste prédéfinie. Chaque personne doit attendre cinq minutes avant de reposer un nouveau pixel. Cela oblige une collaboration des utilisateurs afin de réaliser des dessins de qualité, ce qui implique qu'aucun individu ou groupe ne peut nuire trop fortement à l'ensemble de l'\oe{}uvre.
 
 En 2022, une nouvelle version du r/place est mise en place et plus de 6 millions de personnes participent à cette édition. La toile est agrandie pour atteindre des dimensions de 2000x2000 pixels et celle-ci se trouve remplie de créations en tout genre réalisées par diverses communautés pendant plusieurs jours (voir figure \ref{fig:rplace2022}).
 
@@ -39,19 +39,19 @@ Les codes sources de ces deux événements ne sont malheureusement pas disponibl
 \subsection{Objectifs}
 \label{sec:objectifs}
 
-Le but principal de ce travail de Bachelor consiste à recréer une version open source du fameux r/place de \gls{reddit}. Cette variante sera nommée \gls{beeplace} afin de s'aligner avec le nom de l'écosystème \gls{beescreens}.
-Cette application, comme le r/place original, a comme objectif de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs et minimiser les dégâts causés par des utilisateurs malintentionnés, ceux-ci devront attendre un certain délai entre chaque pose de pixel.
+Le but principal de ce travail de Bachelor consiste à recréer une version open source du fameux r/place de \gls{reddit}. Cette variante sera nommée \gls{beeplace} afin de s'aligner sur le nom de l'écosystème \gls{beescreens}.
+Cette application, comme le r/place original, a comme objectif de permettre aux utilisateurs de poser des pixels sur une toile virtuelle partagée entre tous. Chaque utilisateur pourra poser un ou plusieurs pixels d'une couleur choisie parmi une liste prédéfinie. Afin de maximiser la collaboration entre les utilisateurs et minimiser les dégâts causés par des utilisateurs malintentionnés, tous devront attendre un certain délai entre chaque pose de pixel.
 
-En effet, le concept \gls{beeplace} se base sur les conclusions réalisées à propos de l'application existante, Pimp My Wall. La problématique est la suivante: Pimp My Wall est une application trop permissive. Les utilisateurs peuvent dessiner de manière entièrement libre sur la toile virtuelle et cela engendre des comportements inappropriés. Le public cible, les personnes présentes au Baleinev Festival, est relativement jeune et l'ambiance festive de la soirée amène plus facilement à des dérives. Comme les créations des festivaliers sont affichées en temps réel sur les murs de l'école, il est nécessaire de modérer les créations des utilisateurs. Cette modération est fastidieuse, peu gratifiante et demande beaucoup de temps.
+En effet, le concept \gls{beeplace} se base sur les conclusions réalisées à propos de l'application existante, Pimp My Wall. La problématique est la suivante: Pimp My Wall est une application trop permissive. Les utilisateurs peuvent dessiner de manière entièrement libre sur la toile virtuelle et cela engendre parfois des comportements inappropriés. Le public cible, les personnes présentes au Baleinev Festival, est relativement jeune et l'ambiance festive de la soirée amène plus facilement à des dérives. Comme les créations des festivaliers sont affichées en temps réel sur les murs de l'école, il est nécessaire de modérer les créations des utilisateurs. Cette modération est fastidieuse, peu gratifiante et demande beaucoup de temps.
 
-Afin de pallier à ce problème, l'idée de \gls{beeplace} est née. En imposant un délai entre la pose de pixels aux utilisateurs, ceux-ci seront moins enclins à réaliser des créations inadaptées car cela leur demanderait un effort plus conséquent. Dans le cas où des débordements auraient quand même lieu, la modération pourrait remettre à zéro une zone de la toile en quelques clics. Ce qui ferait perdre énormément de temps aux usagers problématiques et les dissuaderait de recommencer.
+Afin de pallier à ce problème, l'idée de \gls{beeplace} est née. En imposant aux utilisateurs un délai entre la pose de pixels, ces derniers seront moins enclins à réaliser des créations inadaptées car cela leur demanderait un effort plus conséquent. Dans le cas où des débordements auraient quand même lieu, la modération pourrait remettre à zéro une zone de la toile en quelques clics. Ce qui ferait perdre énormément de temps aux usagers problématiques et les dissuaderait de recommencer.
 
 
 En plus de l'application en elle-même, des critères non-fonctionnels sont à prendre en compte. Tout d'abord, il est nécessaire d'assurer sa montée en charge afin qu'elle puisse supporter des possibles hausses de fréquentation, notamment le soir du festival. Ce critère sera vérifié grâce à des tests prévus à cet effet. De plus, il est important d'assurer l'intégration continue de l'application au sein de l'écosystème \gls{beescreens}. En effet, \gls{beeplace} fera partie intégrante de l'écosystème existant et devra donc être correctement intégrée afin de pouvoir être facilement utilisée dans le futur. Pour finir, l'application doit être agréable d'utilisation sur téléphone car les utilisateurs du festival utiliseront principalement ce moyen d'interaction.
 
 \subsection{Fonctionnalités}
 
-Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonctionnalités de l'application ont été listées. Celles-ci sont catégorisées selon leur importance. Les fonctionnalités \textbf{required} sont nécessaires au bon fonctionnement de l'application. Les \textbf{essential} aident beaucoup à la qualité du projet final et pour finir les \textbf{nice-to-have} améliorent surtout l'expérience utilisateur des usagers ainsi que des administrateurs qui ont la tâche de supprimer les éventuels débordements.
+Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonctionnalités de l'application ont été listées. Celles-ci sont catégorisées selon leur importance. Les fonctionnalités \textbf{required} sont nécessaires au bon fonctionnement de l'application. Les \textbf{essential} aident beaucoup à la qualité du projet final, et pour finir les \textbf{nice-to-have} améliorent surtout l'expérience utilisateur des usagers ainsi que des administrateurs qui ont la tâche de supprimer les éventuels débordements.
 
 \subsubsection{Fonctionnalités \guillemotleft required\guillemotright}
 
@@ -60,7 +60,7 @@ Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonc
   \item La toile s'actualise avec les modifications réalisées par les autres utilisateurs.
   \item L'utilisateur peut zoomer ou dézoomer sur la toile afin de voir les moindres détails.
   \item L'utilisateur voit facilement le nombre de pixels qu'il a actuellement la possibilité de placer sur la toile.
-  \item L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et le colorier.
+  \item L'utilisateur peut sélectionner un pixel, choisir une couleur parmi plusieurs proposées et valider son choix.
   \item Les dimensions de la toile doivent être configurables par un administrateur.
   \item L'utilisateur dispose d'un moyen de recharger ses pixels à placer une fois ceux-ci écoulés. Il peut par exemple recevoir un nombre de pixels définis après un temps d'attente également choisi.
 \end{itemize}
@@ -81,18 +81,18 @@ Afin d'avoir une idée plus précise des tâches à réaliser, les diverses fonc
 \begin{itemize}
   \item Ajouter une interface utilisateur permettant aux administrateurs de censurer plus facilement une zone de la toile via le dashboard.
   \item Une fois ses pixels épuisés, l'utilisateur peut les recharger via un moyen physique.
-  \item Faire en sorte que les couleurs disponibles aux utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
+  \item Faire en sorte que les couleurs disponibles pour les utilisateurs soient facilement customisables par l'administrateur (ex: via le dashboard).
   \item Les administrateurs peuvent interdire la pose de pixels à des utilisateurs ou des régions spécifiques.
   \item Les administrateurs peuvent changer la taille de la toile dynamiquement (ex : via le dashboard).
-  \item Afficher à chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
+  \item Afficher chez chaque utilisateur le nombre de festivaliers actuellement connectés sur la toile.
   \item Développer un mode “affichage”, permettant d'afficher régulièrement un code QR pour rejoindre la toile virtuelle. En plus de ce code QR, ajouter des éléments sollicitant l'interaction de l'utilisateur à la manière d'un économiseur d'écran (ex: des pixels qui s'animent de façon indépendante). Ce mode s'enlèverait automatiquement dès qu'un utilisateur est actif sur l'application.
   \item Ajouter la possibilité de sauvegarder le dessin.
-  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits notamment dans les systèmes distribués collaboratifs multi utilisateurs.
+  \item Intégrer la notion de CRDTs (Conflict-free Replicated Data Type), une structure de données permettant d'éviter les conflits, notamment dans les systèmes distribués collaboratifs multi utilisateurs.
 \end{itemize}
 
 \subsection{Calendrier}
 
-Le projet est séparé en différentes milestones, les dates de celles-ci sont adaptées en fonction des événements clés du semestre, comme les délais de rendu ainsi que le Baleinev Festival 2023 en lui-même.
+Le projet est séparé en différentes milestones, les dates de celles-ci sont adaptées en fonction des événements clés du semestre, comme les délais de rendu ainsi que le Baleinev Festival 2023 lui-même.
 
 \subsubsection{Milestone 1 - semaine du 20 au 26 mars}
 
