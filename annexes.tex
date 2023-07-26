@@ -1,0 +1,135 @@
+\chapter{Déploiement}
+\label{annexe-deploiement}
+
+Cette annexe contient les fichiers de déploiement utilisés pour l'application \gls{beeplace}.
+
+Ci-dessous, le \texttt{Dockerfile} du frontend de l'application \gls{beeplace}. Le fichier du backend est omis car il est identique, à l'exception du port et des variables d'environnement utilisés.
+
+\begin{minted}[linenos]{sh}
+  # Base image
+  FROM node:20-alpine
+
+  # Work directory
+  WORKDIR /app
+
+  # Copy the files of the working directory
+  COPY .bundle .
+
+  # Environment variables
+  ENV NODE_ENV=production
+  ENV BACKEND_URL=${BACKEND_URL}
+  ENV DISPLAY_WIDTH=${DISPLAY_WIDTH}
+  ENV DISPLAY_HEIGHT=${DISPLAY_HEIGHT}
+  ENV DISPLAY_COLUMNS=${DISPLAY_COLUMNS}
+  ENV DISPLAY_ROWS=${DISPLAY_ROWS}
+  ENV MIN_SCALE=${MIN_SCALE}
+  ENV MAX_SCALE=${MAX_SCALE}
+
+  # Exposed ports
+  EXPOSE 3000
+
+  # Command to run on start
+  CMD ["npm", "start"]
+\end{minted}
+\begin{center}
+  \textit{Dockerfile}
+\end{center}
+
+\pagebreak
+
+Fichier \texttt{docker-compose.yml} utilisé lors du déploiement pour configurer les quatre services de l'application \gls{beeplace}: le frontend, le backend, Redis et la base de données PostgreSQL.
+
+\begin{minted}[linenos]{yaml}
+networks:
+  traefik_network:
+    name: traefik_network
+    driver_opts:
+      com.docker.network.bridge.name: traefik_network
+
+services:
+  backend:
+    container_name: beeplace-backend
+    # {...} is replacing "/beescreens/beescreens/" to make URL shorter
+    image: registry.gitlab.com{...}beeplace-backend:${BEEPLACE_BACKEND_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - backend.env
+    networks:
+      - traefik_network
+    expose:
+      - 4000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_network
+      #
+      - traefik.http.routers.beeplace-backend-web.rule=Host(`${BEEPLACE_BACKEND_FQDN}`)
+      - traefik.http.routers.beeplace-backend-web.entrypoints=web
+      - traefik.http.routers.beeplace-backend-web.middlewares=redirect-to-https
+      #
+      - traefik.http.routers.beeplace-backend-websecure.rule=Host(`${BEEPLACE_BACKEND_FQDN}`)
+      - traefik.http.routers.beeplace-backend-websecure.entrypoints=websecure
+      - traefik.http.routers.beeplace-backend-websecure.tls=true
+      - traefik.http.routers.beeplace-backend-websecure.tls.certresolver=letsencrypt
+      #
+      - traefik.http.services.beeplace-backend.loadbalancer.server.port=4000
+
+  frontend:
+    container_name: beeplace-frontend
+    # {...} is replacing "/beescreens/beescreens/" to make URL shorter
+    image: registry.gitlab.com{...}beeplace-frontend:${BEEPLACE_FRONTEND_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - frontend.env
+    networks:
+      - traefik_network
+    expose:
+      - 3000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_network
+      #
+      - traefik.http.routers.beeplace-frontend-web.rule=Host(`${BEEPLACE_FRONTEND_FQDN}`)
+      - traefik.http.routers.beeplace-frontend-web.entrypoints=web
+      - traefik.http.routers.beeplace-frontend-web.middlewares=redirect-to-https
+      #
+      - traefik.http.routers.beeplace-frontend-websecure.rule=Host(`${BEEPLACE_FRONTEND_FQDN}`)
+      - traefik.http.routers.beeplace-frontend-websecure.entrypoints=websecure
+      - traefik.http.routers.beeplace-frontend-websecure.tls=true
+      - traefik.http.routers.beeplace-frontend-websecure.tls.certresolver=letsencrypt
+      #
+      - traefik.http.services.beeplace-frontend.loadbalancer.server.port=3000
+
+
+
+  beeplace-redis:
+    container_name: beeplace-redis
+    image: redis:${REDIS_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    networks:
+      - traefik_network
+    ports:
+      - 6379:6379
+    volumes:
+      - ./db-data:/redis/data
+
+  database:
+    container_name: beeplace-database
+    image: postgres:${POSTGRES_IMAGE_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - postgres.env
+    networks:
+      - traefik_network
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+\end{minted}
+\begin{center}
+  \textit{docker-compose.yml}
+\end{center}

@@ -575,7 +575,9 @@
 \RequirePackage{tcolorbox}
 
 % Custom - Inclusivité
+\newcommand{\inclusvitename}{Annonce}
 \newcommand{\inclusvite}{
-  \chapter*{Annonce}
+  \chapter*{\inclusvitename}
+  \addcontentsline{toc}{chapter}{\inclusvitename}
   À des fins de clarté et de fluidité, le présent texte utilise la forme masculine, mais il convient de souligner que cette expression englobe de manière inclusive l'ensemble des genres.
 }
