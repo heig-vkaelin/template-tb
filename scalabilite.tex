@@ -193,26 +193,26 @@ Le test a été lancé 10 fois afin de prévenir les éventuelles erreurs de mes
   \begin{tabular}{|l|l|l|l|}
     \hline
     \textbf{Test}    & \textbf{Temps d'exécution} & \textbf{Utilisateurs virtuels} & \textbf{Pixels dessinés} \\ \hline
-    1                & 22385.053 ms               & 703                            & 1317                     \\ \hline
-    2                & 20921.705 ms               & 589                            & 1168                     \\ \hline
-    3                & 22353.215 ms               & 704                            & 1366                     \\ \hline
-    4                & 23175.281 ms               & 707                            & 1389                     \\ \hline
-    5                & 30976.405 ms               & 797                            & 1672                     \\ \hline
-    6                & 24097.739 ms               & 702                            & 1382                     \\ \hline
-    7                & 25074.294 ms               & 699                            & 1319                     \\ \hline
-    8                & 22141.945 ms               & 630                            & 1455                     \\ \hline
-    9                & 32062.651 ms               & 786                            & 1596                     \\ \hline
-    10               & 20743.08 ms                & 452                            & 1056                     \\ \hline
-    \textbf{Moyenne} & \textbf{24393.147 ms}      & \textbf{676.9}                 & \textbf{1372}            \\ \hline
-    \textbf{Médiane} & \textbf{22780.167 ms}      & \textbf{702.5}                 & \textbf{1374}            \\ \hline
+    1                & 17609.156 ms               & 365                            & 812                      \\ \hline
+    2                & 18976.272 ms               & 567                            & 1045                     \\ \hline
+    3                & 18840.722 ms               & 556                            & 1026                     \\ \hline
+    4                & 18762.471 ms               & 486                            & 952                      \\ \hline
+    5                & 21092.084 ms               & 619                            & 1141                     \\ \hline
+    6                & 19152.99 ms                & 502                            & 1036                     \\ \hline
+    7                & 22984.698 ms               & 762                            & 1203                     \\ \hline
+    8                & 19008.342 ms               & 563                            & 1008                     \\ \hline
+    9                & 16744.266 ms               & 443                            & 868                      \\ \hline
+    10               & 18800.706 ms               & 560                            & 989                      \\ \hline
+    \textbf{Moyenne} & \textbf{19197.171 ms}      & \textbf{542.3}                 & \textbf{1008}            \\ \hline
+    \textbf{Médiane} & \textbf{18908.497 ms}      & \textbf{558}                   & \textbf{1017}            \\ \hline
   \end{tabular}
   \caption{Résultats initiaux des tests de montée en charge avec k6}
   \label{table:k6-initial-results}
 \end{table}
 
-La médiane sera préférée à la moyenne pour les futures comparaisons car elle est moins sensible aux valeurs extrêmes. Même si les valeurs des 10 itérations du test sont relativement proches dans ce cas-ci.
+La médiane sera préférée à la moyenne pour les futures comparaisons car elle est moins sensible aux valeurs extrêmes.
 
-Pour conclure, avec la version initiale de \gls{beeplace}, le test est exécuté pendant environ \textbf{23 secondes} en créant \textbf{702 utilisateurs virtuels} qui dessinent au total \textbf{1374 pixels}.
+Pour conclure, avec la version initiale de \gls{beeplace}, le test est exécuté pendant environ \textbf{19 secondes} en créant \textbf{558 utilisateurs virtuels} qui dessinent au total \textbf{1017 pixels}.
 
 \section{Profiling}
 
@@ -365,8 +365,6 @@ Avant d'envoyer la mise à jour aux autres utilisateurs, une vérification est e
 \subsubsection{Résultats}
 
 Dans la suite des tableaux et des graphiques, la version non optimisée sera notée \textbf{Initiale} et la version optimisée avec l'intervalle sera notée \textbf{Intervalle}.
-
-Les résultats pour la version initiale sont différents de ceux présentés dans le tableau \ref{table:k6-initial-results} car le test a été relancé pour pouvoir comparer les résultats avec l'optimisation au même moment. Ces différences prouvent l'importance du système permettant de changer rapidement l'image Docker avec des tags.
 
 % DE BASE
 % Mean duration: 19197.170700000002 ms
